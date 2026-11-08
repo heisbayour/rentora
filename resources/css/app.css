@@ -1,0 +1,36 @@
+@import '@fontsource-variable/inter';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* Default primary #1A73E8. Overridden per organization in the layout head. */
+        --color-primary-50: 232 240 254;
+        --color-primary-600: 26 115 232;
+        --color-primary-700: 23 101 204;
+    }
+
+    html {
+        @apply bg-canvas text-ink antialiased;
+    }
+
+    body {
+        @apply text-sm;
+    }
+
+    :focus-visible {
+        @apply outline-none ring-2 ring-primary-600 ring-offset-1;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@layer utilities {
+    .tabular-nums {
+        font-variant-numeric: tabular-nums;
+    }
+}
