@@ -10,17 +10,17 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 - [x] Pest, Pint, Larastan configured; composer scripts `test`, `lint`, `lint:fix`, `analyse`, `deploy:build`
 - [x] Tailwind 3.4, Alpine 3, Vite, Inter, Chart.js installed and `npm run build` passes
 - [x] `CLAUDE.md`, `docs/PROGRESS.md`, `docs/DECISIONS.md`, `.env.example`, `config/rentora.php` (1.0.0)
-- [ ] `git init`, first commit, `gh repo create heisbayour/rentora --public` and push
+- [x] `git init`, first commit, `gh repo create heisbayour/rentora --public` and push
 
 ## Phase 1 - Design system
 
-- [ ] Tailwind tokens (6.1) and org primary colour override
-- [ ] Form components: button, input, select, textarea, money-input, date-input, checkbox, toggle, file-dropzone (with client-side compression)
-- [ ] Display components: card, stat-card, status-chip, table (stacked under 768px), empty-state, avatar, timeline, skeleton, pagination, page-header, alert
-- [ ] Overlay and navigation components: modal, slide-over, stepper, tabs, dropdown, toast, confirm
-- [ ] Layouts: admin, portal, public, auth (plus install)
-- [ ] `/app/_styleguide` route (local only) rendering every component
-- [ ] Gates pass, commit, push
+- [x] Tailwind tokens (6.1) and org primary colour override
+- [x] Form components: button, input, select, textarea, money-input, date-input, checkbox, toggle, file-dropzone (with client-side compression)
+- [x] Display components: card, stat-card, status-chip, table (stacked under 768px), empty-state, avatar, timeline, skeleton, pagination, page-header, alert
+- [x] Overlay and navigation components: modal, slide-over, stepper, tabs, dropdown, toast, confirm
+- [x] Layouts: admin, portal, public, auth (plus install)
+- [x] `/app/_styleguide` route (local only) rendering every component
+- [x] Gates pass, commit, push
 
 ## Phase 2 - Organization, auth, roles
 

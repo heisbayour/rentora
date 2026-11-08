@@ -29,6 +29,39 @@
     }
 }
 
+@layer components {
+    /* Spinner shown inside any submit button while its form is submitting. */
+    .rt-btn[data-loading='1'] .rt-btn-spinner,
+    .rt-btn[data-loading='true'] .rt-btn-spinner {
+        display: inline-block;
+    }
+
+    /* x-table: a normal table from 768px, stacked label/value cards below it. */
+    @media (max-width: 767px) {
+        .rt-table thead {
+            @apply sr-only;
+        }
+        .rt-table tbody tr {
+            @apply mb-3 block rounded-card border border-border bg-surface p-3 shadow-card;
+        }
+        .rt-table tbody td {
+            @apply flex items-start justify-between gap-4 border-0 px-0 py-1.5 text-right;
+        }
+        .rt-table tbody td::before {
+            content: attr(data-label);
+            @apply text-left font-medium text-ink-muted;
+        }
+        .rt-table tbody td[data-label=''],
+        .rt-table tbody td:not([data-label]) {
+            @apply justify-end;
+        }
+        .rt-table tbody td[data-label='']::before,
+        .rt-table tbody td:not([data-label])::before {
+            content: none;
+        }
+    }
+}
+
 @layer utilities {
     .tabular-nums {
         font-variant-numeric: tabular-nums;
