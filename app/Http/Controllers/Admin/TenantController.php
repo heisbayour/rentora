@@ -25,7 +25,7 @@ class TenantController extends Controller
     use SortsLists;
 
     /** Tabs available on the profile. Invoices, payments, maintenance and messages join in later phases. */
-    private const TABS = ['overview', 'leases', 'documents', 'activity'];
+    private const TABS = ['overview', 'leases', 'invoices', 'documents', 'activity'];
 
     public function index(Request $request): View
     {
@@ -85,6 +85,8 @@ class TenantController extends Controller
             'canManage' => $canManage,
             'leases' => $tab === 'leases' ? $tenant->leases()->with('unit.property')->latest('start_date')->get() : collect(),
             'documents' => $tab === 'documents' ? $tenant->documents()->get() : collect(),
+            'invoices' => $tab === 'invoices' ? $tenant->invoices()->with(['tenant', 'unit'])->latest('due_date')->get() : collect(),
+            'outstanding' => $canManage ? $tenant->outstanding() : null,
             'activity' => $tab === 'activity' ? $this->activity($tenant) : collect(),
             'visibilities' => DocumentVisibility::options(),
             'whatsappPhone' => self::internationalPhone($tenant->phone),

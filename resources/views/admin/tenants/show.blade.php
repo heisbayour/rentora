@@ -40,6 +40,7 @@
                             <div><dt class="text-ink-muted">{{ __('leases.summary.period') }}</dt><dd>{{ $lease->start_date->format('j M Y') }} to {{ $lease->end_date->format('j M Y') }}</dd></div>
                             @if ($canManage)
                                 <div><dt class="text-ink-muted">{{ __('leases.fields.rent_amount') }}</dt><dd class="tabular-nums">{{ $lease->rent()->format() }} <span class="text-ink-muted">{{ $lease->rent_frequency->label() }}</span></dd></div>
+                                <div><dt class="text-ink-muted">{{ __('tenants.overview.outstanding') }}</dt><dd class="tabular-nums font-medium">{{ $outstanding?->format() }}</dd></div>
                                 <div><dt class="text-ink-muted">{{ __('tenants.overview.balance') }}</dt><dd class="tabular-nums">{{ $tenant->creditBalance()->format() }}</dd></div>
                             @endif
                         </dl>
@@ -83,6 +84,11 @@
                     </dl>
                 </x-card>
             </div>
+        @elseif ($tab === 'invoices')
+            <div class="mb-4 flex justify-end">
+                <x-button size="sm" :href="route('app.invoices.create', ['tenant' => $tenant->id])" icon="plus">{{ __('invoices.new') }}</x-button>
+            </div>
+            @include('admin.invoices._table', ['invoices' => $invoices, 'showTenant' => false])
         @elseif ($tab === 'leases')
             @include('admin.leases._table', ['leases' => $leases, 'showTenant' => false])
         @elseif ($tab === 'documents')

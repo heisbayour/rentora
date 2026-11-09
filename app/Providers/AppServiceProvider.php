@@ -6,8 +6,11 @@ namespace App\Providers;
 
 use App\Enums\Role;
 use App\Models\Document;
+use App\Models\Invoice;
 use App\Models\Lease;
 use App\Models\Organization;
+use App\Models\Payment;
+use App\Models\PaymentAllocation;
 use App\Models\Property;
 use App\Models\Setting;
 use App\Models\Tenant;
@@ -58,6 +61,9 @@ class AppServiceProvider extends ServiceProvider
             'document' => Document::class,
             'tenant' => Tenant::class,
             'lease' => Lease::class,
+            'invoice' => Invoice::class,
+            'payment' => Payment::class,
+            'payment_allocation' => PaymentAllocation::class,
         ]);
 
         $this->defineGates();

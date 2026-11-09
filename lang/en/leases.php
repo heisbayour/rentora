@@ -66,7 +66,8 @@ return [
     'terminate_confirm' => [
         'title' => 'Terminate this lease early?',
         'consequences' => 'The lease stops today, the unit becomes vacant and any prepared renewal is cancelled.',
-        'final_invoice' => 'Issue a final invoice for any amount still owed',
+        'final_invoice' => 'Issue a final invoice',
+        'final_amount' => 'Final invoice amount',
     ],
     'agreement' => 'Lease agreement and documents',
     'activated' => 'Lease activated. The unit is now occupied.',

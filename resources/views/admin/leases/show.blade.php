@@ -87,6 +87,7 @@
             <div class="mt-4 space-y-4">
                 <x-textarea name="reason" :label="__('leases.fields.termination_reason')" rows="2" required />
                 <x-checkbox name="final_invoice" :label="__('leases.terminate_confirm.final_invoice')" />
+                <x-money-input name="final_invoice_amount" :label="__('leases.terminate_confirm.final_amount')" :value="0" :symbol="$currencySymbol" />
             </div>
         </x-confirm>
     @endif

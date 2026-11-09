@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property int $id
@@ -102,6 +103,26 @@ class Tenant extends Model implements Documentable
     public function activeLease(): HasOne
     {
         return $this->hasOne(Lease::class)->where('status', LeaseStatus::Active->value)->latestOfMany('start_date');
+    }
+
+    /** @return HasMany<Invoice, $this> */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    /** @return HasMany<Payment, $this> */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /** Sum still owed on open invoices. */
+    public function outstanding(): Money
+    {
+        $owed = (int) $this->invoices()->open()->sum(DB::raw('amount - amount_paid'));
+
+        return Money::forOrganization($owed);
     }
 
     public function creditBalance(): Money

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Actions\Billing\IssueInitialInvoices;
 use App\Actions\Leases\ActivateLease;
 use App\Actions\Leases\CreateLease;
 use App\Actions\Tenants\InviteTenant;
@@ -37,6 +38,7 @@ class LeaseWizard
         private readonly CreateLease $createLease,
         private readonly ActivateLease $activateLease,
         private readonly InviteTenant $inviteTenant,
+        private readonly IssueInitialInvoices $initialInvoices,
     ) {}
 
     /** @return array<string, mixed> */
@@ -244,8 +246,9 @@ class LeaseWizard
             return $options['activate_now'] ? $this->activateLease->handle($lease) : $lease;
         });
 
-        // First invoices (rent for the first period, deposit) are issued by billing in Phase 5
-        // when $draft['deposit']['issue_first_invoices'] is set.
+        if ($lease->isActive() && (bool) ($draft['deposit']['issue_first_invoices'] ?? false)) {
+            $this->initialInvoices->handle($lease);
+        }
 
         if ($options['send_invite'] && ! $lease->tenant->hasPortalAccount()) {
             $this->inviteTenant->handle($lease->tenant);

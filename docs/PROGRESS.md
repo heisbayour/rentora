@@ -63,16 +63,17 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 
 ## Phase 5 - Billing
 
+
 - [x] `Money` value object (built early in Phase 3 for unit rents; unit tests in tests/Unit/MoneyTest.php)
-- [ ] Period calculator (frequency, anchor day, month ends, leap years)
-- [ ] Invoice generator (idempotent) and first invoices at activation
-- [ ] Manual invoices and void
-- [ ] First invoices at lease activation when chosen in the lease wizard; optional final invoice on early termination
-- [ ] Late fees
-- [ ] Credit balance application
-- [ ] Invoice detail page and PDF
-- [ ] Tests: 8.5 criteria; unit tests for Money and periods; caretaker cannot access money routes
-- [ ] Gates pass, commit, push
+- [x] Period calculator (frequency, anchor day, month ends, leap years)
+- [x] Invoice generator (idempotent) and first invoices at activation
+- [x] Manual invoices and void
+- [x] First invoices at lease activation when chosen in the lease wizard; optional final invoice on early termination
+- [x] Late fees
+- [x] Credit balance application
+- [x] Invoice detail page and PDF
+- [x] Tests: 8.5 criteria; unit tests for Money and periods; caretaker cannot access money routes
+- [x] Gates pass, commit, push
 
 ## Phase 6 - Payments
 
@@ -80,7 +81,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 - [ ] Initialize, callback, webhook (gated), reconcile, check status
 - [ ] Transfer proofs (submit, approve, reject)
 - [ ] Staff-recorded payments
-- [ ] Allocation service and reversal
+- [ ] Allocation flows and reversal (AllocationService itself was built in Phase 5)
 - [ ] Receipt PDF with QR, public verify page
 - [ ] Statements (screen and PDF)
 - [ ] Property page: income this year

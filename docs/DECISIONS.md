@@ -62,3 +62,13 @@ Judgement calls made while building from `docs/BUILD_SPEC.md`, newest last. Revi
 44. **The "issue first invoices" option and the termination "final invoice" option are recorded in the UI now** and acted on by the billing module in Phase 5.
 45. **A WhatsApp click-to-send button on the tenant profile was added early** (plain `wa.me` link, local numbers converted to 234...). Phase 8 adds prefilled messages and the full phone normalizer.
 46. **Caretakers see a tenant's overview with contact details only**; leases, documents and activity tabs are owner/manager only. Unit pages show the current tenant's contacts to caretakers.
+
+## Phase 5
+
+47. **The payments and payment_allocations tables were created in Phase 5.** A tenant's credit is the unallocated part of their successful payments, and applying credit to a new invoice is recorded as an allocation from those payments, so statements (Phase 6) explain every naira. `tenants.credit_balance` is a cache recomputed from payments and allocations after every change.
+48. **Billing periods:** period k starts on A + k periods, where A is the billing anchor day on or before the lease start. The first period starts on the lease start date and the last stops at the lease end. A short first period (for example a lease starting on the 30th with anchor 28) is billed in full; proration is not in the spec.
+49. **The due date of a rent or service charge invoice is the first day of its period.** Invoices are issued `invoice_lead_days` before that.
+50. **Late fees exclude deposits and late fees themselves**, need a lease with a late fee configured, and are charged once the day after due date + grace days has started. A percentage fee is taken on the amount still outstanding. A unique index on `parent_invoice_id` guarantees at most one late fee per invoice.
+51. **Voiding an invoice also voids its unpaid late fee.** An invoice with any allocation cannot be voided.
+52. **First invoices at activation** (first period rent and service charge regardless of lead time, plus the deposit if marked unpaid) are issued when the lease wizard activates the lease with that option on. Leases activated later from the lease page rely on the daily generator, which catches up any due periods.
+53. **The early-termination final invoice takes an amount entered by staff** (type "other"), since the spec does not define how a final amount is calculated.

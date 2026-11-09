@@ -9,12 +9,14 @@ use App\Actions\Leases\EndLease;
 use App\Actions\Leases\RenewLease;
 use App\Actions\Leases\TerminateLease;
 use App\Enums\DocumentVisibility;
+use App\Enums\InvoiceType;
 use App\Enums\LeaseStatus;
 use App\Http\Controllers\Concerns\SortsLists;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RenewLeaseRequest;
 use App\Http\Requests\Admin\TerminateLeaseRequest;
 use App\Models\Lease;
+use App\Services\Billing\InvoiceIssuer;
 use App\Support\Money;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -97,10 +99,17 @@ class LeaseController extends Controller
             ->with('toast', $renewal !== null ? __('leases.ended_and_renewed') : __('leases.ended'));
     }
 
-    public function terminate(TerminateLeaseRequest $request, Lease $lease, TerminateLease $terminate): RedirectResponse
+    public function terminate(TerminateLeaseRequest $request, Lease $lease, TerminateLease $terminate, InvoiceIssuer $issuer): RedirectResponse
     {
         $terminate->handle($lease, (string) $request->validated('reason'));
-        // The optional final invoice ($request->boolean('final_invoice')) is issued by billing from Phase 5.
+
+        $finalAmount = (int) $request->validated('final_invoice_amount', 0);
+        if ($request->boolean('final_invoice') && $finalAmount > 0) {
+            $issuer->issue($lease->tenant, InvoiceType::Other, $finalAmount, today(), [
+                'lease' => $lease,
+                'description' => __('invoices.descriptions.final', ['reason' => $request->validated('reason')]),
+            ]);
+        }
 
         return redirect()->route('app.leases.show', $lease)->with('toast', __('leases.terminated'));
     }

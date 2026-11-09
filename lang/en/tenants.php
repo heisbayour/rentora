@@ -46,11 +46,13 @@ return [
     'tabs' => [
         'overview' => 'Overview',
         'leases' => 'Leases',
+        'invoices' => 'Invoices',
         'documents' => 'Documents',
         'activity' => 'Activity',
     ],
     'overview' => [
         'balance' => 'Credit balance',
+        'outstanding' => 'Outstanding',
         'current_lease' => 'Current lease',
         'no_lease' => 'No active lease.',
         'new_lease' => 'New lease',

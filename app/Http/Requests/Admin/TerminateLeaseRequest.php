@@ -22,6 +22,7 @@ class TerminateLeaseRequest extends FormRequest
         return [
             'reason' => ['required', 'string', 'min:3', 'max:1000'],
             'final_invoice' => ['nullable', 'boolean'],
+            'final_invoice_amount' => ['nullable', 'required_if_accepted:final_invoice', 'integer', 'min:0', 'max:'.UnitRequest::MAX_MINOR],
         ];
     }
 }
