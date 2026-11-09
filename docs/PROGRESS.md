@@ -24,19 +24,19 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 
 ## Phase 2 - Organization, auth, roles
 
-- [ ] Core migrations: organizations, users, settings, sequences, system_state, activity_logs
-- [ ] `BelongsToOrganization` trait and `OrganizationScope`
-- [ ] Fortify with custom views: login, logout, forgot/reset, confirm password, TOTP 2FA for owner/manager
-- [ ] Role middleware, active-user check, login throttle 5/min per email+IP, role-based redirect after login
-- [ ] Policies scaffolding
-- [ ] Staff management (invite, role, deactivate) and profile page
-- [ ] Sequence service (INV/RCT/MR numbers with row lock)
-- [ ] Activity logging service
-- [ ] Settings service with encryption
-- [ ] Installer (`/install`) and upgrader (`/system/upgrade`)
-- [ ] First-run wizard
-- [ ] Tests: 8.1 access and throttle; 8.16 installer and upgrade guards
-- [ ] Gates pass, commit, push
+- [x] Core migrations: organizations, users, settings, sequences, system_state, activity_logs
+- [x] `BelongsToOrganization` trait and `OrganizationScope`
+- [x] Fortify with custom views: login, logout, forgot/reset, confirm password, TOTP 2FA for owner/manager
+- [x] Role middleware, active-user check, login throttle 5/min per email+IP, role-based redirect after login
+- [x] Policies scaffolding
+- [x] Staff management (invite, role, deactivate) and profile page
+- [x] Sequence service (INV/RCT/MR numbers with row lock)
+- [x] Activity logging service
+- [x] Settings service with encryption
+- [x] Installer (`/install`) and upgrader (`/system/upgrade`)
+- [x] First-run wizard (organization step; property, units and tenant steps are added in Phases 3 and 4)
+- [x] Tests: 8.1 access and throttle; 8.16 installer and upgrade guards (caretaker-vs-money test lands with the money routes in Phase 5)
+- [x] Gates pass, commit, push
 
 ## Phase 3 - Properties and units
 
@@ -46,6 +46,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 - [ ] Delete blocked with active lease, soft delete otherwise
 - [ ] Documents module and `FileController`
 - [ ] Tests: 8.3 criteria
+- [ ] First-run wizard steps: first property and quick-add units
 - [ ] Gates pass, commit, push
 
 ## Phase 4 - Tenants and leases
@@ -55,6 +56,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 - [ ] Lease wizard (6.5.2)
 - [ ] Activate, renew, end, terminate; unit status sync
 - [ ] Lease agreement document upload
+- [ ] First-run wizard step: invite first tenant (skippable)
 - [ ] Tests: 8.4 criteria and 8.3 status sync
 - [ ] Gates pass, commit, push
 
@@ -67,7 +69,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 - [ ] Late fees
 - [ ] Credit balance application
 - [ ] Invoice detail page and PDF
-- [ ] Tests: 8.5 criteria; unit tests for Money and periods
+- [ ] Tests: 8.5 criteria; unit tests for Money and periods; caretaker cannot access money routes
 - [ ] Gates pass, commit, push
 
 ## Phase 6 - Payments

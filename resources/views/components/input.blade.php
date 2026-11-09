@@ -6,12 +6,13 @@
     'hint' => null,
     'optional' => false,
     'id' => null,
+    'bag' => 'default',
 ])
 
 @php
     $id = $id ?? str_replace(['[', ']', '.'], '-', $name);
     $errorKey = str_replace(['[', ']'], ['.', ''], $name);
-    $error = $errors->first($errorKey);
+    $error = $errors->getBag($bag)->first($errorKey);
     $value = $type === 'password' ? null : old($errorKey, $value);
 @endphp
 

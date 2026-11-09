@@ -10,7 +10,9 @@
 @php
     $appName = config('rentora.name');
     $fullTitle = $title ? $title.' - '.$appName : $appName;
-    $brandColor = $brandColor ?? config('rentora.defaults.primary_color');
+    $brandColor = $brandColor
+        ?? app(\App\Support\CurrentOrganization::class)->get()?->primary_color
+        ?? config('rentora.defaults.primary_color');
 @endphp
 
 <!DOCTYPE html>

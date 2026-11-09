@@ -7,7 +7,7 @@
 
 @php
     $user = auth()->user();
-    $appName = config('rentora.name');
+    $appName = app(\App\Support\CurrentOrganization::class)->get()?->name ?? config('rentora.name');
     $items = [
         ['key' => 'home', 'route' => 'portal.home', 'icon' => 'home'],
         ['key' => 'pay', 'route' => 'portal.pay', 'icon' => 'credit-card'],

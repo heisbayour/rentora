@@ -32,10 +32,23 @@ return [
 
     'disks' => [
 
+        // Private files (proofs, documents). Never served directly: App\Http\Controllers\FileController
+        // streams them after a policy check, so 'serve' stays off.
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
+            'serve' => false,
+            'throw' => false,
+            'report' => false,
+        ],
+
+        // Public images (logos, unit photos). Written straight into public/uploads because
+        // shared hosts cannot create the storage:link symlink.
+        'uploads' => [
+            'driver' => 'local',
+            'root' => public_path('uploads'),
+            'url' => '/uploads',
+            'visibility' => 'public',
             'throw' => false,
             'report' => false,
         ],

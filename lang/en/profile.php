@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+    'title' => 'Profile',
+    'details' => 'Your details',
+    'name' => 'Full name',
+    'email' => 'Email',
+    'email_hint' => 'Ask the owner to change your email.',
+    'phone' => 'Phone',
+    'save' => 'Save details',
+    'saved' => 'Profile saved.',
+    'password' => 'Password',
+    'current_password' => 'Current password',
+    'new_password' => 'New password',
+    'confirm_password' => 'Confirm new password',
+    'update_password' => 'Update password',
+    'password_updated' => 'Password updated.',
+    'two_factor' => 'Two-factor authentication',
+    'two_factor_intro' => 'Add a second step at login using an authenticator app such as Google Authenticator.',
+    'two_factor_enabled' => 'Two-factor authentication is on.',
+    'two_factor_disabled' => 'Two-factor authentication is off.',
+    'two_factor_scan' => 'Scan this QR code with your authenticator app, then enter the 6-digit code to finish.',
+    'two_factor_setup_key' => 'Setup key',
+    'two_factor_code' => 'Code from the app',
+    'two_factor_confirm' => 'Confirm and turn on',
+    'two_factor_enable' => 'Turn on',
+    'two_factor_disable' => 'Turn off',
+    'recovery_codes' => 'Recovery codes',
+    'recovery_codes_intro' => 'Store these somewhere safe. Each one can be used once if you lose your phone.',
+    'regenerate_codes' => 'Generate new codes',
+    'status' => [
+        'two-factor-authentication-enabled' => 'Scan the QR code to finish turning on two-factor authentication.',
+        'two-factor-authentication-confirmed' => 'Two-factor authentication is on.',
+        'two-factor-authentication-disabled' => 'Two-factor authentication is off.',
+        'recovery-codes-generated' => 'New recovery codes generated.',
+        'password-updated' => 'Password updated.',
+    ],
+];

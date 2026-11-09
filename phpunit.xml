@@ -20,6 +20,9 @@
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
+        <env name="RENTORA_INSTALL_LOCK" value="framework/testing/installed.lock"/>
+        <env name="RENTORA_INSTALL_KEY" value="test-install-key"/>
+        <env name="RENTORA_TICK_KEY" value="test-tick-key"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_STORE" value="array"/>
         <env name="DB_CONNECTION" value="sqlite"/>

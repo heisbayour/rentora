@@ -39,7 +39,9 @@ return [
 
     'install' => [
         'key' => env('RENTORA_INSTALL_KEY'),
-        'lock_file' => 'installed.lock',
+        // Relative to storage_path(). Tests point this at storage/framework/testing.
+        'lock_file' => env('RENTORA_INSTALL_LOCK', 'app/installed.lock'),
+        'writable' => ['storage', 'storage/app', 'storage/framework', 'storage/logs', 'bootstrap/cache', 'public/uploads'],
         'required_php' => '8.2.0',
         'required_extensions' => [
             'pdo_mysql', 'mbstring', 'openssl', 'tokenizer', 'xml', 'ctype',

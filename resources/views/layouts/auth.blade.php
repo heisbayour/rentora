@@ -8,7 +8,9 @@
 ])
 
 @php
-    $orgName = $orgName ?? config('rentora.name');
+    $organization = app(\App\Support\CurrentOrganization::class)->get();
+    $orgName = $orgName ?? $organization?->name ?? config('rentora.name');
+    $logo = $logo ?? $organization?->logoUrl();
 @endphp
 
 <x-layouts::base :title="$title" :brand-color="$brandColor" body-class="bg-canvas">

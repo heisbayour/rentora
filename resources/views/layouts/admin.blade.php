@@ -8,7 +8,7 @@
     $user = auth()->user();
     $role = $user?->role instanceof \App\Enums\Role ? $user->role : null;
     $groups = \App\Support\AdminNavigation::for($role);
-    $appName = config('rentora.name');
+    $appName = app(\App\Support\CurrentOrganization::class)->get()?->name ?? config('rentora.name');
 @endphp
 
 <x-layouts::base :title="$title" :brand-color="$brandColor" body-class="bg-canvas">

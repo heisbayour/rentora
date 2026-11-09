@@ -23,3 +23,18 @@ Judgement calls made while building from `docs/BUILD_SPEC.md`, newest last. Revi
 14. **Admin navigation is a PHP definition** (`App\Support\AdminNavigation`) holding the role visibility rules; items whose routes do not exist yet render disabled. Caretakers see maintenance, units, tenants and vendors (read-only contact info, spec 1.2) and no money items.
 15. **Alpine focus plugin (`@alpinejs/focus`) added** for focus trapping in modals, slide-overs and menus (spec 6.4 keyboard-operable overlays).
 16. **No visual browser check in Phase 1.** The Chrome extension was not connected in this session; the components are covered by rendering tests only. A visual pass is part of `docs/SMOKE_TEST.md` in Phase 13.
+
+## Phase 2
+
+17. **Fortify registration and passkeys are off.** Staff and tenants are invited, so public sign-up is never needed; Fortify 1.41's passkeys are not in the spec. Its publish-time passkeys and two-factor column migrations were removed; the 2FA columns live in the users migration.
+18. **Current organization is a scoped service** (App\Support\CurrentOrganization) set by SetCurrentOrganization before route model binding (it is placed ahead of SubstituteBindings in the middleware priority list), so bound models are always organization scoped and a record from another organization is a 404. With no current organization (console, installer) queries are unscoped; scheduler tasks will set it per organization.
+19. **Guests use the first organization in single-org mode.** In RENTORA_MULTI_ORG=true mode guests have no organization; resolving one by domain is SaaS work in the Section 18 roadmap.
+20. **Unauthorised areas return 403**, for example a tenant opening /app or staff opening /portal. Records belonging to another organization return 404.
+21. **Staff invitations use a signed 7-day link** (/invite/staff/{user}) rather than a password reset token, matching the tenant invite in spec 4.3. The link carries an HMAC of the user id and current password hash, so it stops working once a password is set.
+22. **Invitation emails use Laravel's mail channel until Phase 8**, when every outbound message moves onto the outbox channels.
+23. **The installer checks the PDO extension of the configured database driver** instead of always pdo_mysql, so the same check works for MySQL in production and SQLite in tests and local development.
+24. **The install lock path is configurable** (RENTORA_INSTALL_LOCK, relative to storage/). Tests use storage/framework/testing/installed.lock so the suite never touches a local install's lock. The local seeder writes the lock and marks onboarding complete.
+25. **First-run wizard is a step registry** (App\Services\Onboarding, App\Onboarding\*Step). Phase 2 ships the organization step; the property, units and invite-tenant steps are registered when those modules exist (Phases 3 and 4). Only the owner is redirected to it.
+26. **TOTP 2FA is enforced as owner/manager only** by overriding Fortify's EnableTwoFactorAuthentication action, not only by hiding the UI.
+27. **The local disk no longer has Laravel 12's serve option**, so private files can only be reached through the authorising file controller (Phase 3). Public images use a separate uploads disk rooted at public/uploads.
+28. **Gates for area-level permissions** (manage-settings, manage-staff, manage-money, manage-portfolio, iew-system-health, iew-audit-log, everse-payments, use-maintenance) live in AppServiceProvider; per-record rules go in Policies as each model arrives.
