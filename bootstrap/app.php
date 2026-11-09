@@ -27,6 +27,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // models would be resolved without the OrganizationScope.
         $middleware->prependToPriorityList(before: SubstituteBindings::class, prepend: SetCurrentOrganization::class);
 
+        $middleware->validateCsrfTokens(except: ['webhooks/*']);
+
         $middleware->alias([
             'role' => EnsureUserHasRole::class,
             'active' => EnsureUserIsActive::class,

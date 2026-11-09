@@ -47,6 +47,7 @@ return [
         'overview' => 'Overview',
         'leases' => 'Leases',
         'invoices' => 'Invoices',
+        'payments' => 'Payments',
         'documents' => 'Documents',
         'activity' => 'Activity',
     ],

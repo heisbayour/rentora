@@ -28,6 +28,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property Carbon|null $email_verified_at
  * @property string|null $two_factor_secret
  * @property Carbon|null $two_factor_confirmed_at
+ * @property-read Tenant|null $tenant
  */
 class User extends Authenticatable
 {

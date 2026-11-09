@@ -7,11 +7,14 @@ namespace App\Http\Controllers\Admin;
 use App\Actions\Properties\DeleteProperty;
 use App\Actions\Properties\SaveProperty;
 use App\Enums\DocumentVisibility;
+use App\Enums\PaymentStatus;
 use App\Enums\PropertyType;
 use App\Http\Controllers\Concerns\SortsLists;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PropertyRequest;
+use App\Models\PaymentAllocation;
 use App\Models\Property;
+use App\Support\Money;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -75,7 +78,19 @@ class PropertyController extends Controller
             'units' => $property->units()->orderBy('label')->get(),
             'documents' => $property->documents()->get(),
             'visibilities' => DocumentVisibility::options(),
+            'incomeThisYear' => $this->incomeThisYear($property),
         ]);
+    }
+
+    /** Payments received this year on invoices for this property's units (spec 8.3). */
+    private function incomeThisYear(Property $property): Money
+    {
+        $minor = (int) PaymentAllocation::query()
+            ->whereHas('payment', fn ($q) => $q->where('status', PaymentStatus::Successful->value)->where('paid_at', '>=', now()->startOfYear()))
+            ->whereHas('invoice', fn ($q) => $q->whereIn('unit_id', $property->units()->withTrashed()->select('id')))
+            ->sum('amount');
+
+        return Money::forOrganization($minor);
     }
 
     public function edit(Property $property): View

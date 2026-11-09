@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\LeaseController;
 use App\Http\Controllers\Admin\LeaseWizardController;
 use App\Http\Controllers\Admin\ListingController;
 use App\Http\Controllers\Admin\OnboardingController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\QuickAddUnitsController;
@@ -19,9 +20,13 @@ use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\UnitPhotoController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\Portal\HomeController as PortalHomeController;
+use App\Http\Controllers\Portal\PaymentController as PortalPaymentController;
+use App\Http\Controllers\Public\ReceiptVerificationController;
 use App\Http\Controllers\Public\StaffInvitationController;
 use App\Http\Controllers\Public\TenantInvitationController;
+use App\Http\Controllers\StatementController;
 use App\Http\Controllers\System\InstallController;
+use App\Http\Controllers\System\PaystackWebhookController;
 use App\Http\Controllers\System\UpgradeController;
 use Illuminate\Support\Facades\Route;
 
@@ -89,6 +94,20 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
         Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
         Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf'])->name('invoices.pdf');
         Route::post('invoices/{invoice}/void', [InvoiceController::class, 'void'])->name('invoices.void');
+
+        Route::get('payments', [AdminPaymentController::class, 'index'])->name('payments.index');
+        Route::get('payments/create', [AdminPaymentController::class, 'create'])->name('payments.create');
+        Route::post('payments', [AdminPaymentController::class, 'store'])->name('payments.store');
+        Route::get('payments/{payment}', [AdminPaymentController::class, 'show'])->name('payments.show');
+        Route::post('payments/{payment}/approve', [AdminPaymentController::class, 'approve'])->name('payments.approve');
+        Route::post('payments/{payment}/reject', [AdminPaymentController::class, 'reject'])->name('payments.reject');
+        Route::post('payments/{payment}/reverse', [AdminPaymentController::class, 'reverse'])->name('payments.reverse');
+        Route::post('payments/{payment}/check', [AdminPaymentController::class, 'check'])->name('payments.check');
+        Route::get('payments/{payment}/receipt', [AdminPaymentController::class, 'receipt'])->name('payments.receipt');
+        Route::get('payments/{payment}/proof', [AdminPaymentController::class, 'proof'])->name('payments.proof');
+
+        Route::get('tenants/{tenant}/statement', [StatementController::class, 'show'])->name('tenants.statement');
+        Route::get('tenants/{tenant}/statement/pdf', [StatementController::class, 'pdf'])->name('tenants.statement.pdf');
     });
 
     Route::post('documents', [DocumentController::class, 'store'])->name('documents.store');
@@ -113,4 +132,20 @@ Route::get('app/_styleguide', StyleguideController::class)->name('app.styleguide
 // Tenant portal.
 Route::prefix('portal')->name('portal.')->middleware(['auth', 'active', 'role:tenant'])->group(function () {
     Route::get('/', PortalHomeController::class)->name('home');
+
+    Route::post('pay', [PortalPaymentController::class, 'start'])->middleware('throttle:10,1')->name('pay.start');
+    Route::post('pay/proof', [PortalPaymentController::class, 'submitProof'])->middleware('throttle:10,1')->name('pay.proof');
+    Route::post('payments/{payment}/check', [PortalPaymentController::class, 'check'])->middleware('throttle:10,1')->name('payments.check');
+    Route::get('payments/{payment}/receipt', [PortalPaymentController::class, 'receipt'])->name('payments.receipt');
+    Route::get('statement', [StatementController::class, 'show'])->name('statement');
+    Route::get('statement/pdf', [StatementController::class, 'pdf'])->name('statement.pdf');
 });
+
+// Paystack sends the tenant back here after checkout (spec 4.3).
+Route::get('pay/callback', [PortalPaymentController::class, 'callback'])->middleware(['auth', 'active', 'role:tenant'])->name('pay.callback');
+
+// Paystack webhook: no CSRF, off unless RENTORA_PAYSTACK_WEBHOOKS=true.
+Route::post('webhooks/paystack', PaystackWebhookController::class)->name('webhooks.paystack');
+
+// Public receipt verification from the QR code.
+Route::get('r/{code}', ReceiptVerificationController::class)->middleware('throttle:30,1')->name('receipts.verify');

@@ -89,6 +89,12 @@
                 <x-button size="sm" :href="route('app.invoices.create', ['tenant' => $tenant->id])" icon="plus">{{ __('invoices.new') }}</x-button>
             </div>
             @include('admin.invoices._table', ['invoices' => $invoices, 'showTenant' => false])
+        @elseif ($tab === 'payments')
+            <div class="mb-4 flex justify-end gap-2">
+                <x-button size="sm" variant="secondary" :href="route('app.tenants.statement', $tenant)" icon="document-text">{{ __('payments.actions.statement') }}</x-button>
+                <x-button size="sm" :href="route('app.payments.create', ['tenant' => $tenant->id])" icon="plus">{{ __('payments.record') }}</x-button>
+            </div>
+            @include('admin.payments._table', ['payments' => $payments, 'showTenant' => false])
         @elseif ($tab === 'leases')
             @include('admin.leases._table', ['leases' => $leases, 'showTenant' => false])
         @elseif ($tab === 'documents')

@@ -72,3 +72,14 @@ Judgement calls made while building from `docs/BUILD_SPEC.md`, newest last. Revi
 51. **Voiding an invoice also voids its unpaid late fee.** An invoice with any allocation cannot be voided.
 52. **First invoices at activation** (first period rent and service charge regardless of lead time, plus the deposit if marked unpaid) are issued when the lease wizard activates the lease with that option on. Leases activated later from the lease page rely on the daily generator, which catches up any due periods.
 53. **The early-termination final invoice takes an amount entered by staff** (type "other"), since the spec does not define how a final amount is calculated.
+
+## Phase 6
+
+54. **One `PaymentVerifier` confirms every online payment**: the redirect callback, the webhook, "Check status" and reconciliation all call it. It locks the payment row and returns early for anything not pending, so a duplicate callback or webhook cannot allocate twice or issue a second receipt.
+55. **The webhook looks the payment up by reference before checking the signature**, because Paystack keys are stored per organization in Settings. An invalid signature still gets 401 and nothing is changed. On a valid `charge.success` event the transaction is re-verified with the API rather than trusting the payload.
+56. **Verification codes use 31 unambiguous characters** (no 0/O or 1/I/L) so a code typed from a printed receipt is not misread. Receipt QR codes are embedded as PNG data URIs (GD), so the PDF has no remote images.
+57. **Amount in words is generated in house** (British style, "one thousand and five") instead of PHP's intl NumberFormatter, which shared hosts may not have.
+58. **A failed or abandoned Paystack checkout (Paystack 404 on verify) is marked failed**; "pending", "ongoing" and connection errors leave the payment pending for reconciliation, which gives up after 48 hours.
+59. **Rejected and reversed payments both end in status `rejected`** (the spec has no separate "reversed" status); the activity log records which happened and why.
+60. **The Paystack callback currently returns the tenant to the portal home with a toast**; Phase 9 adds the receipt page it will land on.
+61. **Statements list invoices on their issue date and payments on their paid date**; void invoices and non-successful payments are excluded. On the same day, charges are listed before payments.

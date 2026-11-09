@@ -77,16 +77,16 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 
 ## Phase 6 - Payments
 
-- [ ] `PaymentGateway` interface and Paystack gateway
-- [ ] Initialize, callback, webhook (gated), reconcile, check status
-- [ ] Transfer proofs (submit, approve, reject)
-- [ ] Staff-recorded payments
-- [ ] Allocation flows and reversal (AllocationService itself was built in Phase 5)
-- [ ] Receipt PDF with QR, public verify page
-- [ ] Statements (screen and PDF)
-- [ ] Property page: income this year
-- [ ] Tests: 8.6 criteria; unit test for allocation
-- [ ] Gates pass, commit, push
+- [x] `PaymentGateway` interface and Paystack gateway
+- [x] Initialize, callback, webhook (gated), reconcile, check status
+- [x] Transfer proofs (submit, approve, reject)
+- [x] Staff-recorded payments
+- [x] Allocation flows and reversal (AllocationService itself was built in Phase 5)
+- [x] Receipt PDF with QR, public verify page
+- [x] Statements (screen and PDF)
+- [x] Property page: income this year
+- [x] Tests: 8.6 criteria; unit test for allocation
+- [x] Gates pass, commit, push
 
 ## Phase 7 - Maintenance and vendors
 
@@ -109,7 +109,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 - [ ] Announcements and direct messages
 - [ ] WhatsApp click-to-send buttons
 - [ ] In-app inbox
-- [ ] Lazy scheduler, task registry, all tasks in 10.1, `rentora:tick`, `/system/tick`; lease expiry alerts at 60 and 30 days (8.4)
+- [ ] Lazy scheduler, task registry, all tasks in 10.1 (InvoiceGenerator, LateFeeService and PaymentReconciler services exist and need wiring), `rentora:tick`, `/system/tick`; lease expiry alerts at 60 and 30 days (8.4)
 - [ ] Tenant invite by SMS for tenants without email (8.4)
 - [ ] Tests: 8.8 and 10.2 criteria; unit tests for normalizer, renderer, segment counter
 - [ ] Gates pass, commit, push
@@ -117,7 +117,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 ## Phase 9 - Tenant portal and PWA
 
 - [ ] Portal screens per 8.13
-- [ ] Payment wizard and repair wizard
+- [ ] Payment wizard and repair wizard (payment endpoints, callback, proof upload, receipt and statement routes exist from Phase 6; Phase 9 builds the screens and points the callback at a receipt page)
 - [ ] Notices
 - [ ] Manifests, service worker, offline page, install prompt
 - [ ] Gates pass, commit, push

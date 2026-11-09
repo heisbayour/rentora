@@ -17,6 +17,8 @@ use App\Models\Tenant;
 use App\Models\Unit;
 use App\Models\UnitPhoto;
 use App\Models\User;
+use App\Services\Payments\PaymentGateway;
+use App\Services\Payments\PaystackGateway;
 use App\Services\SettingsService;
 use App\Support\CurrentOrganization;
 use Illuminate\Database\Eloquent\Model;
@@ -36,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->scoped(CurrentOrganization::class);
         $this->app->scoped(SettingsService::class);
+        $this->app->bind(PaymentGateway::class, PaystackGateway::class);
     }
 
     /**
