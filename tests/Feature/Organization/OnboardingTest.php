@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Enums\Role;
 use App\Models\Organization;
+use App\Models\Property;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -34,7 +35,42 @@ it('forbids managers from the wizard', function () {
     $this->actingAs($manager)->get(route('app.onboarding.show', 'organization'))->assertForbidden();
 });
 
-it('saves organization details and logo, then finishes', function () {
+it('walks the owner through organization, first property and units, then finishes', function () {
+    Storage::fake('uploads');
+    $owner = freshOwner();
+
+    $this->actingAs($owner)->post(route('app.onboarding.store', 'organization'), [
+        'name' => 'Adebayo Homes', 'primary_color' => '#1A73E8', 'timezone' => 'Africa/Lagos', 'currency' => 'NGN',
+    ])->assertRedirect(route('app.onboarding.show', 'property'));
+
+    $this->actingAs($owner)->get(route('app.onboarding.show', 'property'))->assertOk();
+    $this->actingAs($owner)->post(route('app.onboarding.store', 'property'), [
+        'name' => 'Lekki Gardens', 'code' => 'lkg', 'type' => 'residential', 'address' => '1 Admiralty Way', 'country' => 'Nigeria',
+    ])->assertRedirect(route('app.onboarding.show', 'units'));
+
+    $this->actingAs($owner)->get(route('app.onboarding.show', 'units'))->assertOk()->assertSee('Lekki Gardens');
+    $this->actingAs($owner)->post(route('app.onboarding.store', 'units'), ['units' => [
+        ['label' => 'Flat 1', 'type' => 'flat', 'rent_amount' => '150000000', 'rent_frequency' => 'annual'],
+        ['label' => '', 'type' => 'flat', 'rent_amount' => '', 'rent_frequency' => 'annual'],
+        ['label' => 'Shop 1', 'type' => 'shop', 'rent_amount' => '5000000', 'rent_frequency' => 'monthly'],
+    ]])->assertRedirect(route('app.dashboard'));
+
+    $property = Property::query()->withoutGlobalScopes()->where('code', 'LKG')->firstOrFail();
+    expect($property->units()->count())->toBe(2);
+    $this->actingAs($owner)->get('/app')->assertOk();
+});
+
+it('resumes the wizard at the first unfinished step', function () {
+    $owner = freshOwner();
+
+    $this->actingAs($owner)->post(route('app.onboarding.store', 'organization'), [
+        'name' => 'Adebayo Homes', 'primary_color' => '#1A73E8', 'timezone' => 'Africa/Lagos', 'currency' => 'NGN',
+    ]);
+
+    $this->actingAs($owner)->get('/app')->assertRedirect(route('app.onboarding.show', 'property'));
+});
+
+it('saves organization details and logo', function () {
     Storage::fake('uploads');
     $owner = freshOwner();
 
@@ -47,7 +83,7 @@ it('saves organization details and logo, then finishes', function () {
         'timezone' => 'Africa/Lagos',
         'currency' => 'NGN',
         'logo' => UploadedFile::fake()->image('logo.png', 400, 200),
-    ])->assertRedirect(route('app.dashboard'));
+    ])->assertRedirect(route('app.onboarding.show', 'property'));
 
     $organization = $owner->organization->fresh();
     expect($organization->name)->toBe('Adebayo Homes')
@@ -55,7 +91,7 @@ it('saves organization details and logo, then finishes', function () {
         ->and($organization->logo_path)->toStartWith('logos/');
     Storage::disk('uploads')->assertExists($organization->logo_path);
 
-    $this->actingAs($owner)->get('/app')->assertOk()->assertSee('11 128 67', false);
+    $this->actingAs($owner)->get(route('app.onboarding.show', 'property'))->assertOk()->assertSee('11 128 67', false);
 });
 
 it('validates the organization step', function () {

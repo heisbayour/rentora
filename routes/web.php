@@ -3,10 +3,17 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DocumentController;
+use App\Http\Controllers\Admin\ListingController;
 use App\Http\Controllers\Admin\OnboardingController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\PropertyController;
+use App\Http\Controllers\Admin\QuickAddUnitsController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\StyleguideController;
+use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\UnitPhotoController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\Portal\HomeController as PortalHomeController;
 use App\Http\Controllers\Public\StaffInvitationController;
 use App\Http\Controllers\System\InstallController;
@@ -44,12 +51,30 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
     Route::get('setup/{step}', [OnboardingController::class, 'show'])->name('onboarding.show');
     Route::post('setup/{step}', [OnboardingController::class, 'store'])->name('onboarding.store');
 
+    // Portfolio: owners and managers manage; caretakers may read units (policies decide per action).
+    Route::resource('properties', PropertyController::class);
+    Route::get('properties/{property}/quick-add', [QuickAddUnitsController::class, 'create'])->name('properties.quick-add');
+    Route::post('properties/{property}/quick-add', [QuickAddUnitsController::class, 'store'])->name('properties.quick-add.store');
+    Route::resource('units', UnitController::class);
+    Route::post('units/{unit}/photos', [UnitPhotoController::class, 'store'])->name('units.photos.store');
+    Route::patch('units/{unit}/photos/{photo}/move', [UnitPhotoController::class, 'move'])->name('units.photos.move');
+    Route::delete('units/{unit}/photos/{photo}', [UnitPhotoController::class, 'destroy'])->name('units.photos.destroy');
+    Route::get('listings', [ListingController::class, 'index'])->name('listings.index');
+    Route::patch('listings/{unit}', [ListingController::class, 'toggle'])->name('listings.toggle');
+    Route::post('documents', [DocumentController::class, 'store'])->name('documents.store');
+    Route::delete('documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
+
     Route::middleware('can:manage-staff')->group(function () {
         Route::get('staff', [StaffController::class, 'index'])->name('staff.index');
         Route::post('staff', [StaffController::class, 'store'])->name('staff.store');
         Route::put('staff/{member}', [StaffController::class, 'update'])->name('staff.update');
         Route::post('staff/{member}/resend', [StaffController::class, 'resend'])->name('staff.resend');
     });
+});
+
+// Private files, streamed after a policy check (spec 11).
+Route::middleware(['auth', 'active'])->group(function () {
+    Route::get('files/documents/{document}', [FileController::class, 'document'])->name('files.documents');
 });
 
 // Developer styleguide; the controller returns 404 outside local and testing.

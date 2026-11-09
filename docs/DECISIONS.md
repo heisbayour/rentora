@@ -38,3 +38,14 @@ Judgement calls made while building from `docs/BUILD_SPEC.md`, newest last. Revi
 26. **TOTP 2FA is enforced as owner/manager only** by overriding Fortify's `EnableTwoFactorAuthentication` action, not only by hiding the UI.
 27. **The `local` disk no longer has Laravel 12's `serve` option**, so private files can only be reached through the authorising file controller (Phase 3). Public images use a separate `uploads` disk rooted at `public/uploads`.
 28. **Gates for area-level permissions** (`manage-settings`, `manage-staff`, `manage-money`, `manage-portfolio`, `view-system-health`, `view-audit-log`, `reverse-payments`, `use-maintenance`) live in `AppServiceProvider`; per-record rules go in Policies as each model arrives.
+
+## Phase 3
+
+29. **`App\Support\Money` was built in Phase 3**, ahead of Phase 5, because unit rents, service charges and deposits are displayed from this phase on. It never uses floats: parsing is string based, formatting splits whole and minor units with integer maths, and percentages use basis points.
+30. **Public photos are re-encoded server side to JPEG** (max 1600px, quality 80) even though the browser already compresses them. This guarantees the spec's `public/uploads/units/{uuid}.jpg` format and strips EXIF metadata such as GPS coordinates from tenants' and landlords' phones.
+31. **Unit photos are reordered with move-earlier / move-later buttons** rather than drag and drop: keyboard accessible, works without JavaScript and needs no extra library.
+32. **An enforced morph map** gives polymorphic columns short names (`property`, `unit`, ...). Every new model must be added to `AppServiceProvider`; a missing one throws rather than silently storing a class name.
+33. **A unit that is not vacant or reserved is automatically unlisted** when saved, and the Listings page refuses to list one, so the public site never shows an occupied unit.
+34. **Deleting a property soft deletes its units too.** The active-lease guard (spec 8.3) is added in Phase 4 with leases; the property page's income and open-repairs figures arrive with payments (Phase 6) and maintenance (Phase 7).
+35. **Caretakers can open the units list and unit pages read-only** but not properties, listings or documents, matching "read-only unit and tenant contact info" in spec 1.2.
+36. **The first-run wizard gained the "first property" and "units" steps**; the units step reuses the quick-add table. Neither is skippable; the tenant-invite step (Phase 4) will be.

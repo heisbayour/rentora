@@ -5,10 +5,17 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Enums\Role;
+use App\Models\Document;
+use App\Models\Organization;
+use App\Models\Property;
+use App\Models\Setting;
+use App\Models\Unit;
+use App\Models\UnitPhoto;
 use App\Models\User;
 use App\Services\SettingsService;
 use App\Support\CurrentOrganization;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
@@ -37,6 +44,17 @@ class AppServiceProvider extends ServiceProvider
 
         // Layouts live in resources/views/layouts and are used as <x-layouts::admin>.
         Blade::anonymousComponentPath(resource_path('views/layouts'), 'layouts');
+
+        // Short, stable names in morph columns (documents, activity_logs). Add every new model here.
+        Relation::enforceMorphMap([
+            'organization' => Organization::class,
+            'user' => User::class,
+            'setting' => Setting::class,
+            'property' => Property::class,
+            'unit' => Unit::class,
+            'unit_photo' => UnitPhoto::class,
+            'document' => Document::class,
+        ]);
 
         $this->defineGates();
     }

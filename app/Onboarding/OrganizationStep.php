@@ -44,6 +44,11 @@ class OrganizationStep implements OnboardingStep
         ];
     }
 
+    public function prepare(array $input): array
+    {
+        return $input;
+    }
+
     public function rules(): array
     {
         return UpdateOrganization::rules();

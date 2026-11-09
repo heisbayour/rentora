@@ -6,6 +6,8 @@ namespace App\Services;
 
 use App\Onboarding\OnboardingStep;
 use App\Onboarding\OrganizationStep;
+use App\Onboarding\PropertyStep;
+use App\Onboarding\UnitsStep;
 
 /**
  * First-run wizard progress, stored in settings so it resumes where the owner
@@ -20,6 +22,8 @@ class Onboarding
     /** @var list<class-string<OnboardingStep>> */
     private const STEPS = [
         OrganizationStep::class,
+        PropertyStep::class,
+        UnitsStep::class,
     ];
 
     public function __construct(private readonly SettingsService $settings) {}

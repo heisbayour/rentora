@@ -26,6 +26,7 @@ return [
     'previous' => 'Previous',
     'loading' => 'Loading',
     'optional' => 'optional',
+    'choose' => 'Choose...',
     'required' => 'required',
     'step_of' => 'Step :current of :total',
     'breadcrumbs' => 'Breadcrumb',

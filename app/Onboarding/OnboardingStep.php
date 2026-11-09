@@ -20,6 +20,14 @@ interface OnboardingStep
     /** @return array<string, mixed> */
     public function data(): array;
 
+    /**
+     * Tidies the submitted input before validation (for example dropping blank rows).
+     *
+     * @param  array<string, mixed>  $input
+     * @return array<string, mixed>
+     */
+    public function prepare(array $input): array;
+
     /** @return array<string, mixed> */
     public function rules(): array;
 

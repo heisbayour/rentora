@@ -1,0 +1,58 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+    'title' => 'Properties',
+    'description' => 'Buildings and estates you manage.',
+    'new' => 'New property',
+    'edit' => 'Edit property',
+    'search' => 'Search by name, code or city',
+    'all_types' => 'All types',
+    'empty_title' => 'No properties yet',
+    'empty_text' => 'Add your first property, then add its units.',
+    'empty_search' => 'No properties match your search.',
+    'fields' => [
+        'name' => 'Property name',
+        'code' => 'Code',
+        'code_hint' => 'A short unique code such as LKG or WUSE2.',
+        'type' => 'Type',
+        'address' => 'Street address',
+        'city' => 'City',
+        'state' => 'State',
+        'country' => 'Country',
+        'description' => 'Description',
+        'cover_image' => 'Cover image',
+        'remove_cover' => 'Remove the current cover image',
+        'is_listed' => 'Show on the public website',
+        'is_listed_hint' => 'Listed units of this property appear on your website.',
+    ],
+    'columns' => [
+        'property' => 'Property',
+        'code' => 'Code',
+        'city' => 'City',
+        'units' => 'Units',
+        'occupancy' => 'Occupancy',
+    ],
+    'stats' => [
+        'units' => 'Units',
+        'occupancy' => 'Occupancy',
+        'occupied_of' => ':occupied of :total occupied',
+        'vacant' => 'Vacant units',
+    ],
+    'tabs' => [
+        'units' => 'Units',
+        'documents' => 'Documents',
+    ],
+    'add_unit' => 'Add unit',
+    'quick_add' => 'Quick add units',
+    'no_units_title' => 'No units in this property',
+    'no_units_text' => 'Add units one by one or use quick add to create several at once.',
+    'delete' => 'Delete property',
+    'delete_title' => 'Delete :name?',
+    'delete_consequences' => 'The property and its :count units are removed from all lists. History such as payments is kept.',
+    'save' => 'Save property',
+    'created' => ':name was added.',
+    'updated' => ':name was updated.',
+    'deleted' => ':name was deleted.',
+];

@@ -40,14 +40,14 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 
 ## Phase 3 - Properties and units
 
-- [ ] Property CRUD with cover image, detail page tabs
-- [ ] Unit CRUD, photos (reorder, delete), status, listing toggle
-- [ ] Quick-add up to 50 units
-- [ ] Delete blocked with active lease, soft delete otherwise
-- [ ] Documents module and `FileController`
-- [ ] Tests: 8.3 criteria
-- [ ] First-run wizard steps: first property and quick-add units
-- [ ] Gates pass, commit, push
+- [x] Property CRUD with cover image, detail page with units and documents tabs (income and open repairs are added in Phases 6 and 7)
+- [x] Unit CRUD, photos (reorder, delete), status, listing toggle
+- [x] Quick-add up to 50 units
+- [x] Soft delete for properties and units (the active-lease guard needs leases and is in Phase 4)
+- [x] Documents module and `FileController`
+- [x] Tests: property, unit, quick-add, photo, listing and document behaviour (8.3 lease criteria in Phase 4)
+- [x] First-run wizard steps: first property and quick-add units
+- [x] Gates pass, commit, push
 
 ## Phase 4 - Tenants and leases
 
@@ -55,6 +55,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 - [ ] Invite flow (signed 7-day link, email/SMS, resend)
 - [ ] Lease wizard (6.5.2)
 - [ ] Activate, renew, end, terminate; unit status sync
+- [ ] Block deleting a unit or property with an active lease (8.3)
 - [ ] Lease agreement document upload
 - [ ] First-run wizard step: invite first tenant (skippable)
 - [ ] Tests: 8.4 criteria and 8.3 status sync
@@ -62,7 +63,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 
 ## Phase 5 - Billing
 
-- [ ] `Money` value object
+- [x] `Money` value object (built early in Phase 3 for unit rents; unit tests in tests/Unit/MoneyTest.php)
 - [ ] Period calculator (frequency, anchor day, month ends, leap years)
 - [ ] Invoice generator (idempotent) and first invoices at activation
 - [ ] Manual invoices and void
@@ -81,6 +82,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 - [ ] Allocation service and reversal
 - [ ] Receipt PDF with QR, public verify page
 - [ ] Statements (screen and PDF)
+- [ ] Property page: income this year
 - [ ] Tests: 8.6 criteria; unit test for allocation
 - [ ] Gates pass, commit, push
 
@@ -92,6 +94,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 - [ ] SLA indicators, emergency handling
 - [ ] Kanban and table views
 - [ ] Rating and auto-close; cost to expense link
+- [ ] Property page: open repairs
 - [ ] Tests: 8.7 criteria
 - [ ] Gates pass, commit, push
 

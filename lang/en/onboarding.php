@@ -6,6 +6,16 @@ return [
     'title' => 'Set up your organization',
     'steps' => [
         'organization' => 'Organization',
+        'property' => 'First property',
+        'units' => 'Units',
+    ],
+    'property' => [
+        'heading' => 'Add your first property',
+        'intro' => 'A building or estate. You can add more properties later.',
+    ],
+    'units' => [
+        'heading' => 'Add the units in :property',
+        'intro' => 'List the flats, rooms, shops or offices you rent out. Add up to :max now; you can add more later.',
     ],
     'organization' => [
         'heading' => 'Tell us about your organization',
