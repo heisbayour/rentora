@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Onboarding\OnboardingStep;
 use App\Onboarding\OrganizationStep;
 use App\Onboarding\PropertyStep;
+use App\Onboarding\TenantStep;
 use App\Onboarding\UnitsStep;
 
 /**
@@ -24,6 +25,7 @@ class Onboarding
         OrganizationStep::class,
         PropertyStep::class,
         UnitsStep::class,
+        TenantStep::class,
     ];
 
     public function __construct(private readonly SettingsService $settings) {}

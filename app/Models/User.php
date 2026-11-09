@@ -9,6 +9,7 @@ use App\Models\Concerns\BelongsToOrganization;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -80,6 +81,12 @@ class User extends Authenticatable
             'role' => Role::class,
             'is_active' => 'boolean',
         ];
+    }
+
+    /** The tenant record behind a tenant portal account. @return HasOne<Tenant, $this> */
+    public function tenant(): HasOne
+    {
+        return $this->hasOne(Tenant::class);
     }
 
     public function hasRole(Role ...$roles): bool

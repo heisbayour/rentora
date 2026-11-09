@@ -51,6 +51,9 @@ return [
     'delete' => 'Delete property',
     'delete_title' => 'Delete :name?',
     'delete_consequences' => 'The property and its :count units are removed from all lists. History such as payments is kept.',
+    'errors' => [
+        'has_active_lease' => ':name has units with active leases. End or terminate those leases before deleting the property.',
+    ],
     'save' => 'Save property',
     'created' => ':name was added.',
     'updated' => ':name was updated.',

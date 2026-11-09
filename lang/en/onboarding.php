@@ -8,6 +8,12 @@ return [
         'organization' => 'Organization',
         'property' => 'First property',
         'units' => 'Units',
+        'tenant' => 'First tenant',
+    ],
+    'tenant' => [
+        'heading' => 'Invite your first tenant',
+        'intro' => 'They get a link to set a password for the tenant portal. You can add their lease afterwards, or skip this for now.',
+        'submit' => 'Send invite and finish',
     ],
     'property' => [
         'heading' => 'Add your first property',

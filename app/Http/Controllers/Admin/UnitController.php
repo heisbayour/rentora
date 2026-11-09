@@ -79,7 +79,7 @@ class UnitController extends Controller
     {
         $this->authorize('view', $unit);
 
-        $unit->load(['property', 'photos']);
+        $unit->load(['property', 'photos', 'activeLease.tenant']);
 
         return view('admin.units.show', [
             'unit' => $unit,

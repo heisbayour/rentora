@@ -51,15 +51,15 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 
 ## Phase 4 - Tenants and leases
 
-- [ ] Tenant CRUD and profile tabs
-- [ ] Invite flow (signed 7-day link, email/SMS, resend)
-- [ ] Lease wizard (6.5.2)
-- [ ] Activate, renew, end, terminate; unit status sync
-- [ ] Block deleting a unit or property with an active lease (8.3)
-- [ ] Lease agreement document upload
-- [ ] First-run wizard step: invite first tenant (skippable)
-- [ ] Tests: 8.4 criteria and 8.3 status sync
-- [ ] Gates pass, commit, push
+- [x] Tenant CRUD and profile tabs: overview, leases, documents, activity (invoices, payments, maintenance and messages tabs join in Phases 5 to 8)
+- [x] Invite flow (signed 7-day link, email now, SMS through the outbox in Phase 8, resend)
+- [x] Lease wizard (6.5.2)
+- [x] Activate, renew, end, terminate; unit status sync
+- [x] Block deleting a unit or property with an active lease (8.3)
+- [x] Lease agreement document upload
+- [x] First-run wizard step: invite first tenant (skippable)
+- [x] Tests: 8.4 criteria and 8.3 status sync
+- [x] Gates pass, commit, push
 
 ## Phase 5 - Billing
 
@@ -67,6 +67,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 - [ ] Period calculator (frequency, anchor day, month ends, leap years)
 - [ ] Invoice generator (idempotent) and first invoices at activation
 - [ ] Manual invoices and void
+- [ ] First invoices at lease activation when chosen in the lease wizard; optional final invoice on early termination
 - [ ] Late fees
 - [ ] Credit balance application
 - [ ] Invoice detail page and PDF
@@ -107,7 +108,8 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 - [ ] Announcements and direct messages
 - [ ] WhatsApp click-to-send buttons
 - [ ] In-app inbox
-- [ ] Lazy scheduler, task registry, all tasks in 10.1, `rentora:tick`, `/system/tick`
+- [ ] Lazy scheduler, task registry, all tasks in 10.1, `rentora:tick`, `/system/tick`; lease expiry alerts at 60 and 30 days (8.4)
+- [ ] Tenant invite by SMS for tenants without email (8.4)
 - [ ] Tests: 8.8 and 10.2 criteria; unit tests for normalizer, renderer, segment counter
 - [ ] Gates pass, commit, push
 

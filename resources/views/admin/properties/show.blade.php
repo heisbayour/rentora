@@ -14,6 +14,10 @@
         </x-slot:actions>
     </x-page-header>
 
+    @error('property')
+        <x-alert type="danger" class="mb-4">{{ $message }}</x-alert>
+    @enderror
+
     <div class="mb-6 grid gap-4 sm:grid-cols-3">
         <x-stat-card :label="__('properties.stats.units')" :value="$property->units_count" icon="squares-2x2" />
         <x-stat-card :label="__('properties.stats.occupancy')" :value="$property->occupancyPercent().'%'"

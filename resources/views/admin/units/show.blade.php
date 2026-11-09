@@ -9,7 +9,29 @@
         @endif
     </x-page-header>
 
+    @error('unit')
+        <x-alert type="danger" class="mb-4">{{ $message }}</x-alert>
+    @enderror
+
     <div class="grid gap-6 lg:grid-cols-3">
+        <x-card :title="__('units.current_tenant')" class="lg:col-span-3">
+            @if ($tenant = $unit->activeLease?->tenant)
+                <div class="flex flex-wrap items-center gap-4 text-sm">
+                    <x-avatar :name="$tenant->full_name" />
+                    <div>
+                        <a href="{{ route('app.tenants.show', $tenant) }}" class="font-medium text-ink hover:text-primary-600">{{ $tenant->full_name }}</a>
+                        <p class="text-ink-muted"><a href="tel:{{ $tenant->phone }}" class="tabular-nums hover:underline">{{ $tenant->phone }}</a>
+                            @if ($tenant->email) · <a href="mailto:{{ $tenant->email }}" class="hover:underline">{{ $tenant->email }}</a>@endif</p>
+                    </div>
+                    @if ($canManage)
+                        <x-button size="sm" variant="secondary" class="ml-auto" :href="route('app.leases.show', $unit->activeLease)">{{ __('leases.title') }}</x-button>
+                    @endif
+                </div>
+            @else
+                <p class="text-sm text-ink-muted">{{ __('units.no_tenant') }}</p>
+            @endif
+        </x-card>
+
         <x-card :title="__('units.details')" class="lg:col-span-1">
             <dl class="space-y-3 text-sm">
                 <div class="flex justify-between gap-4"><dt class="text-ink-muted">{{ __('units.fields.status') }}</dt><dd><x-status-chip :status="$unit->status" /></dd></div>

@@ -10,7 +10,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\DocumentRequest;
 use App\Models\Contracts\Documentable;
 use App\Models\Document;
+use App\Models\Lease;
 use App\Models\Property;
+use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 
@@ -20,6 +22,8 @@ class DocumentController extends Controller
     /** Morph alias => model class. Add a model here when it gains documents. */
     public const DOCUMENTABLES = [
         'property' => Property::class,
+        'tenant' => Tenant::class,
+        'lease' => Lease::class,
     ];
 
     public function __construct(private readonly ManageDocuments $documents) {}

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DocumentController;
+use App\Http\Controllers\Admin\LeaseController;
+use App\Http\Controllers\Admin\LeaseWizardController;
 use App\Http\Controllers\Admin\ListingController;
 use App\Http\Controllers\Admin\OnboardingController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -11,11 +13,13 @@ use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\QuickAddUnitsController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\StyleguideController;
+use App\Http\Controllers\Admin\TenantController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\UnitPhotoController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\Portal\HomeController as PortalHomeController;
 use App\Http\Controllers\Public\StaffInvitationController;
+use App\Http\Controllers\Public\TenantInvitationController;
 use App\Http\Controllers\System\InstallController;
 use App\Http\Controllers\System\UpgradeController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +43,8 @@ Route::middleware(['auth', 'active', 'role:owner'])->group(function () {
 Route::middleware(['signed', 'throttle:10,1'])->group(function () {
     Route::get('invite/staff/{user}', [StaffInvitationController::class, 'show'])->name('invite.staff');
     Route::post('invite/staff/{user}', [StaffInvitationController::class, 'store'])->name('invite.staff.accept');
+    Route::get('invite/{tenant}', [TenantInvitationController::class, 'show'])->whereNumber('tenant')->name('invite.tenant');
+    Route::post('invite/{tenant}', [TenantInvitationController::class, 'store'])->whereNumber('tenant')->name('invite.tenant.accept');
 });
 
 // Landlord console.
@@ -61,6 +67,19 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
     Route::delete('units/{unit}/photos/{photo}', [UnitPhotoController::class, 'destroy'])->name('units.photos.destroy');
     Route::get('listings', [ListingController::class, 'index'])->name('listings.index');
     Route::patch('listings/{unit}', [ListingController::class, 'toggle'])->name('listings.toggle');
+    // People: tenants (caretakers read contact details) and leases.
+    Route::resource('tenants', TenantController::class);
+    Route::post('tenants/{tenant}/invite', [TenantController::class, 'invite'])->name('tenants.invite');
+    Route::get('leases/new', [LeaseWizardController::class, 'start'])->name('leases.wizard.start');
+    Route::get('leases/new/{step}', [LeaseWizardController::class, 'show'])->name('leases.wizard.show');
+    Route::post('leases/new/{step}', [LeaseWizardController::class, 'store'])->name('leases.wizard.store');
+    Route::get('leases', [LeaseController::class, 'index'])->name('leases.index');
+    Route::get('leases/{lease}', [LeaseController::class, 'show'])->name('leases.show');
+    Route::post('leases/{lease}/activate', [LeaseController::class, 'activate'])->name('leases.activate');
+    Route::post('leases/{lease}/renew', [LeaseController::class, 'renew'])->name('leases.renew');
+    Route::post('leases/{lease}/end', [LeaseController::class, 'end'])->name('leases.end');
+    Route::post('leases/{lease}/terminate', [LeaseController::class, 'terminate'])->name('leases.terminate');
+
     Route::post('documents', [DocumentController::class, 'store'])->name('documents.store');
     Route::delete('documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 

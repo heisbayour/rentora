@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\LeaseStatus;
 use App\Enums\RentFrequency;
 use App\Enums\UnitStatus;
 use App\Enums\UnitType;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -85,6 +87,31 @@ class Unit extends Model
     public function photos(): HasMany
     {
         return $this->hasMany(UnitPhoto::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    /** @return HasMany<Lease, $this> */
+    public function leases(): HasMany
+    {
+        return $this->hasMany(Lease::class);
+    }
+
+    /** @return HasOne<Lease, $this> */
+    public function activeLease(): HasOne
+    {
+        return $this->hasOne(Lease::class)->where('status', LeaseStatus::Active->value)->latestOfMany('start_date');
+    }
+
+    public function hasActiveLease(): bool
+    {
+        return $this->leases()->where('status', LeaseStatus::Active->value)->exists();
+    }
+
+    /** Used by BelongsToOrganization when no organization was set explicitly. */
+    public function parentOrganizationId(): ?int
+    {
+        $id = Property::query()->withoutGlobalScopes()->whereKey($this->property_id)->value('organization_id');
+
+        return $id === null ? null : (int) $id;
     }
 
     public function rent(): Money

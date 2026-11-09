@@ -22,9 +22,13 @@ trait BelongsToOrganization
         static::addGlobalScope(new OrganizationScope);
 
         static::creating(function (Model $model): void {
-            if ($model->getAttribute('organization_id') === null) {
-                $model->setAttribute('organization_id', app(CurrentOrganization::class)->id());
+            if ($model->getAttribute('organization_id') !== null) {
+                return;
             }
+            // A child record (lease, unit, document) belongs to its parent's organization,
+            // which also covers work done outside a request (console, scheduler, tests).
+            $organizationId = method_exists($model, 'parentOrganizationId') ? $model->parentOrganizationId() : null;
+            $model->setAttribute('organization_id', $organizationId ?? app(CurrentOrganization::class)->id());
         });
     }
 

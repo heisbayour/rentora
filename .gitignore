@@ -23,3 +23,5 @@ yarn-error.log
 /.zed
 /dist
 /storage/app/installed.lock
+/public/uploads/*
+!/public/uploads/.gitkeep

@@ -49,3 +49,16 @@ Judgement calls made while building from `docs/BUILD_SPEC.md`, newest last. Revi
 34. **Deleting a property soft deletes its units too.** The active-lease guard (spec 8.3) is added in Phase 4 with leases; the property page's income and open-repairs figures arrive with payments (Phase 6) and maintenance (Phase 7).
 35. **Caretakers can open the units list and unit pages read-only** but not properties, listings or documents, matching "read-only unit and tenant contact info" in spec 1.2.
 36. **The first-run wizard gained the "first property" and "units" steps**; the units step reuses the quick-add table. Neither is skippable; the tenant-invite step (Phase 4) will be.
+
+## Phase 4
+
+37. **`leases.renewal_of_id` was added to the schema.** Renewal creates a draft lease starting the day after the current end date; the link lets ending a lease activate its renewal straight away (unit stays occupied) and lets the `EndExpiredLeases` task tell "ended with no renewal" apart (spec 10.1). Terminating early discards a prepared renewal.
+38. **Tenant status meaning:** `pending_invite` until the tenant accepts a portal invite, `active` once they have a portal account (or on a new active lease after accepting), `former` once no active lease covers them.
+39. **"End lease" is available only on or after the end date**; ending sooner is "Terminate early", which requires a reason. Both release the unit (vacant) and the tenant (former) unless another active lease still covers them.
+40. **Activation locks the unit row** (`lockForUpdate`) before checking for another active lease, so two concurrent activations cannot both succeed (spec 5.3 business rule).
+41. **Tenant invitation links are bound to `invite_sent_at` and the portal account**: resending invalidates older links and an accepted link stops working. A tenant invited without an email chooses their login email when accepting.
+42. **Child records take their parent's organization** (`parentOrganizationId()` on Lease, Unit and Document) when no organization was set, so actions run from the console or scheduler file records in the right organization.
+43. **The lease wizard keeps its draft in the session** and refuses deep links past the first incomplete step. Choosing a different unit resets the terms and deposit to that unit's defaults. Late fees use kobo for a fixed amount and basis points (1000 = 10%) for a percentage.
+44. **The "issue first invoices" option and the termination "final invoice" option are recorded in the UI now** and acted on by the billing module in Phase 5.
+45. **A WhatsApp click-to-send button on the tenant profile was added early** (plain `wa.me` link, local numbers converted to 234...). Phase 8 adds prefilled messages and the full phone normalizer.
+46. **Caretakers see a tenant's overview with contact details only**; leases, documents and activity tabs are owner/manager only. Unit pages show the current tenant's contacts to caretakers.

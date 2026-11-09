@@ -53,7 +53,11 @@ it('walks the owner through organization, first property and units, then finishe
         ['label' => 'Flat 1', 'type' => 'flat', 'rent_amount' => '150000000', 'rent_frequency' => 'annual'],
         ['label' => '', 'type' => 'flat', 'rent_amount' => '', 'rent_frequency' => 'annual'],
         ['label' => 'Shop 1', 'type' => 'shop', 'rent_amount' => '5000000', 'rent_frequency' => 'monthly'],
-    ]])->assertRedirect(route('app.dashboard'));
+    ]])->assertRedirect(route('app.onboarding.show', 'tenant'));
+
+    $this->actingAs($owner)->get(route('app.onboarding.show', 'tenant'))->assertOk();
+    $this->actingAs($owner)->post(route('app.onboarding.store', 'tenant'), ['skip' => '1'])
+        ->assertRedirect(route('app.dashboard'));
 
     $property = Property::query()->withoutGlobalScopes()->where('code', 'LKG')->firstOrFail();
     expect($property->units()->count())->toBe(2);

@@ -50,6 +50,11 @@ return [
     'created' => ':label was added.',
     'updated' => ':label was updated.',
     'deleted' => ':label was deleted.',
+    'current_tenant' => 'Current tenant',
+    'no_tenant' => 'No active lease.',
+    'errors' => [
+        'has_active_lease' => ':label has an active lease. End or terminate the lease before deleting the unit.',
+    ],
     'quick_add' => [
         'title' => 'Quick add units',
         'intro' => 'Add up to :max units to :property at once. Leave rows blank to skip them.',

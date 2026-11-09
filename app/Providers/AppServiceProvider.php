@@ -6,9 +6,11 @@ namespace App\Providers;
 
 use App\Enums\Role;
 use App\Models\Document;
+use App\Models\Lease;
 use App\Models\Organization;
 use App\Models\Property;
 use App\Models\Setting;
+use App\Models\Tenant;
 use App\Models\Unit;
 use App\Models\UnitPhoto;
 use App\Models\User;
@@ -54,6 +56,8 @@ class AppServiceProvider extends ServiceProvider
             'unit' => Unit::class,
             'unit_photo' => UnitPhoto::class,
             'document' => Document::class,
+            'tenant' => Tenant::class,
+            'lease' => Lease::class,
         ]);
 
         $this->defineGates();

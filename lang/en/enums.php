@@ -37,6 +37,28 @@ return [
         'reserved' => 'Reserved',
         'under_maintenance' => 'Under maintenance',
     ],
+    'tenant_status' => [
+        'pending_invite' => 'Invite pending',
+        'active' => 'Active',
+        'former' => 'Former',
+    ],
+    'lease_status' => [
+        'draft' => 'Draft',
+        'active' => 'Active',
+        'ended' => 'Ended',
+        'terminated' => 'Terminated',
+    ],
+    'deposit_status' => [
+        'unpaid' => 'Unpaid',
+        'held' => 'Held',
+        'refunded' => 'Refunded',
+        'forfeited' => 'Forfeited',
+    ],
+    'late_fee_type' => [
+        'none' => 'No late fee',
+        'fixed' => 'Fixed amount',
+        'percent' => 'Percentage of the invoice',
+    ],
     'document_visibility' => [
         'internal' => 'Staff only',
         'tenant' => 'Visible to tenant',

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * A private file attached to any model (property, tenant, lease, ...).
@@ -54,6 +55,18 @@ class Document extends Model
     public function uploader(): BelongsTo
     {
         return $this->belongsTo(User::class, 'uploaded_by');
+    }
+
+    /** Used by BelongsToOrganization when no organization was set explicitly. */
+    public function parentOrganizationId(): ?int
+    {
+        $class = Relation::getMorphedModel($this->documentable_type) ?? $this->documentable_type;
+        if (! class_exists($class)) {
+            return null;
+        }
+        $id = $class::query()->withoutGlobalScopes()->whereKey($this->documentable_id)->value('organization_id');
+
+        return $id === null ? null : (int) $id;
     }
 
     public function humanSize(): string
