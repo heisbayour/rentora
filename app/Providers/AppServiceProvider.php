@@ -6,8 +6,12 @@ namespace App\Providers;
 
 use App\Enums\Role;
 use App\Models\Document;
+use App\Models\Expense;
 use App\Models\Invoice;
 use App\Models\Lease;
+use App\Models\MaintenanceAttachment;
+use App\Models\MaintenanceRequest;
+use App\Models\MaintenanceUpdate;
 use App\Models\Organization;
 use App\Models\Payment;
 use App\Models\PaymentAllocation;
@@ -17,6 +21,7 @@ use App\Models\Tenant;
 use App\Models\Unit;
 use App\Models\UnitPhoto;
 use App\Models\User;
+use App\Models\Vendor;
 use App\Services\Payments\PaymentGateway;
 use App\Services\Payments\PaystackGateway;
 use App\Services\SettingsService;
@@ -67,6 +72,11 @@ class AppServiceProvider extends ServiceProvider
             'invoice' => Invoice::class,
             'payment' => Payment::class,
             'payment_allocation' => PaymentAllocation::class,
+            'vendor' => Vendor::class,
+            'maintenance_request' => MaintenanceRequest::class,
+            'maintenance_attachment' => MaintenanceAttachment::class,
+            'maintenance_update' => MaintenanceUpdate::class,
+            'expense' => Expense::class,
         ]);
 
         $this->defineGates();

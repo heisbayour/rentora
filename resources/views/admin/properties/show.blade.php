@@ -23,7 +23,7 @@
         <x-stat-card :label="__('properties.stats.units')" :value="$property->units_count" icon="squares-2x2" />
         <x-stat-card :label="__('properties.stats.occupancy')" :value="$property->occupancyPercent().'%'"
             :delta="__('properties.stats.occupied_of', ['occupied' => $property->occupied_units_count, 'total' => $property->units_count])" icon="home" />
-        <x-stat-card :label="__('properties.stats.vacant')" :value="$property->units_count - $property->occupied_units_count" icon="key" />
+        <x-stat-card :label="__('properties.stats.open_repairs')" :value="$openRepairs" icon="wrench-screwdriver" :href="route('app.maintenance.index')" />
     </div>
 
     <x-tabs :tabs="['units' => __('properties.tabs.units'), 'documents' => __('properties.tabs.documents')]" :active="$tab"

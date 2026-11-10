@@ -90,15 +90,15 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 
 ## Phase 7 - Maintenance and vendors
 
-- [ ] Vendors CRUD
-- [ ] Requests, transitions, thread with internal notes, attachments
-- [ ] Assignment, vendor signed link (14 days)
-- [ ] SLA indicators, emergency handling
-- [ ] Kanban and table views
-- [ ] Rating and auto-close; cost to expense link
-- [ ] Property page: open repairs
-- [ ] Tests: 8.7 criteria
-- [ ] Gates pass, commit, push
+- [x] Vendors CRUD
+- [x] Requests, transitions, thread with internal notes, attachments
+- [x] Assignment, vendor signed link (14 days)
+- [x] SLA indicators, emergency handling
+- [x] Kanban and table views
+- [x] Rating and auto-close (task registered in Phase 8); cost to expense link
+- [x] Property page: open repairs
+- [x] Tests: 8.7 criteria, including tenant notification on status change and staff notification on new requests
+- [x] Gates pass, commit, push
 
 ## Phase 8 - Messaging and scheduler
 
@@ -117,7 +117,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 ## Phase 9 - Tenant portal and PWA
 
 - [ ] Portal screens per 8.13
-- [ ] Payment wizard and repair wizard (payment endpoints, callback, proof upload, receipt and statement routes exist from Phase 6; Phase 9 builds the screens and points the callback at a receipt page)
+- [ ] Payment wizard and repair wizard; with no gateway keys (`isConfigured()` false) the wizard shows only bank transfer with org bank details and receipt upload (DECISIONS 63) (payment endpoints, callback, proof upload, receipt and statement routes exist from Phase 6; Phase 9 builds the screens and points the callback at a receipt page)
 - [ ] Notices
 - [ ] Manifests, service worker, offline page, install prompt
 - [ ] Gates pass, commit, push
@@ -149,7 +149,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 
 - [ ] Security headers, rate limits
 - [ ] Access matrix test, cross-tenant and cross-organization tests
-- [ ] Migrations run on MySQL
+- [ ] Migrations run on MySQL (first run passed 2026-11-10 on XAMPP MariaDB 10.4, DECISIONS 62; repeat before release)
 - [ ] Demo seeder (Section 14)
 - [ ] `scripts/build-deploy.php` and `deploy/` templates
 - [ ] README, DEPLOYMENT, USER_GUIDE, SMOKE_TEST, CHANGELOG

@@ -76,6 +76,7 @@ return [
         'not_successful' => 'Paystack reported this payment as :status.',
         'below_minimum' => 'The minimum online payment is :amount.',
         'above_outstanding' => 'You can pay at most :amount, the total you owe.',
+        'online_not_configured' => 'Online payment is not set up. Please pay by bank transfer and upload your receipt.',
         'gateway_unavailable' => 'Online payment is not available right now. Please try again later or pay by transfer.',
         'not_pending_proof' => 'Only a pending bank transfer proof can be approved or rejected.',
         'paystack_reversal' => 'Paystack payments are refunded from the Paystack dashboard. Record a negative adjustment if needed.',

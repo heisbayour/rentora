@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\LeaseController;
 use App\Http\Controllers\Admin\LeaseWizardController;
 use App\Http\Controllers\Admin\ListingController;
+use App\Http\Controllers\Admin\MaintenanceController;
 use App\Http\Controllers\Admin\OnboardingController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -18,12 +19,15 @@ use App\Http\Controllers\Admin\StyleguideController;
 use App\Http\Controllers\Admin\TenantController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\UnitPhotoController;
+use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\Portal\HomeController as PortalHomeController;
 use App\Http\Controllers\Portal\PaymentController as PortalPaymentController;
+use App\Http\Controllers\Portal\RepairController;
 use App\Http\Controllers\Public\ReceiptVerificationController;
 use App\Http\Controllers\Public\StaffInvitationController;
 use App\Http\Controllers\Public\TenantInvitationController;
+use App\Http\Controllers\Public\VendorJobController;
 use App\Http\Controllers\StatementController;
 use App\Http\Controllers\System\InstallController;
 use App\Http\Controllers\System\PaystackWebhookController;
@@ -110,6 +114,18 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
         Route::get('tenants/{tenant}/statement/pdf', [StatementController::class, 'pdf'])->name('tenants.statement.pdf');
     });
 
+    // Maintenance: every staff role (caretakers' whole module).
+    Route::get('maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');
+    Route::get('maintenance/create', [MaintenanceController::class, 'create'])->name('maintenance.create');
+    Route::post('maintenance', [MaintenanceController::class, 'store'])->name('maintenance.store');
+    Route::get('maintenance/{maintenance}', [MaintenanceController::class, 'show'])->name('maintenance.show');
+    Route::post('maintenance/{maintenance}/status', [MaintenanceController::class, 'status'])->name('maintenance.status');
+    Route::post('maintenance/{maintenance}/assign', [MaintenanceController::class, 'assign'])->name('maintenance.assign');
+    Route::post('maintenance/{maintenance}/comment', [MaintenanceController::class, 'comment'])->name('maintenance.comment');
+    Route::get('vendors', [VendorController::class, 'index'])->name('vendors.index');
+    Route::post('vendors', [VendorController::class, 'store'])->name('vendors.store');
+    Route::put('vendors/{vendor}', [VendorController::class, 'update'])->name('vendors.update');
+
     Route::post('documents', [DocumentController::class, 'store'])->name('documents.store');
     Route::delete('documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 
@@ -124,6 +140,7 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
 // Private files, streamed after a policy check (spec 11).
 Route::middleware(['auth', 'active'])->group(function () {
     Route::get('files/documents/{document}', [FileController::class, 'document'])->name('files.documents');
+    Route::get('files/maintenance/{attachment}', [FileController::class, 'maintenancePhoto'])->name('files.maintenance');
 });
 
 // Developer styleguide; the controller returns 404 outside local and testing.
@@ -137,6 +154,13 @@ Route::prefix('portal')->name('portal.')->middleware(['auth', 'active', 'role:te
     Route::post('pay/proof', [PortalPaymentController::class, 'submitProof'])->middleware('throttle:10,1')->name('pay.proof');
     Route::post('payments/{payment}/check', [PortalPaymentController::class, 'check'])->middleware('throttle:10,1')->name('payments.check');
     Route::get('payments/{payment}/receipt', [PortalPaymentController::class, 'receipt'])->name('payments.receipt');
+    Route::get('repairs', [RepairController::class, 'index'])->name('repairs.index');
+    Route::get('repairs/new', [RepairController::class, 'create'])->name('repairs.create');
+    Route::post('repairs', [RepairController::class, 'store'])->middleware('throttle:10,1')->name('repairs.store');
+    Route::get('repairs/{maintenance}', [RepairController::class, 'show'])->name('repairs.show');
+    Route::post('repairs/{maintenance}/cancel', [RepairController::class, 'cancel'])->name('repairs.cancel');
+    Route::post('repairs/{maintenance}/rate', [RepairController::class, 'rate'])->name('repairs.rate');
+    Route::post('repairs/{maintenance}/comment', [RepairController::class, 'comment'])->name('repairs.comment');
     Route::get('statement', [StatementController::class, 'show'])->name('statement');
     Route::get('statement/pdf', [StatementController::class, 'pdf'])->name('statement.pdf');
 });
@@ -146,6 +170,13 @@ Route::get('pay/callback', [PortalPaymentController::class, 'callback'])->middle
 
 // Paystack webhook: no CSRF, off unless RENTORA_PAYSTACK_WEBHOOKS=true.
 Route::post('webhooks/paystack', PaystackWebhookController::class)->name('webhooks.paystack');
+
+// Vendor job link (spec 8.7): signed, 14 days, for the assigned vendor only.
+Route::middleware(['signed', 'throttle:30,1'])->group(function () {
+    Route::get('vendor/job/{job}', [VendorJobController::class, 'show'])->whereNumber('job')->name('vendor.job');
+    Route::post('vendor/job/{job}', [VendorJobController::class, 'update'])->whereNumber('job')->name('vendor.job.update');
+    Route::get('vendor/job/{job}/photos/{attachment}', [VendorJobController::class, 'photo'])->whereNumber('job')->name('vendor.job.photo');
+});
 
 // Public receipt verification from the QR code.
 Route::get('r/{code}', ReceiptVerificationController::class)->middleware('throttle:30,1')->name('receipts.verify');

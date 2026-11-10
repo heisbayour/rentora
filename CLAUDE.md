@@ -66,5 +66,5 @@ UX rules on every screen: list pages have search, filter chips, sort, 25 per pag
 
 ## Local environment quirks
 
-- Local `.env` uses SQLite (`database/database.sqlite`). The local PHP has no `pdo_mysql` and there is no local MySQL; the Phase 13 MySQL check needs both.
+- Local `.env` uses SQLite (`database/database.sqlite`). For MySQL checks use XAMPP's MariaDB (`C:\xampp\mysql\bin\mysqld.exe --defaults-file=C:\xampp\mysql\bin\my.ini --standalone`, root with no password, database `rentora`) and run artisan with `DB_CONNECTION=mysql DB_HOST=127.0.0.1 DB_DATABASE=rentora DB_USERNAME=root DB_PASSWORD=` overrides.
 - If Composer fails with "Permission denied" writing `vendor/composer/tmp-*.zip`, run `composer clear-cache` and retry.

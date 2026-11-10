@@ -20,6 +20,9 @@ interface PaymentGateway
     /** Checks a webhook signature against the raw request body. */
     public function validWebhookSignature(string $rawBody, ?string $signature): bool;
 
+    /** Whether keys are set, so online payment can be offered at all (otherwise tenants pay by transfer). */
+    public function isConfigured(): bool;
+
     /** Whether the configured secret key is accepted by the provider. */
     public function testConnection(): bool;
 }

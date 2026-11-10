@@ -74,6 +74,11 @@ class PaystackGateway implements PaymentGateway
         return hash_equals(hash_hmac('sha512', $rawBody, $secret), $signature);
     }
 
+    public function isConfigured(): bool
+    {
+        return $this->secretKey() !== '' && $this->publicKey() !== '';
+    }
+
     public function testConnection(): bool
     {
         try {

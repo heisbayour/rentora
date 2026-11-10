@@ -38,6 +38,7 @@ function tenantWithInvoices(array $amounts, ?User $staff = null): array
 
 function fakePaystackVerify(int $amount, string $status = 'success', string $currency = 'NGN'): void
 {
+    config(['rentora.paystack.public_key' => 'pk_test_public', 'rentora.paystack.secret_key' => 'sk_test_secret']);
     Http::fake([
         '*/transaction/verify/*' => Http::response(['status' => true, 'data' => [
             'status' => $status, 'amount' => $amount, 'currency' => $currency, 'id' => 987654, 'gateway_response' => 'Approved',

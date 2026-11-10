@@ -40,6 +40,7 @@ return [
         'occupied_of' => ':occupied of :total occupied',
         'vacant' => 'Vacant units',
         'income' => 'Income this year',
+        'open_repairs' => 'Open repairs',
     ],
     'tabs' => [
         'units' => 'Units',

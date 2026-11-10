@@ -12,6 +12,7 @@ use App\Enums\PropertyType;
 use App\Http\Controllers\Concerns\SortsLists;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PropertyRequest;
+use App\Models\MaintenanceRequest;
 use App\Models\PaymentAllocation;
 use App\Models\Property;
 use App\Support\Money;
@@ -79,6 +80,7 @@ class PropertyController extends Controller
             'documents' => $property->documents()->get(),
             'visibilities' => DocumentVisibility::options(),
             'incomeThisYear' => $this->incomeThisYear($property),
+            'openRepairs' => MaintenanceRequest::query()->open()->whereIn('unit_id', $property->units()->select('id'))->count(),
         ]);
     }
 

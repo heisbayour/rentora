@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Models\MaintenanceAttachment;
 use App\Support\PrivateFiles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +17,19 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class FileController extends Controller
 {
+    public function maintenancePhoto(MaintenanceAttachment $attachment): StreamedResponse
+    {
+        $this->authorize('view', $attachment->request);
+
+        $disk = Storage::disk(PrivateFiles::DISK);
+        abort_unless($disk->exists($attachment->path), 404);
+
+        return $disk->response($attachment->path, null, [
+            'X-Content-Type-Options' => 'nosniff',
+            'Cache-Control' => 'private, no-store',
+        ]);
+    }
+
     public function document(Request $request, Document $document): StreamedResponse
     {
         $this->authorize('view', $document);

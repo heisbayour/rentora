@@ -34,6 +34,9 @@ class StartOnlinePayment
      */
     public function handle(Tenant $tenant, int $amount, array $invoiceIds = []): array
     {
+        if (! $this->gateway->isConfigured()) {
+            throw ValidationException::withMessages(['amount' => __('payments.errors.online_not_configured')]);
+        }
         $minimum = (int) config('rentora.paystack.min_amount');
         if ($amount < $minimum) {
             throw ValidationException::withMessages(['amount' => __('payments.errors.below_minimum', ['amount' => Money::forOrganization($minimum)->format()])]);

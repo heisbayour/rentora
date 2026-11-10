@@ -21,6 +21,7 @@ return [
     'confirm' => 'Confirm',
     'delete' => 'Delete',
     'save' => 'Save',
+    'edit' => 'Edit',
     'back' => 'Back',
     'next' => 'Next',
     'previous' => 'Previous',
