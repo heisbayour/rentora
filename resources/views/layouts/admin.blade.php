@@ -84,6 +84,8 @@
                 <div class="ml-auto flex items-center gap-1">
                     @isset($notifications)
                         {{ $notifications }}
+                    @elseif ($user && Route::has('app.notifications.index'))
+                        <x-notification-bell />
                     @else
                         <x-dropdown width="w-80" :label="__('ui.notifications')">
                             <x-slot:trigger class="relative p-2 text-ink-muted hover:bg-canvas">

@@ -15,8 +15,10 @@ use App\Models\Invoice;
 use App\Models\Lease;
 use App\Models\Tenant;
 use App\Services\Billing\InvoiceIssuer;
+use App\Support\CurrentOrganization;
 use App\Support\Money;
 use App\Support\Pdf;
+use App\Support\PhoneNormalizer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -92,7 +94,19 @@ class InvoiceController extends Controller
 
         $invoice->load(['tenant', 'unit.property', 'lease', 'parent', 'lateFee', 'allocations.payment']);
 
-        return view('admin.invoices.show', ['invoice' => $invoice]);
+        $message = __('messaging.whatsapp.reminder', [
+            'name' => $invoice->tenant->full_name,
+            'org' => app(CurrentOrganization::class)->get()->name ?? config('rentora.name'),
+            'amount' => $invoice->outstanding()->format(),
+            'number' => $invoice->number,
+            'due_date' => $invoice->due_date->format('j M Y'),
+            'link' => route('portal.home'),
+        ]);
+
+        return view('admin.invoices.show', [
+            'invoice' => $invoice,
+            'whatsappLink' => PhoneNormalizer::whatsAppLink($invoice->tenant->phone, $message),
+        ]);
     }
 
     public function void(VoidInvoiceRequest $request, Invoice $invoice, VoidInvoice $void): RedirectResponse

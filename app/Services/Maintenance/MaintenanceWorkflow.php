@@ -237,12 +237,12 @@ class MaintenanceWorkflow
     /** The tenant hears about every status change they did not make themselves (spec 8.7). */
     private function notifyTenant(MaintenanceRequest $request, User|Vendor|null $actor): void
     {
-        $tenantUser = $request->tenant_id === null ? null : Tenant::query()->withoutGlobalScopes()->find($request->tenant_id)?->user;
-        if ($tenantUser === null || ($actor instanceof User && $actor->is($tenantUser))) {
+        $tenant = $request->tenant_id === null ? null : Tenant::query()->withoutGlobalScopes()->find($request->tenant_id);
+        if ($tenant === null || ($actor instanceof User && $tenant->user_id !== null && $actor->getKey() === $tenant->user_id)) {
             return;
         }
 
-        $tenantUser->notify(new MaintenanceStatusChanged($request));
+        $tenant->notify(new MaintenanceStatusChanged($request));
     }
 
     private function recordExpense(MaintenanceRequest $request, User $actor): void

@@ -54,7 +54,6 @@ final class AdminNavigation
             ['key' => 'admin', 'items' => [
                 self::item('staff', 'app.staff.index', 'user-group', self::OWNER),
                 self::item('settings', 'app.settings.edit', 'cog-6-tooth', self::OWNER),
-                self::item('templates', 'app.templates.index', 'chat-bubble-left-right', self::MONEY),
                 self::item('audit', 'app.audit.index', 'shield-check', self::OWNER),
                 self::item('health', 'app.health', 'heart', self::OWNER),
             ]],

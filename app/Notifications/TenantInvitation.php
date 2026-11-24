@@ -4,33 +4,38 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
-use App\Models\Tenant;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
+use App\Services\Messaging\NotificationMessage;
 
-/**
- * Portal invitation for a tenant. Email now; Phase 8 adds SMS through the
- * outbox so tenants without email can be invited by SMS (spec 8.4).
- */
-class TenantInvitation extends Notification
+/** Portal invitation for a tenant by email and SMS (spec 8.4, 9.3 tenant.invited). Critical. */
+class TenantInvitation extends OutboxNotification
 {
     public function __construct(public readonly string $link) {}
 
-    /** @return list<string> */
-    public function via(Tenant $notifiable): array
+    public function event(): string
     {
-        return $notifiable->email ? ['mail'] : [];
+        return 'tenant.invited';
     }
 
-    public function toMail(Tenant $notifiable): MailMessage
+    protected function defaultChannels(object $notifiable): array
     {
-        $organization = $notifiable->organization()->value('name') ?? config('rentora.name');
+        return ['email', 'sms'];
+    }
 
-        return (new MailMessage)
-            ->subject(__('tenants.invite_mail.subject', ['org' => $organization]))
-            ->greeting(__('tenants.invite_mail.greeting', ['name' => $notifiable->full_name]))
-            ->line(__('tenants.invite_mail.line', ['org' => $organization]))
-            ->action(__('tenants.invite_mail.action'), $this->link)
-            ->line(__('tenants.invite_mail.expiry', ['days' => config('rentora.links.invite_days')]));
+    protected function critical(): bool
+    {
+        return true;
+    }
+
+    public function message(object $notifiable): NotificationMessage
+    {
+        $org = self::organizationName($notifiable);
+
+        return new NotificationMessage(
+            title: __('tenants.invite_mail.subject', ['org' => $org]),
+            body: __('tenants.invite_mail.line', ['org' => $org]).' '.__('tenants.invite_mail.expiry', ['days' => config('rentora.links.invite_days')]),
+            link: $this->link,
+            actionLabel: __('tenants.invite_mail.action'),
+            sms: __('messaging.sms.invite'),
+        );
     }
 }

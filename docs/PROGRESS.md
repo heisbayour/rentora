@@ -100,19 +100,34 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 - [x] Tests: 8.7 criteria, including tenant notification on status change and staff notification on new requests
 - [x] Gates pass, commit, push
 
+## v1 finish run (docs/FINISH_BUILD.md, overrides the spec for Phases 8 to 13)
+
+Resume point (FINISH_BUILD Section 1), 2026-11-24: Phases 0 to 7 complete and pushed (237 tests). Already present for Phases 8 to 13 before this run: services InvoiceGenerator, LateFeeService, PaymentReconciler and MaintenanceWorkflow::autoCloseResolved (needed wiring), a plain wa.me button on the tenant profile, `config/rentora.php` scheduler/outbox keys, nav entries for later modules. Nothing else. Each section below is committed as `v1 finish: <section>`.
+
+- [x] Section 2: Messaging and scheduler (Phase 8)
+- [ ] Section 3: Tenant portal and PWA (Phase 9)
+- [ ] Section 4: Dashboard, reports, expenses (Phase 10)
+- [ ] Section 5: Public website (Phase 11)
+- [ ] Section 6: Settings, system health, app version (Phase 12)
+- [ ] Section 7: Release (Phase 13)
+- [ ] Section 8: Android app package
+- [ ] Section 9: Final report
+
+The per-phase lists below are the original spec plan; items FINISH_BUILD defers are marked (deferred) and listed in `docs/ROADMAP.md`.
+
 ## Phase 8 - Messaging and scheduler
 
-- [ ] Outbox table, email and SMS channels, drain rules
-- [ ] SMS drivers: log, termii, twilio; phone normalizer; segment counter
-- [ ] Message templates and editor with preview
-- [ ] Notification classes for every event in 9.3
-- [ ] Announcements and direct messages
-- [ ] WhatsApp click-to-send buttons
-- [ ] In-app inbox
-- [ ] Lazy scheduler, task registry, all tasks in 10.1 (InvoiceGenerator, LateFeeService and PaymentReconciler services exist and need wiring), `rentora:tick`, `/system/tick`; lease expiry alerts at 60 and 30 days (8.4)
-- [ ] Tenant invite by SMS for tenants without email (8.4)
-- [ ] Tests: 8.8 and 10.2 criteria; unit tests for normalizer, renderer, segment counter
-- [ ] Gates pass, commit, push
+- [x] Outbox table, email and SMS channels, drain rules
+- [x] SMS drivers: log, termii; phone normalizer (Twilio and segment counter deferred)
+- [x] Message text in notification classes and lang files (template editor deferred)
+- [x] Notification classes for the FINISH_BUILD event list
+- [x] Announcements (direct messages: WhatsApp button only)
+- [x] WhatsApp click-to-send buttons
+- [x] In-app inbox
+- [x] Lazy scheduler, task registry, all tasks in 10.1 (InvoiceGenerator, LateFeeService and PaymentReconciler services exist and need wiring), `rentora:tick`, `/system/tick`; lease expiry alerts at 60 and 30 days (8.4)
+- [x] Tenant invite by SMS for tenants without email (8.4)
+- [x] Tests: reminders once per kind, scheduler lock, task isolation, outbox retry/fail, own notifications only, audiences, prefs; unit test for normalizer
+- [x] Gates pass, commit, push
 
 ## Phase 9 - Tenant portal and PWA
 

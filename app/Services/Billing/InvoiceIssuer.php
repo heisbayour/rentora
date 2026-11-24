@@ -8,7 +8,9 @@ use App\Enums\InvoiceType;
 use App\Models\Invoice;
 use App\Models\Lease;
 use App\Models\Tenant;
+use App\Notifications\InvoiceIssued;
 use App\Services\ActivityLogger;
+use App\Services\Messaging\Notifier;
 use App\Services\SequenceService;
 use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +25,7 @@ class InvoiceIssuer
         private readonly SequenceService $sequences,
         private readonly AllocationService $allocations,
         private readonly ActivityLogger $logger,
+        private readonly Notifier $notifier,
     ) {}
 
     /**
@@ -56,6 +59,9 @@ class InvoiceIssuer
         $this->allocations->applyCredit($invoice);
         $this->logger->log('invoice.issued', $invoice, ['number' => $invoice->number, 'amount' => $amount]);
 
-        return $invoice->refresh();
+        $invoice->refresh();
+        $this->notifier->tenant($invoice->tenant_id, new InvoiceIssued($invoice));
+
+        return $invoice;
     }
 }

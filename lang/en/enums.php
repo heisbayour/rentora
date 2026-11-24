@@ -81,6 +81,17 @@ return [
         'cheque' => 'Cheque',
         'other' => 'Other',
     ],
+    'message_status' => [
+        'queued' => 'Queued',
+        'sending' => 'Sending',
+        'sent' => 'Sent',
+        'failed' => 'Failed',
+    ],
+    'announcement_audience' => [
+        'all_tenants' => 'All tenants',
+        'property' => 'By property',
+        'tenants' => 'Selected tenants',
+    ],
     'payment_status' => [
         'pending' => 'Pending',
         'successful' => 'Successful',

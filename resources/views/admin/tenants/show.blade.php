@@ -1,7 +1,9 @@
 <x-layouts::admin :title="$tenant->full_name">
     <x-page-header :title="$tenant->full_name" :breadcrumbs="[__('tenants.title') => route('app.tenants.index'), $tenant->full_name => null]">
         <x-slot:actions>
-            <x-button variant="secondary" :href="'https://wa.me/'.$whatsappPhone" target="_blank" rel="noopener" icon="chat-bubble-left-ellipsis">{{ __('tenants.whatsapp') }}</x-button>
+            @if ($whatsappLink)
+                <x-button variant="secondary" :href="$whatsappLink" target="_blank" rel="noopener" icon="chat-bubble-left-ellipsis">{{ __('tenants.whatsapp') }}</x-button>
+            @endif
             @if ($canManage)
                 @unless ($tenant->hasPortalAccount())
                     <form method="POST" action="{{ route('app.tenants.invite', $tenant) }}">

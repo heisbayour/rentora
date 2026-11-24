@@ -5,31 +5,38 @@ declare(strict_types=1);
 namespace App\Notifications;
 
 use App\Models\MaintenanceRequest;
-use App\Models\User;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
+use App\Services\Messaging\NotificationMessage;
+use Illuminate\Database\Eloquent\Model;
 
-/**
- * Tells the tenant their repair moved to a new status (spec 9.3
- * maintenance.status_changed). Email now; Phase 8 adds the in-app inbox and
- * routes it through the outbox.
- */
-class MaintenanceStatusChanged extends Notification
+/** Tells the tenant their repair moved to a new status (spec 9.3 maintenance.status_changed). */
+class MaintenanceStatusChanged extends OutboxNotification
 {
     public function __construct(public readonly MaintenanceRequest $request) {}
 
-    /** @return list<string> */
-    public function via(User $notifiable): array
+    public function event(): string
     {
-        return $notifiable->email ? ['mail'] : [];
+        return 'maintenance.status_changed';
     }
 
-    public function toMail(User $notifiable): MailMessage
+    protected function defaultChannels(object $notifiable): array
     {
-        return (new MailMessage)
-            ->subject(__('maintenance.status_mail.subject', ['number' => $this->request->number, 'status' => $this->request->status->label()]))
-            ->greeting(__('maintenance.vendor_mail.greeting', ['name' => $notifiable->name]))
-            ->line(__('maintenance.status_mail.line', ['title' => $this->request->title, 'status' => $this->request->status->label()]))
-            ->action(__('maintenance.status_mail.action'), route('portal.repairs.show', $this->request));
+        return ['in_app', 'email'];
+    }
+
+    public function related(): ?Model
+    {
+        return $this->request;
+    }
+
+    public function message(object $notifiable): NotificationMessage
+    {
+        $status = $this->request->status->label();
+
+        return new NotificationMessage(
+            title: __('maintenance.status_mail.subject', ['number' => $this->request->number, 'status' => $status]),
+            body: __('maintenance.status_mail.line', ['title' => $this->request->title, 'status' => $status]),
+            link: route('portal.repairs.show', $this->request),
+            actionLabel: __('maintenance.status_mail.action'),
+        );
     }
 }

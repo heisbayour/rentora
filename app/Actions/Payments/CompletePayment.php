@@ -6,9 +6,12 @@ namespace App\Actions\Payments;
 
 use App\Enums\PaymentStatus;
 use App\Models\Payment;
+use App\Models\Tenant;
 use App\Models\User;
+use App\Notifications\PaymentReceived;
 use App\Services\ActivityLogger;
 use App\Services\Billing\AllocationService;
+use App\Services\Messaging\Notifier;
 use App\Services\SequenceService;
 use Illuminate\Support\Facades\DB;
 
@@ -23,6 +26,7 @@ class CompletePayment
         private readonly SequenceService $sequences,
         private readonly AllocationService $allocations,
         private readonly ActivityLogger $logger,
+        private readonly Notifier $notifier,
     ) {}
 
     /**
@@ -61,6 +65,11 @@ class CompletePayment
             'method' => $completed->method->value,
         ], $approvedBy);
 
-        return $completed->refresh();
+        $completed->refresh();
+        $tenantName = (string) Tenant::query()->withoutGlobalScopes()->whereKey($completed->tenant_id)->value('full_name');
+        $this->notifier->tenant($completed->tenant_id, new PaymentReceived($completed, $tenantName));
+        $this->notifier->toStaff($completed->organization_id, new PaymentReceived($completed, $tenantName));
+
+        return $completed;
     }
 }

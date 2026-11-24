@@ -14,9 +14,12 @@ use Database\Factories\TenantFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -134,6 +137,23 @@ class Tenant extends Model implements Documentable
     public function wants(string $channel): bool
     {
         return (bool) (($this->notification_prefs ?? self::DEFAULT_PREFS)[$channel] ?? true);
+    }
+
+    /** @return BelongsToMany<Announcement, $this> */
+    public function announcements(): BelongsToMany
+    {
+        return $this->belongsToMany(Announcement::class);
+    }
+
+    /**
+     * In-app notifications for a tenant land in their portal account's inbox,
+     * so tenants and staff share one inbox implementation.
+     *
+     * @return MorphMany<DatabaseNotification, User>
+     */
+    public function routeNotificationForDatabase(): MorphMany
+    {
+        return User::query()->withoutGlobalScopes()->findOrFail($this->user_id)->notifications();
     }
 
     public function hasPortalAccount(): bool

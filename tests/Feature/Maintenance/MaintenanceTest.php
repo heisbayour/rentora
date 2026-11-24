@@ -66,19 +66,19 @@ it('caps a tenant at five photos', function () {
 it('notifies the tenant when staff change the status, but not for their own change', function () {
     Notification::fake();
     $organization = organization();
-    [$user] = leasedTenantUser($organization);
+    [$user, $tenant] = leasedTenantUser($organization);
     $manager = userWithRole(Role::Manager, $organization);
 
     $this->actingAs($user)->post(route('portal.repairs.store'), repairPayload())->assertRedirect();
     $request = MaintenanceRequest::query()->sole();
-    Notification::assertNotSentTo($user, MaintenanceStatusChanged::class);
+    Notification::assertNotSentTo($tenant, MaintenanceStatusChanged::class);
 
     $this->actingAs($manager)->post(route('app.maintenance.status', $request), ['status' => 'acknowledged'])->assertSessionHasNoErrors();
-    Notification::assertSentTo($user, MaintenanceStatusChanged::class, fn (MaintenanceStatusChanged $n) => $n->request->status === MaintenanceStatus::Acknowledged);
-    Notification::assertSentToTimes($user, MaintenanceStatusChanged::class, 1);
+    Notification::assertSentTo($tenant, MaintenanceStatusChanged::class, fn (MaintenanceStatusChanged $n) => $n->request->status === MaintenanceStatus::Acknowledged);
+    Notification::assertSentToTimes($tenant, MaintenanceStatusChanged::class, 1);
 
     $this->actingAs($user)->post(route('portal.repairs.cancel', $request))->assertSessionHasNoErrors();
-    Notification::assertSentToTimes($user, MaintenanceStatusChanged::class, 1);
+    Notification::assertSentToTimes($tenant, MaintenanceStatusChanged::class, 1);
 });
 
 it('notifies active staff of a new request and flags emergencies', function () {

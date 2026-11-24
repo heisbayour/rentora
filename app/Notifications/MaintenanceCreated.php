@@ -6,23 +6,17 @@ namespace App\Notifications;
 
 use App\Enums\MaintenancePriority;
 use App\Models\MaintenanceRequest;
-use App\Models\User;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
+use App\Services\Messaging\NotificationMessage;
+use Illuminate\Database\Eloquent\Model;
 
-/**
- * Tells staff about a new repair request (spec 9.3 maintenance.created).
- * Email now; Phase 8 adds the in-app inbox and the immediate SMS for
- * emergencies through the outbox.
- */
-class MaintenanceCreated extends Notification
+/** Tells staff about a new repair request (spec 9.3 maintenance.created); emergencies also go by SMS. */
+class MaintenanceCreated extends OutboxNotification
 {
     public function __construct(public readonly MaintenanceRequest $request) {}
 
-    /** @return list<string> */
-    public function via(User $notifiable): array
+    public function event(): string
     {
-        return $notifiable->email ? ['mail'] : [];
+        return 'maintenance.created';
     }
 
     public function isEmergency(): bool
@@ -30,14 +24,25 @@ class MaintenanceCreated extends Notification
         return $this->request->priority === MaintenancePriority::Emergency;
     }
 
-    public function toMail(User $notifiable): MailMessage
+    protected function defaultChannels(object $notifiable): array
+    {
+        return $this->isEmergency() ? ['in_app', 'email', 'sms'] : ['in_app', 'email'];
+    }
+
+    public function related(): ?Model
+    {
+        return $this->request;
+    }
+
+    public function message(object $notifiable): NotificationMessage
     {
         $key = $this->isEmergency() ? 'maintenance.created_mail.subject_emergency' : 'maintenance.created_mail.subject';
 
-        return (new MailMessage)
-            ->subject(__($key, ['number' => $this->request->number, 'title' => $this->request->title]))
-            ->greeting(__('maintenance.vendor_mail.greeting', ['name' => $notifiable->name]))
-            ->line(__('maintenance.created_mail.line', ['title' => $this->request->title, 'priority' => $this->request->priority->label()]))
-            ->action(__('maintenance.created_mail.action'), route('app.maintenance.show', $this->request));
+        return new NotificationMessage(
+            title: __($key, ['number' => $this->request->number, 'title' => $this->request->title]),
+            body: __('maintenance.created_mail.line', ['title' => $this->request->title, 'priority' => $this->request->priority->label()]),
+            link: route('app.maintenance.show', $this->request),
+            actionLabel: __('maintenance.created_mail.action'),
+        );
     }
 }

@@ -9,7 +9,10 @@ use App\Enums\PaymentStatus;
 use App\Models\Payment;
 use App\Models\Tenant;
 use App\Models\User;
+use App\Notifications\ProofRejected;
+use App\Notifications\ProofSubmitted;
 use App\Services\ActivityLogger;
+use App\Services\Messaging\Notifier;
 use App\Services\Payments\PaymentCodes;
 use App\Support\PrivateFiles;
 use Carbon\CarbonInterface;
@@ -29,6 +32,7 @@ class TransferProofs
         private readonly PrivateFiles $files,
         private readonly CompletePayment $complete,
         private readonly ActivityLogger $logger,
+        private readonly Notifier $notifier,
     ) {}
 
     /**
@@ -52,6 +56,7 @@ class TransferProofs
         $payment->save();
 
         $this->logger->log('payment.proof_submitted', $payment, ['amount' => $amount]);
+        $this->notifier->toStaff($tenant->organization_id, new ProofSubmitted($payment, $tenant->full_name));
 
         return $payment;
     }
@@ -78,8 +83,10 @@ class TransferProofs
         });
 
         $this->logger->log('payment.rejected', $payment, ['reason' => $reason], $approver);
+        $payment->refresh();
+        $this->notifier->tenant($payment->tenant_id, new ProofRejected($payment));
 
-        return $payment->refresh();
+        return $payment;
     }
 
     private function assertPendingProof(Payment $payment): void

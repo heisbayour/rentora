@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Enums\Role;
+use App\Models\Announcement;
 use App\Models\Document;
 use App\Models\Expense;
 use App\Models\Invoice;
@@ -13,6 +14,7 @@ use App\Models\MaintenanceAttachment;
 use App\Models\MaintenanceRequest;
 use App\Models\MaintenanceUpdate;
 use App\Models\Organization;
+use App\Models\OutboundMessage;
 use App\Models\Payment;
 use App\Models\PaymentAllocation;
 use App\Models\Property;
@@ -77,6 +79,8 @@ class AppServiceProvider extends ServiceProvider
             'maintenance_attachment' => MaintenanceAttachment::class,
             'maintenance_update' => MaintenanceUpdate::class,
             'expense' => Expense::class,
+            'announcement' => Announcement::class,
+            'outbound_message' => OutboundMessage::class,
         ]);
 
         $this->defineGates();

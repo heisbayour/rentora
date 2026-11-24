@@ -14,6 +14,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TenantRequest;
 use App\Models\ActivityLog;
 use App\Models\Tenant;
+use App\Support\CurrentOrganization;
+use App\Support\PhoneNormalizer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -90,7 +92,10 @@ class TenantController extends Controller
             'payments' => $tab === 'payments' ? $tenant->payments()->with('tenant')->latest('id')->get() : collect(),
             'activity' => $tab === 'activity' ? $this->activity($tenant) : collect(),
             'visibilities' => DocumentVisibility::options(),
-            'whatsappPhone' => self::internationalPhone($tenant->phone),
+            'whatsappLink' => PhoneNormalizer::whatsAppLink($tenant->phone, __('messaging.whatsapp.tenant', [
+                'name' => $tenant->full_name,
+                'org' => app(CurrentOrganization::class)->get()->name ?? config('rentora.name'),
+            ])),
         ]);
     }
 
@@ -136,13 +141,5 @@ class TenantController extends Controller
                 ->where(fn (Builder $w) => $w->where('subject_type', 'tenant')->where('subject_id', $tenant->id))
                 ->orWhere(fn (Builder $w) => $w->where('subject_type', 'lease')->whereIn('subject_id', $leaseIds)))
             ->latest('id')->limit(100)->get();
-    }
-
-    /** Digits only, Nigerian local numbers converted to 234..., for wa.me links. Phase 8 adds the full normalizer. */
-    private static function internationalPhone(string $phone): string
-    {
-        $digits = preg_replace('/\D+/', '', $phone) ?? '';
-
-        return str_starts_with($digits, '0') ? config('rentora.defaults.phone_country_code').substr($digits, 1) : $digits;
     }
 }

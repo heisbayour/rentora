@@ -5,34 +5,40 @@ declare(strict_types=1);
 namespace App\Notifications;
 
 use App\Models\MaintenanceRequest;
-use App\Models\Vendor;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
+use App\Services\Messaging\NotificationMessage;
+use Illuminate\Database\Eloquent\Model;
 
-/**
- * Sends a vendor the signed job link (spec 8.7). Email now; Phase 8 adds SMS
- * through the outbox.
- */
-class VendorJobAssigned extends Notification
+/** Sends the assigned vendor their signed job link (spec 9.3 maintenance.vendor_assigned). */
+class VendorJobAssigned extends OutboxNotification
 {
     public function __construct(
         public readonly MaintenanceRequest $request,
         public readonly string $link,
     ) {}
 
-    /** @return list<string> */
-    public function via(Vendor $notifiable): array
+    public function event(): string
     {
-        return $notifiable->email ? ['mail'] : [];
+        return 'maintenance.vendor_assigned';
     }
 
-    public function toMail(Vendor $notifiable): MailMessage
+    protected function defaultChannels(object $notifiable): array
     {
-        return (new MailMessage)
-            ->subject(__('maintenance.vendor_mail.subject', ['number' => $this->request->number]))
-            ->greeting(__('maintenance.vendor_mail.greeting', ['name' => $notifiable->name]))
-            ->line(__('maintenance.vendor_mail.line', ['title' => $this->request->title]))
-            ->action(__('maintenance.vendor_mail.action'), $this->link)
-            ->line(__('maintenance.vendor_mail.expiry', ['days' => config('rentora.links.vendor_days')]));
+        return ['sms', 'email'];
+    }
+
+    public function related(): ?Model
+    {
+        return $this->request;
+    }
+
+    public function message(object $notifiable): NotificationMessage
+    {
+        return new NotificationMessage(
+            title: __('maintenance.vendor_mail.subject', ['number' => $this->request->number]),
+            body: __('maintenance.vendor_mail.line', ['title' => $this->request->title]).' '.__('maintenance.vendor_mail.expiry', ['days' => config('rentora.links.vendor_days')]),
+            link: $this->link,
+            actionLabel: __('maintenance.vendor_mail.action'),
+            sms: __('messaging.sms.vendor_job', ['number' => $this->request->number, 'title' => $this->request->title]),
+        );
     }
 }

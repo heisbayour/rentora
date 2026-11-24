@@ -2,6 +2,9 @@
     <x-page-header :title="$invoice->number" :description="$invoice->description"
         :breadcrumbs="[__('invoices.title') => route('app.invoices.index'), $invoice->number => null]">
         <x-slot:actions>
+            @if ($whatsappLink && $invoice->outstandingMinor() > 0)
+                <x-button variant="secondary" :href="$whatsappLink" target="_blank" rel="noopener" icon="chat-bubble-left-ellipsis">{{ __('messaging.whatsapp.button') }}</x-button>
+            @endif
             <x-button variant="secondary" :href="route('app.invoices.pdf', $invoice)" icon="arrow-down-tray">{{ __('invoices.download_pdf') }}</x-button>
             @if ($invoice->status !== \App\Enums\InvoiceStatus::Void && $invoice->amount_paid === 0)
                 <x-button type="button" variant="danger" x-data x-on:click="$dispatch('open-modal', 'void-invoice')">{{ __('invoices.void') }}</x-button>

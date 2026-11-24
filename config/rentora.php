@@ -67,11 +67,6 @@ return [
             'channel' => env('TERMII_CHANNEL', 'generic'),
             'base_url' => env('TERMII_BASE_URL', 'https://v3.api.termii.com'),
         ],
-        'twilio' => [
-            'sid' => env('TWILIO_SID'),
-            'token' => env('TWILIO_TOKEN'),
-            'from' => env('TWILIO_FROM'),
-        ],
     ],
 
     'uploads' => [

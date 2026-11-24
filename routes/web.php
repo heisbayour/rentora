@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\InvoiceController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Admin\LeaseController;
 use App\Http\Controllers\Admin\LeaseWizardController;
 use App\Http\Controllers\Admin\ListingController;
 use App\Http\Controllers\Admin\MaintenanceController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\OnboardingController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -22,6 +24,8 @@ use App\Http\Controllers\Admin\UnitPhotoController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\Portal\HomeController as PortalHomeController;
+use App\Http\Controllers\Portal\InboxController;
+use App\Http\Controllers\Portal\NoticeController;
 use App\Http\Controllers\Portal\PaymentController as PortalPaymentController;
 use App\Http\Controllers\Portal\RepairController;
 use App\Http\Controllers\Public\ReceiptVerificationController;
@@ -31,6 +35,7 @@ use App\Http\Controllers\Public\VendorJobController;
 use App\Http\Controllers\StatementController;
 use App\Http\Controllers\System\InstallController;
 use App\Http\Controllers\System\PaystackWebhookController;
+use App\Http\Controllers\System\TickController;
 use App\Http\Controllers\System\UpgradeController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +49,9 @@ Route::prefix('install')->name('install.')->middleware('installer')->group(funct
     Route::post('migrate', [InstallController::class, 'migrate'])->name('migrate');
     Route::post('organization', [InstallController::class, 'store'])->name('organization');
 });
+
+// External cron trigger (spec 10.2); 404 unless ?key= matches RENTORA_TICK_KEY.
+Route::get('system/tick', TickController::class)->middleware('throttle:12,1')->name('system.tick');
 
 Route::middleware(['auth', 'active', 'role:owner'])->group(function () {
     Route::get('system/upgrade', [UpgradeController::class, 'show'])->name('system.upgrade');
@@ -63,6 +71,10 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
 
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
+    Route::post('notifications/{notification}', [NotificationController::class, 'read'])->name('notifications.read');
 
     Route::get('setup/{step}', [OnboardingController::class, 'show'])->name('onboarding.show');
     Route::post('setup/{step}', [OnboardingController::class, 'store'])->name('onboarding.store');
@@ -109,6 +121,11 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
         Route::post('payments/{payment}/check', [AdminPaymentController::class, 'check'])->name('payments.check');
         Route::get('payments/{payment}/receipt', [AdminPaymentController::class, 'receipt'])->name('payments.receipt');
         Route::get('payments/{payment}/proof', [AdminPaymentController::class, 'proof'])->name('payments.proof');
+
+        Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+        Route::get('announcements/create', [AnnouncementController::class, 'create'])->name('announcements.create');
+        Route::get('announcements/recipients', [AnnouncementController::class, 'recipients'])->name('announcements.recipients');
+        Route::post('announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
 
         Route::get('tenants/{tenant}/statement', [StatementController::class, 'show'])->name('tenants.statement');
         Route::get('tenants/{tenant}/statement/pdf', [StatementController::class, 'pdf'])->name('tenants.statement.pdf');
@@ -161,6 +178,11 @@ Route::prefix('portal')->name('portal.')->middleware(['auth', 'active', 'role:te
     Route::post('repairs/{maintenance}/cancel', [RepairController::class, 'cancel'])->name('repairs.cancel');
     Route::post('repairs/{maintenance}/rate', [RepairController::class, 'rate'])->name('repairs.rate');
     Route::post('repairs/{maintenance}/comment', [RepairController::class, 'comment'])->name('repairs.comment');
+    Route::get('inbox', [InboxController::class, 'index'])->name('inbox');
+    Route::post('inbox/read-all', [InboxController::class, 'readAll'])->name('inbox.read-all');
+    Route::post('inbox/{notification}', [InboxController::class, 'read'])->name('inbox.read');
+    Route::get('notices', NoticeController::class)->name('notices');
+
     Route::get('statement', [StatementController::class, 'show'])->name('statement');
     Route::get('statement/pdf', [StatementController::class, 'pdf'])->name('statement.pdf');
 });
