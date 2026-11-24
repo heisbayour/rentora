@@ -88,7 +88,7 @@ it('confirms a successful payment on the callback and allocates it', function ()
     $payment = pendingPaystackPayment($tenant, 5_000_000);
     fakePaystackVerify(5_000_000);
 
-    $this->actingAs($user)->get(route('pay.callback', ['reference' => $payment->reference]))->assertRedirect(route('portal.home'));
+    $this->actingAs($user)->get(route('pay.callback', ['reference' => $payment->reference]))->assertRedirect(route('portal.payments.index'));
 
     $payment->refresh();
     expect($payment->status)->toBe(PaymentStatus::Successful)
@@ -211,7 +211,7 @@ it('approves a transfer proof with a receipt, or rejects it with a reason', func
     $this->actingAs($user)->post(route('portal.pay.proof'), [
         'amount' => '2000000', 'paid_on' => today()->toDateString(), 'sender_name' => 'Ada Okafor',
         'proof' => UploadedFile::fake()->image('slip.jpg'),
-    ])->assertRedirect(route('portal.home'));
+    ])->assertRedirect(route('portal.pay'));
     $proof = Payment::query()->sole();
     expect($proof->status)->toBe(PaymentStatus::Pending)->and($proof->method)->toBe(PaymentMethod::BankTransfer);
     Storage::disk('local')->assertExists($proof->proof_path);

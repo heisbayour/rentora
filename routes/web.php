@@ -23,11 +23,15 @@ use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\UnitPhotoController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\Portal\AccountController;
+use App\Http\Controllers\Portal\DocumentController as PortalDocumentController;
 use App\Http\Controllers\Portal\HomeController as PortalHomeController;
 use App\Http\Controllers\Portal\InboxController;
+use App\Http\Controllers\Portal\InvoiceController as PortalInvoiceController;
 use App\Http\Controllers\Portal\NoticeController;
 use App\Http\Controllers\Portal\PaymentController as PortalPaymentController;
 use App\Http\Controllers\Portal\RepairController;
+use App\Http\Controllers\Public\ManifestController;
 use App\Http\Controllers\Public\ReceiptVerificationController;
 use App\Http\Controllers\Public\StaffInvitationController;
 use App\Http\Controllers\Public\TenantInvitationController;
@@ -167,6 +171,15 @@ Route::get('app/_styleguide', StyleguideController::class)->name('app.styleguide
 Route::prefix('portal')->name('portal.')->middleware(['auth', 'active', 'role:tenant'])->group(function () {
     Route::get('/', PortalHomeController::class)->name('home');
 
+    Route::get('pay', [PortalPaymentController::class, 'pay'])->name('pay');
+    Route::get('payments', [PortalPaymentController::class, 'index'])->name('payments.index');
+    Route::get('invoices', [PortalInvoiceController::class, 'index'])->name('invoices.index');
+    Route::get('invoices/{invoice}', [PortalInvoiceController::class, 'show'])->name('invoices.show');
+    Route::get('invoices/{invoice}/pdf', [PortalInvoiceController::class, 'pdf'])->name('invoices.pdf');
+    Route::get('documents', PortalDocumentController::class)->name('documents');
+    Route::get('account', [AccountController::class, 'edit'])->name('account');
+    Route::put('account', [AccountController::class, 'update'])->name('account.update');
+
     Route::post('pay', [PortalPaymentController::class, 'start'])->middleware('throttle:10,1')->name('pay.start');
     Route::post('pay/proof', [PortalPaymentController::class, 'submitProof'])->middleware('throttle:10,1')->name('pay.proof');
     Route::post('payments/{payment}/check', [PortalPaymentController::class, 'check'])->middleware('throttle:10,1')->name('payments.check');
@@ -199,6 +212,9 @@ Route::middleware(['signed', 'throttle:30,1'])->group(function () {
     Route::post('vendor/job/{job}', [VendorJobController::class, 'update'])->whereNumber('job')->name('vendor.job.update');
     Route::get('vendor/job/{job}/photos/{attachment}', [VendorJobController::class, 'photo'])->whereNumber('job')->name('vendor.job.photo');
 });
+
+// PWA manifest for the tenant portal (spec 8.14).
+Route::get('manifest.webmanifest', ManifestController::class)->name('pwa.manifest');
 
 // Public receipt verification from the QR code.
 Route::get('r/{code}', ReceiptVerificationController::class)->middleware('throttle:30,1')->name('receipts.verify');

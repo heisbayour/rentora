@@ -11,7 +11,8 @@ return [
     'name' => env('APP_NAME', 'Rentora'),
     'tagline' => 'Rental property management',
 
-    'version' => '1.0.0',
+    // Single source of truth: the VERSION file in the project root (docs/RELEASING.md).
+    'version' => is_file(base_path('VERSION')) ? trim((string) file_get_contents(base_path('VERSION'))) : '0.0.0',
 
     'multi_org' => (bool) env('RENTORA_MULTI_ORG', false),
 

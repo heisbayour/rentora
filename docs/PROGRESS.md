@@ -105,7 +105,7 @@ Source: `docs/BUILD_SPEC.md`. Phases run in order (Section 15). Each phase ends 
 Resume point (FINISH_BUILD Section 1), 2026-11-24: Phases 0 to 7 complete and pushed (237 tests). Already present for Phases 8 to 13 before this run: services InvoiceGenerator, LateFeeService, PaymentReconciler and MaintenanceWorkflow::autoCloseResolved (needed wiring), a plain wa.me button on the tenant profile, `config/rentora.php` scheduler/outbox keys, nav entries for later modules. Nothing else. Each section below is committed as `v1 finish: <section>`.
 
 - [x] Section 2: Messaging and scheduler (Phase 8)
-- [ ] Section 3: Tenant portal and PWA (Phase 9)
+- [x] Section 3: Tenant portal and PWA (Phase 9)
 - [ ] Section 4: Dashboard, reports, expenses (Phase 10)
 - [ ] Section 5: Public website (Phase 11)
 - [ ] Section 6: Settings, system health, app version (Phase 12)
@@ -131,11 +131,11 @@ The per-phase lists below are the original spec plan; items FINISH_BUILD defers 
 
 ## Phase 9 - Tenant portal and PWA
 
-- [ ] Portal screens per 8.13
-- [ ] Payment wizard and repair wizard; with no gateway keys (`isConfigured()` false) the wizard shows only bank transfer with org bank details and receipt upload (DECISIONS 63) (payment endpoints, callback, proof upload, receipt and statement routes exist from Phase 6; Phase 9 builds the screens and points the callback at a receipt page)
-- [ ] Notices
-- [ ] Manifests, service worker, offline page, install prompt
-- [ ] Gates pass, commit, push
+- [x] Portal screens per 8.13
+- [x] Payment wizard and repair wizard; with no gateway keys (`isConfigured()` false) the wizard shows only bank transfer with org bank details and receipt upload (DECISIONS 63) (payment endpoints, callback, proof upload, receipt and statement routes exist from Phase 6; Phase 9 builds the screens and points the callback at a receipt page)
+- [x] Notices
+- [x] Manifests, service worker, offline page, install prompt
+- [x] Gates pass, commit, push
 
 ## Phase 10 - Dashboard, reports, expenses, search, audit
 

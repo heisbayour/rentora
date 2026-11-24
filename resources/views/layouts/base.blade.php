@@ -28,6 +28,8 @@
     <meta name="theme-color" content="{{ $brandColor }}">
     @if ($manifest)
         <link rel="manifest" href="{{ $manifest }}">
+        <link rel="apple-touch-icon" href="{{ asset('icons/apple-touch-icon.png') }}">
+        <meta name="apple-mobile-web-app-capable" content="yes">
     @endif
     <style>:root { {{ \App\Support\BrandColor::cssVariables($brandColor) }} }</style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])

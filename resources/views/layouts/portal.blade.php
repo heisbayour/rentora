@@ -26,7 +26,7 @@
     }, $items);
 @endphp
 
-<x-layouts::base :title="$title" :brand-color="$brandColor" :manifest="$manifest" body-class="bg-canvas">
+<x-layouts::base :title="$title" :brand-color="$brandColor" :manifest="$manifest ?? route('pwa.manifest')" body-class="bg-canvas">
     <header class="sticky top-0 z-20 border-b border-border bg-surface/95 backdrop-blur">
         <div class="mx-auto flex h-14 max-w-portal items-center gap-4 px-4">
             <span class="text-base font-semibold text-ink">{{ $appName }}</span>
