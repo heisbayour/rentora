@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\ExpenseController;
+use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\LeaseController;
 use App\Http\Controllers\Admin\LeaseWizardController;
@@ -36,6 +37,7 @@ use App\Http\Controllers\Portal\PaymentController as PortalPaymentController;
 use App\Http\Controllers\Portal\RepairController;
 use App\Http\Controllers\Public\ManifestController;
 use App\Http\Controllers\Public\ReceiptVerificationController;
+use App\Http\Controllers\Public\SiteController;
 use App\Http\Controllers\Public\StaffInvitationController;
 use App\Http\Controllers\Public\TenantInvitationController;
 use App\Http\Controllers\Public\VendorJobController;
@@ -46,9 +48,11 @@ use App\Http\Controllers\System\TickController;
 use App\Http\Controllers\System\UpgradeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Public website (spec 8.11). The owner can switch it off; "/" then goes to the login page.
+Route::get('/', [SiteController::class, 'home'])->name('home');
+Route::get('listings', [SiteController::class, 'listings'])->name('public.listings');
+Route::get('listings/{unit}', [SiteController::class, 'unit'])->whereNumber('unit')->name('public.unit');
+Route::post('listings/{unit}/inquiry', [SiteController::class, 'inquire'])->whereNumber('unit')->middleware('throttle:inquiries')->name('public.inquire');
 
 // Web installer: only before storage/app/installed.lock exists, only with ?key=RENTORA_INSTALL_KEY.
 Route::prefix('install')->name('install.')->middleware('installer')->group(function () {
@@ -135,6 +139,9 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
         Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('reports/{report}', [ReportController::class, 'show'])->name('reports.show');
         Route::get('reports/{report}/export', [ReportController::class, 'export'])->name('reports.export');
+
+        Route::get('inquiries', [InquiryController::class, 'index'])->name('inquiries.index');
+        Route::patch('inquiries/{inquiry}', [InquiryController::class, 'update'])->name('inquiries.update');
 
         Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
         Route::get('announcements/create', [AnnouncementController::class, 'create'])->name('announcements.create');

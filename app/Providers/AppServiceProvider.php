@@ -8,6 +8,7 @@ use App\Enums\Role;
 use App\Models\Announcement;
 use App\Models\Document;
 use App\Models\Expense;
+use App\Models\Inquiry;
 use App\Models\Invoice;
 use App\Models\Lease;
 use App\Models\MaintenanceAttachment;
@@ -81,6 +82,7 @@ class AppServiceProvider extends ServiceProvider
             'expense' => Expense::class,
             'announcement' => Announcement::class,
             'outbound_message' => OutboundMessage::class,
+            'inquiry' => Inquiry::class,
         ]);
 
         $this->defineGates();

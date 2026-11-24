@@ -107,7 +107,7 @@ Resume point (FINISH_BUILD Section 1), 2026-11-24: Phases 0 to 7 complete and pu
 - [x] Section 2: Messaging and scheduler (Phase 8)
 - [x] Section 3: Tenant portal and PWA (Phase 9)
 - [x] Section 4: Dashboard, reports, expenses (Phase 10)
-- [ ] Section 5: Public website (Phase 11)
+- [x] Section 5: Public website (Phase 11)
 - [ ] Section 6: Settings, system health, app version (Phase 12)
 - [ ] Section 7: Release (Phase 13)
 - [ ] Section 8: Android app package
@@ -149,10 +149,10 @@ The per-phase lists below are the original spec plan; items FINISH_BUILD defers 
 
 ## Phase 11 - Public website
 
-- [ ] Home, listings, unit page, inquiry form
-- [ ] Inquiry admin inbox
-- [ ] SEO, sitemap.xml, robots.txt, site toggle
-- [ ] Gates pass, commit, push
+- [x] Home, listings, unit page, inquiry form
+- [x] Inquiry admin inbox
+- [x] Site toggle, title and meta description (sitemap and Open Graph deferred; static robots.txt)
+- [x] Gates pass, commit, push
 
 ## Phase 12 - Settings and system health
 

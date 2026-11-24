@@ -81,6 +81,11 @@ return [
         'cheque' => 'Cheque',
         'other' => 'Other',
     ],
+    'inquiry_status' => [
+        'new' => 'New',
+        'contacted' => 'Contacted',
+        'closed' => 'Closed',
+    ],
     'message_status' => [
         'queued' => 'Queued',
         'sending' => 'Sending',

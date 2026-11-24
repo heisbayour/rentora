@@ -69,6 +69,9 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($throttleKey);
         });
 
+        // Public inquiry form: 3 per hour per IP (spec 8.11, 11).
+        RateLimiter::for('inquiries', fn (Request $request) => Limit::perHour(3)->by('inquiry|'.$request->ip()));
+
         RateLimiter::for('two-factor', function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });

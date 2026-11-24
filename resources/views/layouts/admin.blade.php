@@ -73,13 +73,7 @@
                     <x-heroicon-o-bars-3 class="h-6 w-6" aria-hidden="true" />
                 </button>
 
-                <button type="button" @click="$dispatch('open-search')"
-                    @keydown.window.ctrl.k.prevent="$dispatch('open-search')" @keydown.window.meta.k.prevent="$dispatch('open-search')"
-                    class="flex h-10 flex-1 items-center gap-3 rounded-control border border-border bg-canvas px-3 text-left text-sm text-ink-muted hover:border-primary-600 sm:max-w-md">
-                    <x-heroicon-m-magnifying-glass class="h-5 w-5 shrink-0" aria-hidden="true" />
-                    <span class="flex-1 truncate">{{ __('ui.search_placeholder') }}</span>
-                    <kbd class="hidden rounded border border-border bg-surface px-1.5 text-xs sm:inline">{{ __('ui.search_shortcut') }}</kbd>
-                </button>
+                {{-- Global search (Ctrl+K) is on the roadmap (docs/ROADMAP.md). --}}
 
                 <div class="ml-auto flex items-center gap-1">
                     @isset($notifications)
