@@ -106,7 +106,7 @@ Resume point (FINISH_BUILD Section 1), 2026-11-24: Phases 0 to 7 complete and pu
 
 - [x] Section 2: Messaging and scheduler (Phase 8)
 - [x] Section 3: Tenant portal and PWA (Phase 9)
-- [ ] Section 4: Dashboard, reports, expenses (Phase 10)
+- [x] Section 4: Dashboard, reports, expenses (Phase 10)
 - [ ] Section 5: Public website (Phase 11)
 - [ ] Section 6: Settings, system health, app version (Phase 12)
 - [ ] Section 7: Release (Phase 13)
@@ -139,13 +139,13 @@ The per-phase lists below are the original spec plan; items FINISH_BUILD defers 
 
 ## Phase 10 - Dashboard, reports, expenses, search, audit
 
-- [ ] Dashboard KPIs, charts, lists (caretaker variant)
-- [ ] Expenses CRUD
-- [ ] Six reports with CSV and PDF
-- [ ] Global search command palette
-- [ ] Audit log
-- [ ] Tests: 8.2 KPIs, 8.10 arrears aging
-- [ ] Gates pass, commit, push
+- [x] Dashboard KPIs, charts, lists (caretaker variant)
+- [x] Expenses CRUD
+- [x] Rent roll, arrears aging, collections with CSV (other reports and PDF deferred)
+- [ ] Global search command palette (deferred)
+- [x] Audit log
+- [x] Tests: 8.2 KPIs, 8.10 arrears aging, caretaker money access
+- [x] Gates pass, commit, push
 
 ## Phase 11 - Public website
 

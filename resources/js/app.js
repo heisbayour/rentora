@@ -6,6 +6,7 @@ import moneyInput from './components/money-input';
 import fileDropzone from './components/file-dropzone';
 import typedConfirm from './components/typed-confirm';
 import portalPay from './components/portal-pay';
+import dashboardChart from './components/dashboard-chart';
 import { registerPwa } from './pwa';
 import { guardFormSubmissions } from './forms';
 
@@ -17,6 +18,7 @@ Alpine.data('moneyInput', moneyInput);
 Alpine.data('fileDropzone', fileDropzone);
 Alpine.data('typedConfirm', typedConfirm);
 Alpine.data('portalPay', portalPay);
+Alpine.data('dashboardChart', dashboardChart);
 
 guardFormSubmissions();
 

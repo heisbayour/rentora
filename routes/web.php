@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DocumentController;
+use App\Http\Controllers\Admin\ExpenseController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\LeaseController;
 use App\Http\Controllers\Admin\LeaseWizardController;
@@ -16,6 +18,7 @@ use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\QuickAddUnitsController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\StyleguideController;
 use App\Http\Controllers\Admin\TenantController;
@@ -126,6 +129,13 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
         Route::get('payments/{payment}/receipt', [AdminPaymentController::class, 'receipt'])->name('payments.receipt');
         Route::get('payments/{payment}/proof', [AdminPaymentController::class, 'proof'])->name('payments.proof');
 
+        Route::get('expenses/{expense}/receipt', [ExpenseController::class, 'receipt'])->name('expenses.receipt');
+        Route::resource('expenses', ExpenseController::class)->except('show');
+
+        Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('reports/{report}', [ReportController::class, 'show'])->name('reports.show');
+        Route::get('reports/{report}/export', [ReportController::class, 'export'])->name('reports.export');
+
         Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
         Route::get('announcements/create', [AnnouncementController::class, 'create'])->name('announcements.create');
         Route::get('announcements/recipients', [AnnouncementController::class, 'recipients'])->name('announcements.recipients');
@@ -149,6 +159,8 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
 
     Route::post('documents', [DocumentController::class, 'store'])->name('documents.store');
     Route::delete('documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
+
+    Route::get('audit', AuditLogController::class)->middleware('can:view-audit-log')->name('audit.index');
 
     Route::middleware('can:manage-staff')->group(function () {
         Route::get('staff', [StaffController::class, 'index'])->name('staff.index');

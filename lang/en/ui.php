@@ -20,6 +20,7 @@ return [
     'cancel' => 'Cancel',
     'confirm' => 'Confirm',
     'delete' => 'Delete',
+    'actions' => 'Actions',
     'save' => 'Save',
     'edit' => 'Edit',
     'back' => 'Back',
