@@ -8,6 +8,7 @@ use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\InstallerGuard;
 use App\Http\Middleware\RunLazyScheduler;
+use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetCurrentOrganization;
 use App\Http\Responses\LoginResponse;
 use Illuminate\Foundation\Application;
@@ -23,7 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->web(prepend: [EnsureInstalled::class], append: [SetCurrentOrganization::class, RunLazyScheduler::class]);
+        $middleware->web(prepend: [SecurityHeaders::class, EnsureInstalled::class], append: [SetCurrentOrganization::class, RunLazyScheduler::class]);
         // The organization must be known before route model binding, or bound
         // models would be resolved without the OrganizationScope.
         $middleware->prependToPriorityList(before: SubstituteBindings::class, prepend: SetCurrentOrganization::class);

@@ -37,6 +37,7 @@ use App\Http\Controllers\Portal\InvoiceController as PortalInvoiceController;
 use App\Http\Controllers\Portal\NoticeController;
 use App\Http\Controllers\Portal\PaymentController as PortalPaymentController;
 use App\Http\Controllers\Portal\RepairController;
+use App\Http\Controllers\Public\AssetLinksController;
 use App\Http\Controllers\Public\ManifestController;
 use App\Http\Controllers\Public\ReceiptVerificationController;
 use App\Http\Controllers\Public\SiteController;
@@ -248,6 +249,7 @@ Route::middleware(['signed', 'throttle:30,1'])->group(function () {
 
 // PWA manifest for the tenant portal (spec 8.14).
 Route::get('manifest.webmanifest', ManifestController::class)->name('pwa.manifest');
+Route::get('.well-known/assetlinks.json', AssetLinksController::class)->name('android.assetlinks');
 
 // Public receipt verification from the QR code.
 Route::get('r/{code}', ReceiptVerificationController::class)->middleware('throttle:30,1')->name('receipts.verify');

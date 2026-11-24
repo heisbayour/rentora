@@ -5,6 +5,7 @@
     },
     "exclude": [
         "storage",
-        "bootstrap/cache"
+        "bootstrap/cache",
+        "dist"
     ]
 }

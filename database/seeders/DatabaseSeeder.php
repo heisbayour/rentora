@@ -13,8 +13,9 @@ use App\Support\Installation;
 use Illuminate\Database\Seeder;
 
 /**
- * Local demo data (spec 14). Never run by the installer. Phase 13 expands
- * this with properties, tenants, invoices and maintenance history.
+ * Local demo data (spec 14, FINISH_BUILD Section 7). Never run by the
+ * installer. Demo logins: owner@, manager@, caretaker@ and tenant@demo.test,
+ * password "password".
  */
 class DatabaseSeeder extends Seeder
 {
@@ -48,5 +49,7 @@ class DatabaseSeeder extends Seeder
         if (! Installation::isInstalled()) {
             Installation::markInstalled();
         }
+
+        $this->call(DemoSeeder::class);
     }
 }

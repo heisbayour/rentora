@@ -109,7 +109,7 @@ Resume point (FINISH_BUILD Section 1), 2026-11-24: Phases 0 to 7 complete and pu
 - [x] Section 4: Dashboard, reports, expenses (Phase 10)
 - [x] Section 5: Public website (Phase 11)
 - [x] Section 6: Settings, system health, app version (Phase 12)
-- [ ] Section 7: Release (Phase 13)
+- [x] Section 7: Release (Phase 13)
 - [ ] Section 8: Android app package
 - [ ] Section 9: Final report
 
@@ -162,22 +162,22 @@ The per-phase lists below are the original spec plan; items FINISH_BUILD defers 
 
 ## Phase 13 - Hardening and release
 
-- [ ] Security headers, rate limits
-- [ ] Access matrix test, cross-tenant and cross-organization tests
-- [ ] Migrations run on MySQL (first run passed 2026-11-10 on XAMPP MariaDB 10.4, DECISIONS 62; repeat before release)
-- [ ] Demo seeder (Section 14)
-- [ ] `scripts/build-deploy.php` and `deploy/` templates
-- [ ] README, DEPLOYMENT, USER_GUIDE, SMOKE_TEST, CHANGELOG
-- [ ] Final gates, tag `v1.0.0`, push tags
+- [x] Security headers, rate limits
+- [x] Access matrix test, cross-tenant and cross-organization tests
+- [x] Migrations run on MySQL (`migrate:fresh --seed` on XAMPP MariaDB 10.4, 2026-11-24: 34 tables, demo seeded)
+- [x] Demo seeder (FINISH_BUILD size: 2 properties, 12 units, 9 tenants)
+- [x] `scripts/build-deploy.php` and `deploy/` templates, build-info.json
+- [x] README, DEPLOYMENT, USER_GUIDE, SMOKE_TEST, CHANGELOG, RELEASING, ROADMAP
+- [x] Final gates, tag `v1.0.0`, push tags
 
 ## Section 17 - Final verification
 
-- [ ] All phases complete, all [T] criteria covered by passing tests
-- [ ] `composer test`, `composer lint`, `composer analyse` pass with zero failures
-- [ ] Migrations verified on MySQL
-- [ ] Seeded demo works for all four demo logins
-- [ ] No em dash character anywhere in repo
-- [ ] No secrets in git history
-- [ ] `composer deploy:build` zip installs and runs via `/install` on a fresh Apache folder and DB
-- [ ] README, DEPLOYMENT, USER_GUIDE, SMOKE_TEST, CHANGELOG written
-- [ ] Repo public at `github.com/heisbayour/rentora`, tagged `v1.0.0`
+- [x] All phases complete for the FINISH_BUILD scope; deferred items in docs/ROADMAP.md
+- [x] `composer test`, `composer lint`, `composer analyse` pass with zero failures
+- [x] Migrations verified on MySQL
+- [x] Seeded demo works for all four demo logins (test in AccessMatrixTest)
+- [x] No em dash character anywhere in repo
+- [x] No secrets in git history (no .env, keystore or passwords tracked)
+- [x] `composer deploy:build` zip installs and runs via `/install` on a fresh folder and MySQL DB (PHP built-in server, 2026-11-24)
+- [x] README, DEPLOYMENT, USER_GUIDE, SMOKE_TEST, CHANGELOG written
+- [x] Repo public at `github.com/heisbayour/rentora`, tagged `v1.0.0`

@@ -1,0 +1,7 @@
+Options -Indexes
+<FilesMatch "^(\.env.*|composer\.(json|lock)|artisan|package(-lock)?\.json|vite\.config\.js|build-info\.json)$">
+  Require all denied
+</FilesMatch>
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]

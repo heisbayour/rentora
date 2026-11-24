@@ -127,3 +127,15 @@ it('lets a tenant update their name and phone', function () {
 
     expect($user->fresh()->name)->toBe('New Name')->and($tenant->fresh()->phone)->toBe('08035550000');
 });
+
+it('serves Digital Asset Links for the Android app', function () {
+    $this->get('/.well-known/assetlinks.json')->assertOk()->assertExactJson([]);
+
+    config(['rentora.android.package' => 'com.heisbayour.rentora', 'rentora.android.fingerprints' => ['AA:BB:CC']]);
+
+    $this->get('/.well-known/assetlinks.json')->assertOk()
+        ->assertHeader('Content-Type', 'application/json')
+        ->assertJsonPath('0.target.package_name', 'com.heisbayour.rentora')
+        ->assertJsonPath('0.target.sha256_cert_fingerprints.0', 'AA:BB:CC')
+        ->assertJsonPath('0.relation.0', 'delegate_permission/common.handle_all_urls');
+});
