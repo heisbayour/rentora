@@ -108,7 +108,7 @@ Resume point (FINISH_BUILD Section 1), 2026-11-24: Phases 0 to 7 complete and pu
 - [x] Section 3: Tenant portal and PWA (Phase 9)
 - [x] Section 4: Dashboard, reports, expenses (Phase 10)
 - [x] Section 5: Public website (Phase 11)
-- [ ] Section 6: Settings, system health, app version (Phase 12)
+- [x] Section 6: Settings, system health, app version (Phase 12)
 - [ ] Section 7: Release (Phase 13)
 - [ ] Section 8: Android app package
 - [ ] Section 9: Final report
@@ -156,9 +156,9 @@ The per-phase lists below are the original spec plan; items FINISH_BUILD defers 
 
 ## Phase 12 - Settings and system health
 
-- [ ] All settings tabs with test buttons
-- [ ] System health page
-- [ ] Gates pass, commit, push
+- [x] All settings tabs with test buttons (Notifications tab deferred)
+- [x] System health page; VERSION file, build-info.json, version in every footer, docs/RELEASING.md
+- [x] Gates pass, commit, push
 
 ## Phase 13 - Hardening and release
 

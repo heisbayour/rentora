@@ -39,6 +39,7 @@ class LeaseWizard
         private readonly ActivateLease $activateLease,
         private readonly InviteTenant $inviteTenant,
         private readonly IssueInitialInvoices $initialInvoices,
+        private readonly SettingsService $settings,
     ) {}
 
     /** @return array<string, mixed> */
@@ -192,10 +193,11 @@ class LeaseWizard
             'rent_frequency' => $unit->rent_frequency->value,
             'service_charge_amount' => $unit->service_charge_amount,
             'billing_anchor_day' => CreateLease::anchorDayFor($start),
-            'invoice_lead_days' => $unit->rent_frequency->defaultLeadDays(),
-            'grace_days' => CreateLease::DEFAULT_GRACE_DAYS,
-            'late_fee_type' => LateFeeType::None->value,
-            'late_fee_value' => 0,
+            // Settings > Billing defaults when the owner set them (spec 8.12).
+            'invoice_lead_days' => $this->settings->int('billing.default_lead_days', $unit->rent_frequency->defaultLeadDays()),
+            'grace_days' => $this->settings->int('billing.default_grace_days', CreateLease::DEFAULT_GRACE_DAYS),
+            'late_fee_type' => (string) $this->settings->get('billing.late_fee_type', LateFeeType::None->value),
+            'late_fee_value' => $this->settings->int('billing.late_fee_value', 0),
         ];
     }
 

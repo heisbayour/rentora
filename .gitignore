@@ -25,3 +25,11 @@ yarn-error.log
 /storage/app/installed.lock
 /public/uploads/*
 !/public/uploads/.gitkeep
+/build-info.json
+
+# Android signing material never goes in this public repo.
+*.keystore
+*.jks
+keys/
+/android/build/
+/android/app/

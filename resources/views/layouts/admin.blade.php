@@ -115,6 +115,7 @@
             <main id="main" class="px-4 py-6 sm:px-6 lg:px-8">
                 {{ $slot }}
             </main>
+            <footer class="px-4 pb-6 sm:px-6 lg:px-8"><x-app-version /></footer>
         </div>
     </div>
     @isset($overlays)

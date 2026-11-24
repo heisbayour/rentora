@@ -53,7 +53,7 @@
             </div>
             <div class="sm:text-right">
                 <p>&copy; {{ now()->year }} {{ $orgName }}. {{ __('ui.all_rights') }}</p>
-                <p class="mt-1">{{ __('ui.powered_by', ['name' => config('rentora.name')]) }}</p>
+                <x-app-version class="mt-1" />
             </div>
         </div>
     </footer>

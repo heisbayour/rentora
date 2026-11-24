@@ -20,8 +20,10 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\QuickAddUnitsController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\StyleguideController;
+use App\Http\Controllers\Admin\SystemHealthController;
 use App\Http\Controllers\Admin\TenantController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\UnitPhotoController;
@@ -168,6 +170,18 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
     Route::delete('documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 
     Route::get('audit', AuditLogController::class)->middleware('can:view-audit-log')->name('audit.index');
+
+    Route::middleware('can:manage-settings')->group(function () {
+        Route::get('settings', [SettingsController::class, 'edit'])->name('settings.edit');
+        Route::put('settings/{tab}', [SettingsController::class, 'update'])->name('settings.update');
+        Route::post('settings/test/{kind}', [SettingsController::class, 'test'])->middleware('throttle:10,1')->name('settings.test');
+    });
+
+    Route::middleware('can:view-system-health')->group(function () {
+        Route::get('health', [SystemHealthController::class, 'show'])->name('health');
+        Route::post('health/retry', [SystemHealthController::class, 'retryFailed'])->name('health.retry');
+        Route::post('health/drain', [SystemHealthController::class, 'drain'])->name('health.drain');
+    });
 
     Route::middleware('can:manage-staff')->group(function () {
         Route::get('staff', [StaffController::class, 'index'])->name('staff.index');

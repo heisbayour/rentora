@@ -48,6 +48,7 @@
 
     <main id="main" class="mx-auto max-w-portal px-4 pb-28 pt-6 md:pb-10">
         {{ $slot }}
+        <x-app-version class="mt-8 text-center" />
     </main>
 
     <nav class="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)] md:hidden" aria-label="{{ $appName }}">
