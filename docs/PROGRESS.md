@@ -110,7 +110,7 @@ Resume point (FINISH_BUILD Section 1), 2026-11-24: Phases 0 to 7 complete and pu
 - [x] Section 5: Public website (Phase 11)
 - [x] Section 6: Settings, system health, app version (Phase 12)
 - [x] Section 7: Release (Phase 13)
-- [ ] Section 8: Android app package
+- [x] Section 8: Android app package (keystore, assetlinks route, signed APK and AAB built 2026-11-24 with placeholder host)
 - [ ] Section 9: Final report
 
 The per-phase lists below are the original spec plan; items FINISH_BUILD defers are marked (deferred) and listed in `docs/ROADMAP.md`.

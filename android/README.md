@@ -48,6 +48,13 @@ Outputs in `C:\Rentora\android-build\`:
 - `app-release-signed.apk` - install directly on a phone (allow "install unknown apps")
 - `app-release-bundle.aab` - upload to Google Play Console
 
+### Windows build notes
+
+- If the build stops with `'gradlew.bat' is not recognized`, Windows has `NoDefaultCurrentDirectoryInExePath=1` set. Clear it for that PowerShell window first: `Remove-Item Env:NoDefaultCurrentDirectoryInExePath`.
+- The first v1.0.0 build used a portable Temurin JDK 17 in `C:\Rentora\tools\jdk-17.0.21.1+2` and the Android command-line tools in `C:\Rentora\tools\android-sdk`, set in `%USERPROFILE%\.bubblewrap\config.json` (`jdkPath`, `androidSdkPath`). `bubblewrap doctor` checks both.
+- `minSdkVersion` is 24 (Android 7.0), the minimum of the Android Browser Helper library Bubblewrap uses.
+- Bubblewrap downloads the icons from `iconUrl` while generating the project, so the site (or a local server for the icons) must be reachable at that moment.
+
 ## New version of the app
 
 1. Raise `appVersionCode` by 1 and set `appVersionName` to the new `VERSION` in `android/twa-manifest.json`; commit.
