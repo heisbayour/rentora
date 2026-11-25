@@ -12,6 +12,7 @@ use App\Http\Requests\Admin\InviteStaffRequest;
 use App\Http\Requests\Admin\UpdateStaffRequest;
 use App\Models\User;
 use App\Support\CurrentOrganization;
+use App\Support\InviteShare;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -46,6 +47,7 @@ class StaffController extends Controller
     public function store(InviteStaffRequest $request, InviteStaff $invite): RedirectResponse
     {
         $member = $invite->handle($request->validated());
+        InviteShare::flash($member->name, InviteStaff::link($member), $member->phone);
 
         return redirect()->route('app.staff.index')->with('toast', __('staff.invited', ['name' => $member->name]));
     }
@@ -64,7 +66,7 @@ class StaffController extends Controller
         $this->authorize('manage-staff');
         abort_unless($member->isStaff(), 404);
 
-        $invite->send($member);
+        InviteShare::flash($member->name, $invite->send($member), $member->phone);
 
         return redirect()->route('app.staff.index')->with('toast', __('staff.resent', ['name' => $member->name]));
     }

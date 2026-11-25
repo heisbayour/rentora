@@ -31,7 +31,10 @@ class Requirements
         }
 
         foreach ((array) config('rentora.install.writable') as $directory) {
-            $path = base_path((string) $directory);
+            // "public/..." follows public_path(): in the deploy layout that is the document root, not base_path('public').
+            $path = str_starts_with((string) $directory, 'public/')
+                ? public_path(substr((string) $directory, 7))
+                : base_path((string) $directory);
             if (! is_dir($path)) {
                 @mkdir($path, 0755, true);
             }

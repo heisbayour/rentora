@@ -25,7 +25,16 @@ keytool -list -v -keystore "C:\Rentora\keys\rentora.keystore" -alias rentora
 
 ## Before building: set your domain
 
-`android/twa-manifest.json` ships with the placeholder host `rentora.example.com`. Replace it (in `host`, `iconUrl`, `maskableIconUrl`, `webManifestUrl` and `fullScopeUrl`) with your live HTTPS domain, for example `rentora.yourdomain.com`. The site must be live at that address when you build, because Bubblewrap downloads the icons from it.
+`android/twa-manifest.json` is set to the live site `rentora-housing.infinityfreeapp.com` (in `host`, `iconUrl`, `maskableIconUrl`, `webManifestUrl` and `fullScopeUrl`). For another domain, replace it in those five fields.
+
+Bubblewrap downloads the icons from `iconUrl` while generating the project, and InfinityFree blocks non-browser downloads. So the copy of the manifest used for building points the icons at a local server instead:
+
+```powershell
+cd C:\Rentora\rentora
+php -S 127.0.0.1:8095 -t public          # leave running in its own window
+```
+
+In `C:\Rentora\android-build\twa-manifest.json` (the build copy, not the committed one) set `iconUrl` and `maskableIconUrl` to `http://127.0.0.1:8095/icons/icon-512.png` and `http://127.0.0.1:8095/icons/icon-maskable-512.png`, and remove the `webManifestUrl` line. `host`, `startUrl` and `fullScopeUrl` stay on the live domain, so the app still opens the live site.
 
 ## Build the APK and AAB with Bubblewrap
 
@@ -36,7 +45,7 @@ From a folder **outside** the repository (so no generated Android project or key
 ```powershell
 mkdir C:\Rentora\android-build
 cd C:\Rentora\android-build
-copy C:\Rentora\rentora\android\twa-manifest.json .
+copy C:\Rentora\rentora\android\twa-manifest.json .   # then point the icons at the local server, as above
 bubblewrap update --skipVersionUpgrade      # generates the Android project from twa-manifest.json
 $env:BUBBLEWRAP_KEYSTORE_PASSWORD = "<keystore password>"
 $env:BUBBLEWRAP_KEY_PASSWORD = "<key password>"

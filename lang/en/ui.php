@@ -52,4 +52,13 @@ return [
     'skip_to_content' => 'Skip to content',
     'powered_by' => 'Powered by :name',
     'all_rights' => 'All rights reserved.',
+    'invite_share' => [
+        'title' => 'Invite link for :name',
+        'text' => 'If email or SMS is not set up yet, copy this link or share it on WhatsApp. It works for :days days and only for this person.',
+        'label' => 'Invite link',
+        'copy' => 'Copy invite link',
+        'copied' => 'Copied',
+        'whatsapp' => 'Share on WhatsApp',
+        'message' => 'Hello :name, :org has invited you. Open this link to set up your account: :link',
+    ],
 ];

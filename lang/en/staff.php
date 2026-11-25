@@ -7,7 +7,7 @@ return [
     'description' => 'Invite managers and caretakers, change roles and deactivate accounts.',
     'invite' => 'Invite staff',
     'invite_title' => 'Invite a staff member',
-    'invite_intro' => 'They receive an email with a link to set their password. The link works for 7 days.',
+    'invite_intro' => 'They receive an email with a link to set their password. You can also copy the link or share it on WhatsApp. The link works for 7 days.',
     'send_invite' => 'Send invite',
     'name' => 'Full name',
     'email' => 'Email',

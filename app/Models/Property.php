@@ -35,11 +35,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Property extends Model implements Documentable
 {
     use BelongsToOrganization;
-
     use HasDocuments;
 
     /** @use HasFactory<PropertyFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     protected $fillable = [

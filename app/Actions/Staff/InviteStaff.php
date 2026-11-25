@@ -35,9 +35,13 @@ class InviteStaff
         return $user;
     }
 
-    public function send(User $user): void
+    /** Sends the invitation and returns the link, so the console can offer Copy and WhatsApp too. */
+    public function send(User $user): string
     {
-        $user->notify(new StaffInvitation(self::link($user)));
+        $link = self::link($user);
+        $user->notify(new StaffInvitation($link));
+
+        return $link;
     }
 
     /**

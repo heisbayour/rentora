@@ -27,6 +27,8 @@
         <x-alert type="danger" class="mb-4">{{ $errors->first('tenant') }}</x-alert>
     @endif
 
+    <x-invite-share />
+
     @php
         $tabLabels = collect($tabs)->mapWithKeys(fn ($t) => [$t => __('tenants.tabs.'.$t)])->all();
         $tabLinks = collect($tabs)->mapWithKeys(fn ($t) => [$t => route('app.tenants.show', [$tenant, 'tab' => $t])])->all();

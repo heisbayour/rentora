@@ -5,6 +5,8 @@
         </x-slot:actions>
     </x-page-header>
 
+    <x-invite-share />
+
     <form method="GET" class="mb-4 flex flex-wrap items-center gap-2" data-no-guard>
         <div class="w-full sm:w-72">
             <x-input name="q" :value="$search" :placeholder="__('staff.search')" aria-label="{{ __('staff.search') }}" />

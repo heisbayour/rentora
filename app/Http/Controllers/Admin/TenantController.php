@@ -15,6 +15,7 @@ use App\Http\Requests\Admin\TenantRequest;
 use App\Models\ActivityLog;
 use App\Models\Tenant;
 use App\Support\CurrentOrganization;
+use App\Support\InviteShare;
 use App\Support\PhoneNormalizer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -126,7 +127,7 @@ class TenantController extends Controller
     {
         $this->authorize('update', $tenant);
 
-        $invite->handle($tenant);
+        InviteShare::flash($tenant->full_name, $invite->handle($tenant), $tenant->phone);
 
         return back()->with('toast', __('tenants.invite_sent', ['name' => $tenant->full_name]));
     }
