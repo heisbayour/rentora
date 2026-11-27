@@ -17,6 +17,14 @@ class SecurityHeaders
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // When the site is served over HTTPS (APP_URL) but the host's proxy
+        // hands PHP a plain http request without forwarding headers, treat
+        // the request as HTTPS so request URLs match the https links the app
+        // signed. Otherwise every signed link fails with "Invalid signature".
+        if (! $request->isSecure() && str_starts_with((string) config('app.url'), 'https://')) {
+            $request->server->set('HTTPS', 'on');
+        }
+
         if ($request->isSecure() && config('session.secure') === null) {
             config(['session.secure' => true]);
         }

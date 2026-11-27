@@ -13,7 +13,7 @@
     @if ($units->isEmpty())
         <x-empty-state icon="globe-alt" :title="__('listings.empty_title')" :text="__('listings.empty_text')" />
     @else
-        <ul class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             @foreach ($units as $unit)
                 <li class="overflow-hidden rounded-card border border-border bg-surface shadow-card">
                     @if ($photo = $unit->photos->first())

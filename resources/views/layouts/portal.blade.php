@@ -21,7 +21,11 @@
         return $item + [
             'label' => __('nav.portal.'.$item['key']),
             'href' => $exists ? route($item['route']) : '#',
-            'active' => $exists && request()->routeIs(\Illuminate\Support\Str::beforeLast($item['route'], '.').'*'),
+            // "portal.repairs.index" is active on any portal.repairs.* page; "portal.pay" only on itself
+            // and its children (stripping its last segment would give "portal*" and match every page).
+            'active' => $exists && (str_ends_with($item['route'], '.index')
+                ? request()->routeIs(\Illuminate\Support\Str::beforeLast($item['route'], '.').'.*')
+                : request()->routeIs($item['route'], $item['route'].'.*')),
         ];
     }, $items);
 @endphp

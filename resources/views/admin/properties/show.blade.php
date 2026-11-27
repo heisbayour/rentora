@@ -18,7 +18,7 @@
         <x-alert type="danger" class="mb-4">{{ $message }}</x-alert>
     @enderror
 
-    <div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <x-stat-card :label="__('properties.stats.income')" :value="$incomeThisYear->format()" icon="banknotes" />
         <x-stat-card :label="__('properties.stats.units')" :value="$property->units_count" icon="squares-2x2" />
         <x-stat-card :label="__('properties.stats.occupancy')" :value="$property->occupancyPercent().'%'"

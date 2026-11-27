@@ -13,8 +13,11 @@ function dismissed() {
     }
 }
 
+/** The Android app's WebView adds "RentoraApp" to its user agent. */
+export const inNativeApp = /RentoraApp/.test(window.navigator.userAgent);
+
 export function registerPwa(Alpine) {
-    const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    const standalone = inNativeApp || window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
     const ios = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
 
     Alpine.store('install', {
@@ -48,6 +51,15 @@ export function registerPwa(Alpine) {
         store.deferred = event;
         store.canPrompt = !store.hidden;
     });
+
+    // The app shows its own offline screen, so no service worker there (and
+    // none left over from an earlier visit).
+    if (inNativeApp) {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then((list) => list.forEach((r) => r.unregister())).catch(() => {});
+        }
+        return;
+    }
 
     if ('serviceWorker' in navigator && document.querySelector('link[rel="manifest"]')) {
         window.addEventListener('load', () => {

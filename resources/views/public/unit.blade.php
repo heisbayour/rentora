@@ -5,7 +5,7 @@
             <x-heroicon-m-arrow-left class="h-4 w-4" aria-hidden="true" /> {{ __('public.listings_title') }}
         </a>
 
-        <div class="grid gap-8 lg:grid-cols-5">
+        <div class="grid grid-cols-1 gap-8 lg:grid-cols-5">
             <div class="lg:col-span-3">
                 @if ($unit->photos->isNotEmpty())
                     <div x-data="{ active: 0 }">

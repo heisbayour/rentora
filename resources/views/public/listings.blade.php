@@ -4,7 +4,7 @@
         <h1 class="text-2xl font-semibold text-ink">{{ __('public.listings_title') }}</h1>
         <p class="mt-1 text-sm text-ink-muted">{{ __('public.listings_intro', ['org' => $organization->name]) }}</p>
 
-        <form method="GET" class="mt-6 grid gap-3 rounded-card border border-border bg-canvas p-4 sm:grid-cols-5 sm:items-end" data-no-guard>
+        <form method="GET" class="mt-6 grid grid-cols-1 gap-3 rounded-card border border-border bg-canvas p-4 sm:grid-cols-5 sm:items-end" data-no-guard>
             <x-select name="property_id" :label="__('public.filters.property')" :options="$properties" :value="$filters['property_id'] ?? null" :placeholder="__('public.filters.any')" />
             <x-select name="type" :label="__('public.filters.type')" :options="$types" :value="$filters['type'] ?? null" :placeholder="__('public.filters.any')" />
             <x-select name="bedrooms" :label="__('public.filters.bedrooms')" :options="[1 => '1+', 2 => '2+', 3 => '3+', 4 => '4+']" :value="$filters['bedrooms'] ?? null" :placeholder="__('public.filters.any')" />
@@ -16,7 +16,7 @@
             @if ($units->isEmpty())
                 <x-empty-state icon="home" :title="__('public.no_results_title')" :text="__('public.no_results_text')" />
             @else
-                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($units as $unit)
                         @include('public._unit-card', ['unit' => $unit])
                     @endforeach

@@ -139,3 +139,21 @@ it('serves Digital Asset Links for the Android app', function () {
         ->assertJsonPath('0.target.sha256_cert_fingerprints.0', 'AA:BB:CC')
         ->assertJsonPath('0.relation.0', 'delegate_permission/common.handle_all_urls');
 });
+
+it('marks only the current section as active in the portal navigation', function () {
+    [$user] = portalTenant();
+
+    foreach (['portal.home', 'portal.pay', 'portal.repairs.index', 'portal.inbox', 'portal.account'] as $route) {
+        $html = $this->actingAs($user)->get(route($route))->assertOk()->getContent();
+        // Once in the desktop bar, once in the mobile bottom bar.
+        expect(substr_count($html, 'aria-current="page"'))->toBe(2, $route);
+    }
+});
+
+it('hides the install app card inside the Android app', function () {
+    [$user] = portalTenant();
+
+    $this->actingAs($user)->get(route('portal.home'))->assertOk()->assertSee(__('portal.install.title'));
+    $this->actingAs($user)->withHeader('User-Agent', 'Mozilla/5.0 (Linux; Android 14; wv) Chrome/131.0 Mobile RentoraApp')
+        ->get(route('portal.home'))->assertOk()->assertDontSee(__('portal.install.title'));
+});

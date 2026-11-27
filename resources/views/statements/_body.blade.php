@@ -3,7 +3,7 @@
     $money = fn (int $minor) => \App\Support\Money::forOrganization($minor)->format();
 @endphp
 
-<div class="mb-6 grid gap-4 sm:grid-cols-4">
+<div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-4">
     <x-stat-card :label="__('payments.statement.opening')" :value="$money($statement['opening'])" />
     <x-stat-card :label="__('payments.statement.charges')" :value="$money($statement['charges'])" />
     <x-stat-card :label="__('payments.statement.payments')" :value="$money($statement['payments'])" />

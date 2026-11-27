@@ -52,7 +52,7 @@
 
         <x-card :title="__('portal.pay.method')">
             @if ($cardEnabled)
-                <div class="grid gap-2 sm:grid-cols-2">
+                <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     <label class="flex cursor-pointer items-start gap-3 rounded-control border p-3" :class="method === 'card' ? 'border-primary-600 bg-primary-50' : 'border-border'">
                         <input type="radio" value="card" x-model="method" class="mt-0.5 h-4 w-4 border-border text-primary-600 focus:ring-primary-600">
                         <span><span class="block text-sm font-medium text-ink">{{ __('portal.pay.card') }}</span><span class="block text-xs text-ink-muted">{{ __('portal.pay.card_hint') }}</span></span>
@@ -73,7 +73,7 @@
 
             <div x-show="method === 'transfer'" @class(['mt-4' => $cardEnabled])>
                 @if ($bank['account_number'])
-                    <dl class="grid gap-2 rounded-control bg-canvas p-4 text-sm sm:grid-cols-3">
+                    <dl class="grid grid-cols-1 gap-2 rounded-control bg-canvas p-4 text-sm sm:grid-cols-3">
                         <div><dt class="text-ink-muted">{{ __('portal.pay.bank_name') }}</dt><dd class="font-medium text-ink">{{ $bank['name'] }}</dd></div>
                         <div><dt class="text-ink-muted">{{ __('portal.pay.account_name') }}</dt><dd class="font-medium text-ink">{{ $bank['account_name'] }}</dd></div>
                         <div><dt class="text-ink-muted">{{ __('portal.pay.account_number') }}</dt><dd class="font-medium tabular-nums text-ink">{{ $bank['account_number'] }}</dd></div>
@@ -86,7 +86,7 @@
                     @csrf
                     <input type="hidden" name="amount" :value="amount">
                     <template x-for="id in invoiceIds" :key="id"><input type="hidden" name="invoice_ids[]" :value="id"></template>
-                    <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <x-date-input name="paid_on" :label="__('portal.pay.paid_on')" :value="today()" required />
                         <x-input name="sender_name" :label="__('portal.pay.sender_name')" :value="$tenant->full_name" required />
                     </div>

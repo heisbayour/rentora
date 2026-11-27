@@ -27,7 +27,7 @@
         </x-card>
 
         <x-card title="Form controls" data-component="form">
-            <form class="grid gap-5 md:grid-cols-2" onsubmit="event.preventDefault()" data-no-guard>
+            <form class="grid grid-cols-1 gap-5 md:grid-cols-2" onsubmit="event.preventDefault()" data-no-guard>
                 <x-input name="full_name" label="Full name" placeholder="Adaeze Okafor" hint="As it appears on their ID." />
                 <x-input name="email" type="email" label="Email" optional />
                 <x-select name="frequency" label="Rent frequency" placeholder="Choose..." :options="['monthly' => 'Monthly', 'quarterly' => 'Quarterly', 'annual' => 'Annual']" value="annual" />
@@ -40,7 +40,7 @@
             </form>
         </x-card>
 
-        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" data-component="stat-card">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" data-component="stat-card">
             <x-stat-card label="Collected this month" value="₦4,250,000.00" delta="+12% on last month" trend="up" icon="banknotes" />
             <x-stat-card label="Total arrears" value="₦1,180,500.00" delta="3 tenants over 90 days" trend="down" icon="exclamation-triangle" />
             <x-stat-card label="Occupancy" value="75%" delta="18 of 24 units" icon="building-office-2" />
@@ -84,7 +84,7 @@
             <x-pagination :paginator="$paginator" class="mt-4" />
         </div>
 
-        <div class="grid gap-6 lg:grid-cols-2">
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <x-empty-state data-component="empty-state" icon="users" title="No tenants yet"
                 text="Add your first tenant to start billing rent." action-label="Add tenant" action-href="#" />
 
@@ -105,7 +105,7 @@
                 <x-alert>Bank transfer proofs are reviewed within one working day.</x-alert>
             </div>
             <x-stepper class="mt-6" data-component="stepper" :steps="['Tenant', 'Unit', 'Lease terms', 'Deposit', 'Review']" :current="3" />
-            <div class="mt-6 grid gap-6 md:grid-cols-2" data-component="skeleton">
+            <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2" data-component="skeleton">
                 <x-skeleton :lines="4" />
                 <x-skeleton height="h-32" />
             </div>

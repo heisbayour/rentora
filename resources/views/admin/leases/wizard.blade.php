@@ -23,7 +23,7 @@
                             @foreach ($units->groupBy('property_id') as $group)
                                 <div>
                                     <p class="mb-2 text-xs font-medium uppercase tracking-wide text-ink-muted">{{ $group->first()->property->name }}</p>
-                                    <div class="grid gap-3 sm:grid-cols-2">
+                                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                         @foreach ($group as $option)
                                             <label class="flex cursor-pointer items-start gap-3 rounded-control border border-border p-3 has-[:checked]:border-primary-600 has-[:checked]:bg-primary-50">
                                                 <input type="radio" name="unit_id" value="{{ $option->id }}" class="mt-1 border-border text-primary-600 focus:ring-primary-600"
@@ -43,7 +43,7 @@
 
                 @elseif ($step === 'terms')
                     <p class="mb-5 text-sm text-ink-muted">{{ __('leases.wizard.terms_intro') }}</p>
-                    <div class="grid gap-5 sm:grid-cols-2" x-data="{ feeType: @js(old('late_fee_type', $terms['late_fee_type'])) }">
+                    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2" x-data="{ feeType: @js(old('late_fee_type', $terms['late_fee_type'])) }">
                         <x-date-input name="start_date" :label="__('leases.fields.start_date')" :value="$terms['start_date']" required />
                         <x-date-input name="end_date" :label="__('leases.fields.end_date')" :value="$terms['end_date']" required />
                         <x-money-input name="rent_amount" :label="__('leases.fields.rent_amount')" :value="$terms['rent_amount']" :symbol="$currencySymbol" />
@@ -65,7 +65,7 @@
 
                 @elseif ($step === 'deposit')
                     <p class="mb-5 text-sm text-ink-muted">{{ __('leases.wizard.deposit_intro') }}</p>
-                    <div class="grid gap-5 sm:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                         <x-money-input name="deposit_amount" :label="__('leases.fields.deposit_amount')" :value="$deposit['deposit_amount']" :symbol="$currencySymbol" />
                         <x-select name="deposit_status" :label="__('leases.fields.deposit_status')" :value="$deposit['deposit_status']"
                             :options="['unpaid' => \App\Enums\DepositStatus::Unpaid->label(), 'held' => \App\Enums\DepositStatus::Held->label()]" />
@@ -79,7 +79,7 @@
                         $reviewTerms = $draft['terms'];
                         $money = fn (int $minor) => \App\Support\Money::forOrganization($minor)->format();
                     @endphp
-                    <dl class="grid gap-4 text-sm sm:grid-cols-2">
+                    <dl class="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
                         <div><dt class="text-ink-muted">{{ __('leases.summary.tenant') }}</dt><dd class="font-medium">{{ $reviewTenant }}@if ($tenant) <span class="text-xs text-ink-muted">({{ __('leases.wizard.existing_tenant') }})</span>@endif</dd></div>
                         <div><dt class="text-ink-muted">{{ __('leases.summary.unit') }}</dt><dd class="font-medium">{{ $unit?->label }}, {{ $unit?->property->name }}</dd></div>
                         <div><dt class="text-ink-muted">{{ __('leases.summary.period') }}</dt><dd>{{ \Illuminate\Support\Carbon::parse($reviewTerms['start_date'])->format('j M Y') }} to {{ \Illuminate\Support\Carbon::parse($reviewTerms['end_date'])->format('j M Y') }}</dd></div>

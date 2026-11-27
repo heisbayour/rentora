@@ -3,7 +3,7 @@
     $value = fn (string $key) => is_array($tenant) ? ($tenant[$key] ?? null) : $tenant->{$key};
 @endphp
 
-<div class="grid gap-5 sm:grid-cols-2">
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
     <x-input name="full_name" :label="__('tenants.fields.full_name')" :value="$value('full_name')" required autocomplete="off" class="sm:col-span-2" />
     <x-input name="phone" type="tel" :label="__('tenants.fields.phone')" :value="$value('phone')" required />
     <x-input name="alt_phone" type="tel" :label="__('tenants.fields.alt_phone')" :value="$value('alt_phone')" optional />

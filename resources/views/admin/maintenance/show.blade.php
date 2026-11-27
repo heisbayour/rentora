@@ -12,7 +12,7 @@
         <x-alert type="danger" :title="__('enums.maintenance_priority.emergency')" class="mb-4">{{ $request->description }}</x-alert>
     @endif
 
-    <div class="grid gap-6 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div class="space-y-6 lg:col-span-2">
             <x-card>
                 <div class="mb-4 flex flex-wrap items-center gap-2">
@@ -21,7 +21,7 @@
                     <x-status-chip :status="$request->category" />
                 </div>
                 <p class="whitespace-pre-line text-sm text-ink">{{ $request->description }}</p>
-                <dl class="mt-5 grid gap-4 text-sm sm:grid-cols-2">
+                <dl class="mt-5 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
                     <div><dt class="text-ink-muted">{{ __('maintenance.details.reported_by') }}</dt><dd>{{ $request->reporter?->name ?? $request->tenant?->full_name }} · {{ __('maintenance.details.reported', ['when' => $request->created_at->diffForHumans()]) }}</dd></div>
                     <div>
                         <dt class="text-ink-muted">{{ __('maintenance.details.first_response') }}</dt>

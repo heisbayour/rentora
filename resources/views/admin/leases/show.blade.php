@@ -30,7 +30,7 @@
         @enderror
     @endforeach
 
-    <div class="grid gap-6 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <x-card class="lg:col-span-2">
             <div class="mb-4 flex flex-wrap items-center gap-3">
                 <x-status-chip :status="$lease->status" />
@@ -38,7 +38,7 @@
                     <span class="text-sm text-ink-muted">{{ $days >= 0 ? trans_choice('leases.summary.days_left', $days, ['count' => $days]) : __('leases.summary.ended_days', ['count' => abs($days)]) }}</span>
                 @endif
             </div>
-            <dl class="grid gap-4 text-sm sm:grid-cols-2">
+            <dl class="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
                 <div><dt class="text-ink-muted">{{ __('leases.summary.tenant') }}</dt><dd><a href="{{ route('app.tenants.show', $lease->tenant) }}" class="font-medium text-primary-600 hover:underline">{{ $lease->tenant->full_name }}</a></dd></div>
                 <div><dt class="text-ink-muted">{{ __('leases.summary.unit') }}</dt><dd><a href="{{ route('app.units.show', $lease->unit) }}" class="font-medium text-primary-600 hover:underline">{{ $lease->unit->label }}</a>, {{ $lease->unit->property->name }}</dd></div>
                 <div><dt class="text-ink-muted">{{ __('leases.summary.period') }}</dt><dd>{{ $lease->start_date->format('j M Y') }} to {{ $lease->end_date->format('j M Y') }}</dd></div>
@@ -46,7 +46,7 @@
                 <div><dt class="text-ink-muted">{{ __('leases.fields.service_charge_amount') }}</dt><dd class="tabular-nums">{{ $lease->serviceCharge()->format() }}</dd></div>
                 <div><dt class="text-ink-muted">{{ __('leases.fields.deposit_amount') }}</dt><dd class="tabular-nums">{{ $lease->deposit()->format() }} <x-status-chip :status="$lease->deposit_status" class="ml-1" /></dd></div>
                 <div><dt class="text-ink-muted">{{ __('leases.summary.billing') }}</dt><dd>{{ __('leases.fields.billing_anchor_day') }}: {{ $lease->billing_anchor_day }} · {{ __('leases.fields.grace_days') }}: {{ $lease->grace_days }}</dd></div>
-                <div><dt class="text-ink-muted">{{ __('leases.fields.late_fee_type') }}</dt><dd>{{ $lease->late_fee_type->label() }}</dd></div>
+                <div><dt class="text-ink-muted">{{ __('leases.fields.late_fee_type') }}</dt><dd class="tabular-nums">{{ $lease->lateFeeSummary() }}</dd></div>
                 @if ($lease->renewal)
                     <div><dt class="text-ink-muted">{{ __('leases.summary.renewal') }}</dt><dd><a href="{{ route('app.leases.show', $lease->renewal) }}" class="text-primary-600 hover:underline">{{ $lease->renewal->start_date->format('j M Y') }} to {{ $lease->renewal->end_date->format('j M Y') }}</a></dd></div>
                 @endif

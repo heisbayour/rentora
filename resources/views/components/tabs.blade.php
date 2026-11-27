@@ -15,7 +15,8 @@
 
 <div {{ $attributes }} @if (! $links) x-data="{ tab: @js($active) }" @endif>
     <div class="border-b border-border">
-        <nav class="-mb-px flex gap-6 overflow-x-auto" role="tablist">
+        {{-- Tabs wrap onto a second line on narrow screens rather than scrolling out of sight. --}}
+        <nav class="-mb-px flex flex-wrap gap-x-5 gap-y-1 sm:gap-x-6" role="tablist">
             @foreach ($tabs as $key => $label)
                 @if ($links)
                     <a href="{{ $links[$key] ?? '#' }}" role="tab" aria-selected="{{ $key === $active ? 'true' : 'false' }}"

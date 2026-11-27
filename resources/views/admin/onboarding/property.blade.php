@@ -2,7 +2,7 @@
     <div class="mx-auto max-w-2xl">
         <x-stepper :steps="$stepTitles" :current="$position" class="mb-6" />
         <x-card :title="__('onboarding.property.heading')" :description="__('onboarding.property.intro')">
-            <form method="POST" action="{{ route('app.onboarding.store', $stepKey) }}" class="grid gap-5 sm:grid-cols-2">
+            <form method="POST" action="{{ route('app.onboarding.store', $stepKey) }}" class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 @csrf
                 <x-input name="name" :label="__('properties.fields.name')" :value="$property->name" required />
                 <x-input name="code" :label="__('properties.fields.code')" :value="$property->code" :hint="__('properties.fields.code_hint')" required class="[&_input]:uppercase" />

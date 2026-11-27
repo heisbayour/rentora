@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -57,6 +58,12 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         Model::preventLazyLoading(! $this->app->isProduction());
         Password::defaults(fn () => Password::min(8));
+
+        // Behind a TLS-terminating proxy PHP may see plain http; generated
+        // (and signed) URLs must use the scheme the visitor actually uses.
+        if (str_starts_with((string) config('app.url'), 'https://')) {
+            URL::forceScheme('https');
+        }
 
         // Layouts live in resources/views/layouts and are used as <x-layouts::admin>.
         Blade::anonymousComponentPath(resource_path('views/layouts'), 'layouts');

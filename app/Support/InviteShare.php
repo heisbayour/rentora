@@ -13,7 +13,7 @@ class InviteShare
     /** @return array{name: string, link: string, whatsapp: string} */
     public static function data(string $name, string $link, ?string $phone): array
     {
-        $organization = app(CurrentOrganization::class)->get()->name ??config('rentora.name');
+        $organization = app(CurrentOrganization::class)->get()->name ?? config('rentora.name');
         $message = __('ui.invite_share.message', ['name' => $name, 'org' => $organization, 'link' => $link]);
 
         return [

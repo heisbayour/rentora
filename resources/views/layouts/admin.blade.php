@@ -18,7 +18,7 @@
             @click="$store.sidebar.mobileOpen = false" aria-hidden="true"></div>
 
         {{-- Sidebar --}}
-        <aside class="fixed inset-y-0 left-0 z-40 flex flex-col border-r border-border bg-surface transition-all duration-200"
+        <aside class="fixed inset-y-0 left-0 z-40 flex w-sidebar flex-col border-r border-border bg-surface transition-all duration-200"
             :class="[
                 $store.sidebar.collapsed ? 'lg:w-rail' : 'lg:w-sidebar',
                 $store.sidebar.mobileOpen ? 'w-sidebar translate-x-0' : 'w-sidebar -translate-x-full lg:translate-x-0'
@@ -66,7 +66,8 @@
         </aside>
 
         {{-- Main column --}}
-        <div class="transition-all duration-200" :class="$store.sidebar.collapsed ? 'lg:pl-rail' : 'lg:pl-sidebar'">
+        {{-- Offset by the sidebar width: expanded by default (also before Alpine starts), the rail when collapsed. --}}
+        <div class="transition-all duration-200 lg:pl-sidebar" :class="$store.sidebar.collapsed && 'lg:!pl-rail'">
             <header class="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-border bg-surface/95 px-4 backdrop-blur sm:px-6">
                 <button type="button" class="rounded-control p-2 text-ink-muted hover:bg-canvas lg:hidden" @click="$store.sidebar.mobileOpen = true">
                     <span class="sr-only">{{ __('ui.open_menu') }}</span>

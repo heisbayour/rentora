@@ -199,3 +199,15 @@ it('blocks deleting a tenant with an active lease', function () {
 
     expect(Tenant::query()->find($lease->tenant_id))->not->toBeNull();
 });
+
+it('shows the late fee with its value on the lease page', function (string $type, int $value, string $expected) {
+    $manager = userWithRole(Role::Manager);
+    $lease = leaseFor($manager, ['late_fee_type' => $type, 'late_fee_value' => $value]);
+
+    $this->actingAs($manager)->get(route('app.leases.show', $lease))->assertOk()->assertSee($expected);
+})->with([
+    'percent' => ['percent', 1000, '10% of the invoice'],
+    'fractional percent' => ['percent', 1250, '12.5% of the invoice'],
+    'fixed' => ['fixed', 500000, '₦5,000.00 fixed'],
+    'none' => ['none', 0, 'No late fee'],
+]);

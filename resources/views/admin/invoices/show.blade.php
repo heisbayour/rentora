@@ -19,7 +19,7 @@
         <x-alert type="warning" class="mb-4">{{ __('invoices.details.voided', ['date' => $invoice->voided_at->format('j M Y'), 'reason' => $invoice->void_reason]) }}</x-alert>
     @endif
 
-    <div class="grid gap-6 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <x-card class="lg:col-span-2">
             <div class="mb-4 flex flex-wrap items-center gap-3">
                 <x-status-chip :status="$invoice->status" />
@@ -28,7 +28,7 @@
                     <span class="text-sm font-medium text-danger">{{ __('invoices.details.overdue_days', ['count' => (int) $invoice->due_date->diffInDays(today())]) }}</span>
                 @endif
             </div>
-            <dl class="grid gap-4 text-sm sm:grid-cols-2">
+            <dl class="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
                 <div><dt class="text-ink-muted">{{ __('invoices.details.billed_to') }}</dt><dd><a href="{{ route('app.tenants.show', $invoice->tenant) }}" class="font-medium text-primary-600 hover:underline">{{ $invoice->tenant->full_name }}</a></dd></div>
                 @if ($invoice->unit)
                     <div><dt class="text-ink-muted">{{ __('invoices.details.unit') }}</dt><dd>{{ $invoice->unit->label }}, {{ $invoice->unit->property?->name }}</dd></div>

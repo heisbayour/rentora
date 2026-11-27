@@ -7,7 +7,7 @@
         <x-alert type="warning" class="mb-4">{{ __('health.debug_on') }}</x-alert>
     @endif
 
-    <div class="grid gap-6 lg:grid-cols-2">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <x-card :title="__('health.version')">
             <dl class="space-y-2 text-sm">
                 <div class="flex justify-between gap-3"><dt class="text-ink-muted">{{ __('settings.version.version') }}</dt><dd class="font-medium tabular-nums">{{ $version['version'] }}</dd></div>

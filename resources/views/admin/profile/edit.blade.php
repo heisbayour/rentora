@@ -11,7 +11,7 @@
 
     <div class="grid max-w-3xl gap-6">
         <x-card :title="__('profile.details')">
-            <form method="POST" action="{{ route('app.profile.update') }}" class="grid gap-5 sm:grid-cols-2">
+            <form method="POST" action="{{ route('app.profile.update') }}" class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 @csrf
                 @method('PUT')
                 <x-input name="name" :label="__('profile.name')" :value="$user->name" required autocomplete="name" />
@@ -24,7 +24,7 @@
         </x-card>
 
         <x-card :title="__('profile.password')">
-            <form method="POST" action="{{ route('user-password.update') }}" class="grid gap-5 sm:grid-cols-2">
+            <form method="POST" action="{{ route('user-password.update') }}" class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 @csrf
                 @method('PUT')
                 <x-input name="current_password" type="password" bag="updatePassword" :label="__('profile.current_password')" autocomplete="current-password" required class="sm:col-span-2" />

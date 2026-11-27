@@ -10,7 +10,7 @@
     </x-page-header>
 
     <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <form method="GET" class="w-full sm:w-80" data-no-guard>
+        <form method="GET" class="w-full sm:w-80 sm:shrink-0" data-no-guard>
             @foreach (['view' => $view, 'status' => $status?->value, 'priority' => $priority?->value, 'mine' => $mine ? '1' : null] as $key => $value)
                 @if ($value)
                     <input type="hidden" name="{{ $key }}" value="{{ $value }}">
@@ -31,10 +31,11 @@
     </div>
 
     @if ($view === 'kanban')
-        <div class="flex gap-4 overflow-x-auto pb-4">
+        {{-- Columns wrap onto new rows when the screen is too narrow, so none is hidden off to the side. --}}
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] items-start gap-4 pb-4">
             @foreach (\App\Enums\MaintenanceStatus::cases() as $column)
                 @continue(! $column->isOpen())
-                <section class="w-72 shrink-0 rounded-card bg-canvas p-3" aria-label="{{ $column->label() }}">
+                <section class="min-w-0 rounded-card bg-canvas p-3" aria-label="{{ $column->label() }}">
                     <h2 class="mb-3 flex items-center justify-between text-sm font-semibold text-ink">
                         {{ $column->label() }}
                         <span class="rounded-full bg-surface px-2 text-xs text-ink-muted ring-1 ring-border">{{ $columns->get($column->value)?->count() ?? 0 }}</span>

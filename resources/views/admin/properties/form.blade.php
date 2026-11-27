@@ -18,7 +18,7 @@
             @method('PUT')
         @endif
         <x-card>
-            <div class="grid gap-5 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <x-input name="name" :label="__('properties.fields.name')" :value="$property->name" required />
                 <x-input name="code" :label="__('properties.fields.code')" :value="$property->code" :hint="__('properties.fields.code_hint')" required class="[&_input]:uppercase" />
                 <x-select name="type" :label="__('properties.fields.type')" :options="\App\Enums\PropertyType::options()" :value="$property->type" />

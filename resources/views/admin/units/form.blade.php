@@ -17,7 +17,7 @@
             @method('PUT')
         @endif
         <x-card :title="__('units.details')">
-            <div class="grid gap-5 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <x-select name="property_id" :label="__('units.fields.property')" :options="$properties" :value="$unit->property_id" :placeholder="__('ui.choose')" required />
                 <x-input name="label" :label="__('units.fields.label')" :value="$unit->label" :hint="__('units.fields.label_hint')" required />
                 <x-select name="type" :label="__('units.fields.type')" :options="$types" :value="$unit->type" />
@@ -30,7 +30,7 @@
         </x-card>
 
         <x-card :title="__('units.rent_terms')">
-            <div class="grid gap-5 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <x-money-input name="rent_amount" :label="__('units.fields.rent_amount')" :value="$unit->rent_amount ?? 0" :symbol="$currencySymbol" />
                 <x-select name="rent_frequency" :label="__('units.fields.rent_frequency')" :options="$frequencies" :value="$unit->rent_frequency" />
                 <x-money-input name="service_charge_amount" :label="__('units.fields.service_charge_amount')" :value="$unit->service_charge_amount ?? 0" :symbol="$currencySymbol" />

@@ -52,7 +52,11 @@ export default {
             boxShadow: {
                 card: '0 1px 2px rgba(60,64,67,.15), 0 1px 3px 1px rgba(60,64,67,.08)',
             },
-            width: {
+            // Spacing (not only width) so w-, pl-, ml-, left- and inset- all
+            // get the sidebar and rail sizes. With these under "width" only,
+            // the main column's lg:pl-sidebar / lg:pl-rail did not exist and
+            // the content sat under the sidebar (fixed in 1.0.2).
+            spacing: {
                 sidebar: '256px',
                 rail: '72px',
             },

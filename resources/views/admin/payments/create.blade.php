@@ -5,7 +5,7 @@
     <form method="POST" action="{{ route('app.payments.store') }}" enctype="multipart/form-data" class="max-w-2xl">
         @csrf
         <x-card>
-            <div class="grid gap-5 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <x-select name="tenant_id" :label="__('payments.fields.tenant')" :options="$tenants" :value="$tenantId" :placeholder="__('ui.choose')"
                     class="sm:col-span-2" onchange="window.location = '{{ route('app.payments.create') }}?tenant=' + this.value" />
                 <x-select name="method" :label="__('payments.fields.method')" :options="$methods" value="cash" />

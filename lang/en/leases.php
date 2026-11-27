@@ -37,6 +37,11 @@ return [
         'late_fee_percent_hint' => 'For a percentage, enter basis points: 1000 = 10%.',
         'termination_reason' => 'Reason',
     ],
+    'late_fee_summary' => [
+        'none' => 'No late fee',
+        'fixed' => ':amount fixed',
+        'percent' => ':percent% of the invoice',
+    ],
     'summary' => [
         'tenant' => 'Tenant',
         'unit' => 'Unit',

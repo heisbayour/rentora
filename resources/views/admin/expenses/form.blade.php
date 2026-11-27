@@ -7,7 +7,7 @@
         @csrf
         @if ($editing) @method('PUT') @endif
         <x-card>
-            <div class="grid gap-5 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <x-select name="property_id" :label="__('expenses.fields.property')" :options="$properties" :value="$expense->property_id" :placeholder="__('ui.choose')" />
                 <x-select name="unit_id" :label="__('expenses.fields.unit')" :options="$units" :value="$expense->unit_id" placeholder="-" optional />
                 <x-select name="category" :label="__('expenses.fields.category')" :options="$categories" :value="$expense->category" />

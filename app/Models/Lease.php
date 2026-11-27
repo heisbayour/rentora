@@ -139,6 +139,19 @@ class Lease extends Model implements Documentable
         return Money::forOrganization($this->deposit_amount);
     }
 
+    /** "10% of the invoice", "₦5,000.00 fixed" or "No late fee". */
+    public function lateFeeSummary(): string
+    {
+        return match ($this->late_fee_type) {
+            LateFeeType::None => __('leases.late_fee_summary.none'),
+            LateFeeType::Fixed => __('leases.late_fee_summary.fixed', ['amount' => Money::forOrganization($this->late_fee_value)->format()]),
+            // Basis points: 1000 = 10%, 1250 = 12.5%.
+            LateFeeType::Percent => __('leases.late_fee_summary.percent', [
+                'percent' => rtrim(rtrim(number_format($this->late_fee_value / 100, 2, '.', ''), '0'), '.'),
+            ]),
+        };
+    }
+
     public function isActive(): bool
     {
         return $this->status === LeaseStatus::Active;

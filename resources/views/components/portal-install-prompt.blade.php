@@ -1,4 +1,5 @@
-{{-- "Install app" card: Android uses the browser's install prompt, iOS Safari gets instructions (spec 8.14). --}}
+{{-- "Install app" card: Android uses the browser's install prompt, iOS Safari gets instructions (spec 8.14). Never inside the Android app. --}}
+@unless (\App\Support\NativeApp::is())
 <div x-data x-cloak x-show="$store.install.canPrompt || $store.install.showIos"
     {{ $attributes->class('flex items-start gap-3 rounded-card border border-border bg-surface p-4 shadow-card') }}>
     <x-heroicon-o-device-phone-mobile class="h-6 w-6 shrink-0 text-primary-600" aria-hidden="true" />
@@ -12,3 +13,4 @@
         </div>
     </div>
 </div>
+@endunless

@@ -31,6 +31,14 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->validateCsrfTokens(except: ['webhooks/*']);
 
+        // Shared hosts (InfinityFree) terminate HTTPS at their proxy, so the
+        // forwarded scheme and host must be trusted for URLs and signatures.
+        $middleware->trustProxies(at: '*');
+
+        // InfinityFree's browser check appends "?i=1" to URLs; every signed
+        // route ignores it, so the link still validates.
+        $middleware->validateSignatures(except: ['i']);
+
         $middleware->alias([
             'role' => EnsureUserHasRole::class,
             'active' => EnsureUserIsActive::class,

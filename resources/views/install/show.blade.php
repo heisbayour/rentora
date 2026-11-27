@@ -40,7 +40,7 @@
     @else
         <h1 class="text-lg font-semibold text-ink">{{ __('install.organization_title') }}</h1>
         <p class="mt-1 text-sm text-ink-muted">{{ __('install.organization_intro') }}</p>
-        <form method="POST" action="{{ route('install.organization') }}" class="mt-6 grid gap-5 sm:grid-cols-2">
+        <form method="POST" action="{{ route('install.organization') }}" class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
             @csrf
             <input type="hidden" name="key" value="{{ $key }}">
             <x-input name="organization_name" :label="__('install.organization_name')" required class="sm:col-span-2" />

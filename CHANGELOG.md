@@ -2,6 +2,26 @@
 
 All notable changes are listed here. Versions follow semantic versioning (see `docs/RELEASING.md`).
 
+## [1.0.2] - 2026-11-25
+
+### Fixed
+
+- Signed links (tenant invites, staff invites, vendor job links) failed with "403 Invalid signature" on InfinityFree. The host's browser check appends `?i=1` to the URL and its proxy terminates HTTPS. All proxies are now trusted, URLs use https whenever `APP_URL` does (also when the proxy forwards no scheme), and every signed route ignores the `i` parameter. A tampered link still fails.
+- Admin console on desktop: the page content sat under the sidebar, hiding the left edge of every page, with the sidebar expanded or collapsed. The sidebar sizes were defined for widths only, so the content offset classes (`lg:pl-sidebar`, `lg:pl-rail`) were never generated. They are now spacing tokens, and the expanded offset is applied before JavaScript starts.
+- Lease page: the late fee shows its value ("10% of the invoice", "₦5,000.00 fixed" or "No late fee") instead of only the type.
+- Tenant portal: the navigation marked Home, Pay, Inbox and Account as active on every page; only the current section is highlighted now.
+- Phones: cards on the dashboard and other two-column pages could be wider than the screen when a line of text was long. Grids now have an explicit single column on small screens.
+- Public site and other pages: the white page background stopped after the first screen.
+- Maintenance board: columns wrap onto new rows instead of hiding off the right edge; tabs (tenant profile, settings) wrap instead of scrolling out of sight; the payments table no longer cuts off the Status column at 1024px (long references wrap); search boxes keep their width next to filter chips.
+
+### Changed
+
+- Inside the Android app (user agent containing `RentoraApp`) the portal no longer shows the "Install app" card and does not register the service worker, so the app's own offline screen is used.
+
+### Added
+
+- `scripts/screenshots.mjs`: screenshots of the main screens at 1920, 1366, 1024 and 390 pixels wide, with automated checks for content under the sidebar and anything past the right edge.
+
 ## [1.0.1] - 2026-11-25
 
 ### Fixed

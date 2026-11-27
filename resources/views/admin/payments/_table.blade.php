@@ -16,14 +16,14 @@
         @foreach ($payments as $payment)
             <tr>
                 <td data-label="{{ __('payments.columns.reference') }}">
-                    <a href="{{ route('app.payments.show', $payment) }}" class="font-mono text-xs font-medium text-ink hover:text-primary-600">{{ $payment->receipt_number ?? $payment->reference }}</a>
+                    <a href="{{ route('app.payments.show', $payment) }}" class="break-all font-mono text-xs font-medium text-ink hover:text-primary-600">{{ $payment->receipt_number ?? $payment->reference }}</a>
                 </td>
                 @if ($showTenant)
                     <td data-label="{{ __('payments.columns.tenant') }}">{{ $payment->tenant->full_name }}</td>
                 @endif
                 <td data-label="{{ __('payments.columns.method') }}">{{ $payment->method->label() }}</td>
                 <td data-label="{{ __('payments.columns.date') }}" class="whitespace-nowrap">{{ ($payment->paid_at ?? $payment->created_at)?->format('j M Y') }}</td>
-                <td data-label="{{ __('payments.columns.amount') }}" class="text-right tabular-nums">{{ $payment->money()->format() }}</td>
+                <td data-label="{{ __('payments.columns.amount') }}" class="whitespace-nowrap text-right tabular-nums">{{ $payment->money()->format() }}</td>
                 <td data-label="{{ __('payments.columns.status') }}"><x-status-chip :status="$payment->status" /></td>
             </tr>
         @endforeach

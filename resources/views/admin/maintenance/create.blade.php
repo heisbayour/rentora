@@ -4,7 +4,7 @@
     <form method="POST" action="{{ route('app.maintenance.store') }}" enctype="multipart/form-data" class="max-w-2xl">
         @csrf
         <x-card>
-            <div class="grid gap-5 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <x-select name="unit_id" :label="__('maintenance.fields.unit')" :options="$units" :value="$unitId" :placeholder="__('ui.choose')" class="sm:col-span-2" />
                 <x-select name="tenant_id" :label="__('maintenance.fields.tenant')" :options="$tenants" placeholder="-" :hint="__('maintenance.fields.tenant_hint')" class="sm:col-span-2" />
                 <x-select name="category" :label="__('maintenance.fields.category')" :options="$categories" value="plumbing" />

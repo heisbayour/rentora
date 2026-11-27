@@ -13,7 +13,7 @@
         <x-alert type="danger" class="mb-4">{{ $message }}</x-alert>
     @enderror
 
-    <div class="grid gap-6 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <x-card :title="__('units.current_tenant')" class="lg:col-span-3">
             @if ($tenant = $unit->activeLease?->tenant)
                 <div class="flex flex-wrap items-center gap-4 text-sm">

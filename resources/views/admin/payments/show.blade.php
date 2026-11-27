@@ -33,13 +33,13 @@
         <x-alert type="danger" class="mb-4">{{ $message }}</x-alert>
     @enderror
 
-    <div class="grid gap-6 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <x-card class="lg:col-span-2">
             <div class="mb-4 flex flex-wrap items-center gap-3">
                 <x-status-chip :status="$payment->status" />
                 <span class="text-xl font-semibold tabular-nums">{{ $payment->money()->format() }}</span>
             </div>
-            <dl class="grid gap-4 text-sm sm:grid-cols-2">
+            <dl class="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
                 <div><dt class="text-ink-muted">{{ __('payments.fields.tenant') }}</dt><dd><a href="{{ route('app.tenants.show', $payment->tenant) }}" class="font-medium text-primary-600 hover:underline">{{ $payment->tenant->full_name }}</a></dd></div>
                 <div><dt class="text-ink-muted">{{ __('payments.fields.method') }}</dt><dd>{{ $payment->method->label() }}</dd></div>
                 <div><dt class="text-ink-muted">{{ __('payments.details.reference') }}</dt><dd class="font-mono text-xs">{{ $payment->reference }}</dd></div>

@@ -5,7 +5,7 @@
     <form method="POST" action="{{ route('app.invoices.store') }}" class="max-w-2xl">
         @csrf
         <x-card>
-            <div class="grid gap-5 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <x-select name="tenant_id" :label="__('invoices.fields.tenant')" :options="$tenants" :value="$tenantId" :placeholder="__('ui.choose')" class="sm:col-span-2" />
                 <x-select name="lease_id" :label="__('invoices.fields.lease')" :options="$leases" :placeholder="'-'" :hint="__('invoices.fields.lease_hint')" class="sm:col-span-2" />
                 <x-select name="type" :label="__('invoices.fields.type')" :options="$types" value="utility" />

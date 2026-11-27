@@ -44,7 +44,7 @@
     </main>
 
     <footer id="contact" class="border-t border-border bg-canvas">
-        <div class="mx-auto grid max-w-6xl gap-6 px-4 py-10 text-sm text-ink-muted sm:grid-cols-2 sm:px-6">
+        <div class="mx-auto grid grid-cols-1 max-w-6xl gap-6 px-4 py-10 text-sm text-ink-muted sm:grid-cols-2 sm:px-6">
             <div>
                 <p class="text-base font-semibold text-ink">{{ $orgName }}</p>
                 @foreach (array_filter($contact) as $line)

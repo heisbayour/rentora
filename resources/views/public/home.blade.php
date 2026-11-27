@@ -19,7 +19,7 @@
         @if ($featured->isEmpty())
             <x-empty-state icon="home" :title="__('public.empty_title')" :text="__('public.empty_text')" />
         @else
-            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($featured as $unit)
                     @include('public._unit-card', ['unit' => $unit])
                 @endforeach

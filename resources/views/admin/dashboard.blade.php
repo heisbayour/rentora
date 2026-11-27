@@ -2,7 +2,7 @@
     <x-page-header :title="__('dashboard.greeting', ['name' => auth()->user()->name])" :description="__('dashboard.intro')" />
 
     @if ($money)
-        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <x-stat-card :label="__('dashboard.kpi.expected')" :value="$format($kpis['expected'])" icon="document-currency-dollar" :href="route('app.invoices.index')" />
             <x-stat-card :label="__('dashboard.kpi.collected')" :value="$format($kpis['collected'])" icon="banknotes" :href="route('app.payments.index')" />
             <x-stat-card :label="__('dashboard.kpi.collection_rate')" :value="$kpis['collection_rate'] === null ? '-' : $kpis['collection_rate'].'%'" icon="chart-pie" />
@@ -13,7 +13,7 @@
             <x-stat-card :label="__('dashboard.kpi.expiring')" :value="(string) $kpis['expiring']" icon="calendar-days" :href="route('app.leases.index')" />
         </div>
 
-        <div class="mt-6 grid gap-6 lg:grid-cols-3">
+        <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
             <x-card :title="__('dashboard.charts.collections')" class="lg:col-span-2">
                 <div class="h-64" x-data="dashboardChart('bar', @js([
                     'labels' => $collections['labels'],
@@ -35,7 +35,7 @@
             </x-card>
         </div>
 
-        <div class="mt-6 grid gap-6 lg:grid-cols-2">
+        <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
             <x-card :title="__('dashboard.lists.pending_proofs')">
                 @forelse ($pendingProofs as $proof)
                     <div class="flex flex-wrap items-center justify-between gap-3 border-b border-border py-3 last:border-0">
@@ -85,7 +85,7 @@
             </x-confirm>
         @endforeach
     @else
-        <div class="grid gap-4 sm:grid-cols-2">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <x-stat-card :label="__('dashboard.kpi.open_repairs')" :value="(string) $openRepairs" icon="wrench-screwdriver" :href="route('app.maintenance.index')" />
             <x-stat-card :label="__('dashboard.kpi.emergency_repairs')" :value="(string) $emergencies" icon="exclamation-triangle" :href="route('app.maintenance.index')" />
         </div>

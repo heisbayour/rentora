@@ -7,13 +7,13 @@
 
     <x-tabs :tabs="$tabs" :links="$links" :active="$tab" class="mb-6" />
 
-    <div class="grid gap-6 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div class="lg:col-span-2">
             @if ($tab === 'organization')
                 <form method="POST" action="{{ route('app.settings.update', 'organization') }}" enctype="multipart/form-data">
                     @csrf @method('PUT')
                     <x-card :title="__('settings.tabs.organization')">
-                        <div class="grid gap-5 sm:grid-cols-2">
+                        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                             <x-input name="name" :label="__('onboarding.organization.name')" :value="$organization->name" required class="sm:col-span-2" />
                             <x-input name="email" type="email" :label="__('onboarding.organization.email')" :value="$organization->email" optional />
                             <x-input name="phone" type="tel" :label="__('onboarding.organization.phone')" :value="$organization->phone" optional />
@@ -43,7 +43,7 @@
                 <form method="POST" action="{{ route('app.settings.update', 'billing') }}">
                     @csrf @method('PUT')
                     <x-card :title="__('settings.tabs.billing')" :description="__('settings.billing.intro')">
-                        <div class="grid gap-5 sm:grid-cols-2">
+                        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                             <x-input name="billing__default_lead_days" type="number" min="0" max="120" :label="__('settings.billing.lead_days')" :value="$v('billing.default_lead_days')" :hint="__('settings.billing.lead_days_hint')" optional />
                             <x-input name="billing__default_grace_days" type="number" min="0" max="90" :label="__('settings.billing.grace_days')" :value="$v('billing.default_grace_days')" placeholder="5" optional />
                             <x-select name="billing__late_fee_type" :label="__('settings.billing.late_fee_type')" :options="$lateFeeTypes" :value="$v('billing.late_fee_type') ?? 'none'" />
@@ -63,7 +63,7 @@
                 <form method="POST" action="{{ route('app.settings.update', 'payments') }}">
                     @csrf @method('PUT')
                     <x-card :title="__('settings.tabs.payments')" :description="__('settings.payments.intro', ['callback' => route('pay.callback')])">
-                        <div class="grid gap-5 sm:grid-cols-2">
+                        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                             <x-select name="paystack__mode" :label="__('settings.payments.mode')" :options="['test' => __('settings.payments.test'), 'live' => __('settings.payments.live')]" :value="$v('paystack.mode') ?? 'test'" />
                             <div></div>
                             <x-input name="paystack__public_key" :label="__('settings.payments.public_key')" :value="$v('paystack.public_key')" placeholder="pk_test_..." optional class="sm:col-span-2" />
@@ -80,7 +80,7 @@
                 <form method="POST" action="{{ route('app.settings.update', 'email') }}">
                     @csrf @method('PUT')
                     <x-card :title="__('settings.tabs.email')" :description="__('settings.email.intro')">
-                        <div class="grid gap-5 sm:grid-cols-2">
+                        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                             <x-input name="mail__host" :label="__('settings.email.host')" :value="$v('mail.host')" placeholder="smtp-relay.brevo.com" optional />
                             <x-input name="mail__port" type="number" :label="__('settings.email.port')" :value="$v('mail.port')" placeholder="587" optional />
                             <x-select name="mail__encryption" :label="__('settings.email.encryption')" :options="['tls' => 'TLS (587)', 'ssl' => 'SSL (465)', 'none' => __('settings.email.none')]" :value="$v('mail.encryption') ?? 'tls'" />
@@ -101,7 +101,7 @@
                 <form method="POST" action="{{ route('app.settings.update', 'sms') }}">
                     @csrf @method('PUT')
                     <x-card :title="__('settings.tabs.sms')" :description="__('settings.sms.intro')">
-                        <div class="grid gap-5 sm:grid-cols-2">
+                        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                             <x-select name="sms__driver" :label="__('settings.sms.driver')" :options="$smsDrivers" :value="$v('sms.driver') ?? config('rentora.sms.driver')" />
                             <x-select name="sms__termii_channel" :label="__('settings.sms.channel')" :options="['generic' => 'generic', 'dnd' => 'dnd']" :value="$v('sms.termii_channel') ?? 'generic'" :hint="__('settings.sms.channel_hint')" />
                             <x-input name="sms__termii_api_key" type="password" autocomplete="off" :label="__('settings.sms.api_key')" :placeholder="$v('sms.termii_api_key')" :hint="__('settings.secret_hint')" optional />

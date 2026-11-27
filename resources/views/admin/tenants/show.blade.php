@@ -36,10 +36,10 @@
 
     <x-tabs :tabs="$tabLabels" :links="$tabLinks" :active="$tab">
         @if ($tab === 'overview')
-            <div class="grid gap-6 lg:grid-cols-3">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 <x-card :title="__('tenants.overview.current_lease')" class="lg:col-span-2">
                     @if ($lease = $tenant->activeLease)
-                        <dl class="grid gap-4 text-sm sm:grid-cols-2">
+                        <dl class="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
                             <div><dt class="text-ink-muted">{{ __('leases.summary.unit') }}</dt><dd class="font-medium">{{ $lease->unit->label }}, {{ $lease->unit->property->name }}</dd></div>
                             <div><dt class="text-ink-muted">{{ __('leases.summary.period') }}</dt><dd>{{ $lease->start_date->format('j M Y') }} to {{ $lease->end_date->format('j M Y') }}</dd></div>
                             @if ($canManage)

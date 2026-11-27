@@ -6,7 +6,7 @@
     </x-page-header>
 
     <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <form method="GET" class="w-full sm:w-80" data-no-guard>
+        <form method="GET" class="w-full sm:w-80 sm:shrink-0" data-no-guard>
             @foreach (['status' => $status?->value, 'type' => $type?->value, 'overdue' => $overdue ? '1' : null] as $key => $value)
                 @if ($value)
                     <input type="hidden" name="{{ $key }}" value="{{ $value }}">
