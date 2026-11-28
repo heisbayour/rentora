@@ -84,7 +84,7 @@ return [
 
     'per_page' => 25,
 
-    // Android Trusted Web Activity (served at /.well-known/assetlinks.json).
+    // Android app identity, served at /.well-known/assetlinks.json (optional since 1.0.2).
     'android' => [
         'package' => env('ANDROID_PACKAGE_NAME'),
         'fingerprints' => array_values(array_filter(array_map('trim', explode(',', (string) env('ANDROID_SHA256_FINGERPRINTS', ''))))),

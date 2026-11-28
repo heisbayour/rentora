@@ -1,0 +1,38 @@
+{
+  "appId": "com.heisbayour.rentora",
+  "appName": "Rentora",
+  "webDir": "www",
+  "server": {
+    "url": "https://rentora-housing.infinityfreeapp.com/portal",
+    "cleartext": false,
+    "androidScheme": "https",
+    "allowNavigation": [
+      "rentora-housing.infinityfreeapp.com",
+      "checkout.paystack.com",
+      "*.paystack.com",
+      "paystack.com",
+      "*.paystack.co",
+      "paystack.co"
+    ]
+  },
+  "android": {
+    "appendUserAgent": "RentoraApp",
+    "allowMixedContent": false,
+    "captureInput": false,
+    "webContentsDebuggingEnabled": false,
+    "backgroundColor": "#FFFFFF"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "launchAutoHide": true,
+      "backgroundColor": "#FFFFFF",
+      "androidScaleType": "CENTER",
+      "showSpinner": false
+    },
+    "SystemBars": {
+      "insetsHandling": "disable",
+      "style": "DARK"
+    }
+  }
+}

@@ -72,7 +72,7 @@ function removeTree(string $path): void
 function excluded(string $relative): bool
 {
     $relative = str_replace('\\', '/', $relative);
-    $topLevel = ['.git', '.github', 'node_modules', 'tests', 'dist', 'docs', 'vendor', 'android', 'deploy', 'scripts', '.env', '.phpunit.cache',
+    $topLevel = ['.git', '.github', 'node_modules', 'tests', 'dist', 'docs', 'vendor', 'android', 'android-app', 'deploy', 'scripts', '.env', '.phpunit.cache',
         'phpunit.xml', '.phpunit.result.cache', 'build-info.json', '.editorconfig', '.idea', '.vscode', 'database/database.sqlite'];
     foreach ($topLevel as $prefix) {
         if ($relative === $prefix || str_starts_with($relative, $prefix.'/')) {

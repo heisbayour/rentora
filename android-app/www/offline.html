@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rentora - no connection</title>
+    <style>
+        html, body { height: 100%; margin: 0; }
+        body {
+            display: flex; align-items: center; justify-content: center;
+            background: #F8F9FA; color: #202124;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        }
+        main { max-width: 320px; padding: 24px; text-align: center; }
+        .icon {
+            width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 16px;
+            background: #E8F0FE; display: flex; align-items: center; justify-content: center;
+        }
+        h1 { font-size: 20px; line-height: 28px; margin: 0 0 8px; }
+        p { font-size: 14px; line-height: 20px; color: #5F6368; margin: 0 0 24px; }
+        button {
+            width: 100%; height: 44px; border: 0; border-radius: 8px;
+            background: #1A73E8; color: #fff; font-size: 16px; font-weight: 600;
+        }
+        button:active { background: #1765CC; }
+        button:disabled { opacity: .6; }
+    </style>
+</head>
+<body>
+<main>
+    <div class="icon" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1A73E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3l18 18M8.5 16.5a5 5 0 0 1 7 0M5 12.9a10 10 0 0 1 5.2-2.8M19 12.9a10 10 0 0 0-2.1-1.6M2 8.8a15 15 0 0 1 4.2-2.7M22 8.8A15 15 0 0 0 10.7 5M12 20h.01"/>
+        </svg>
+    </div>
+    <h1>No connection</h1>
+    <p>Rentora could not be reached. Check your mobile data or Wi-Fi, then try again.</p>
+    <button id="retry" type="button">Retry</button>
+</main>
+<script>
+    // The app replaces __RETRY_URL__ with the page that failed to load.
+    var START = 'https://rentora-housing.infinityfreeapp.com/portal';
+    var target = '__RETRY_URL__';
+    if (target.indexOf('https://rentora-housing.infinityfreeapp.com/') !== 0) { target = START; }
+    var button = document.getElementById('retry');
+    button.addEventListener('click', function () {
+        button.disabled = true;
+        button.textContent = 'Connecting...';
+        window.location.replace(target);
+    });
+</script>
+</body>
+</html>

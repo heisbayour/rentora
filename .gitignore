@@ -31,5 +31,3 @@ yarn-error.log
 *.keystore
 *.jks
 keys/
-/android/build/
-/android/app/

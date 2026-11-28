@@ -18,6 +18,16 @@ All notable changes are listed here. Versions follow semantic versioning (see `d
 
 - Inside the Android app (user agent containing `RentoraApp`) the portal no longer shows the "Install app" card and does not register the service worker, so the app's own offline screen is used.
 
+### Android app (versionCode 3, versionName 1.0.2)
+
+- The app is now a Capacitor WebView instead of a Trusted Web Activity: it opens the portal full screen with no address bar, also on InfinityFree. It installs as an update over the old app (same package name and signing key).
+- Native splash screen and launcher icons, `#1A73E8` status bar on every Android version.
+- Back button goes back through pages and closes the app only from the home page.
+- Photo fields offer the camera and the gallery; the camera permission is asked for when first needed.
+- Receipts, invoices and statements download to Downloads and open in the PDF viewer.
+- WhatsApp, phone, email and other sites open in their apps; Paystack checkout stays in the app.
+- "No connection" screen with Retry, and pull down to refresh.
+- Build steps and versioning: `android-app/README.md`. The old TWA files (`android/`) are removed.
 ### Added
 
 - `scripts/screenshots.mjs`: screenshots of the main screens at 1920, 1366, 1024 and 390 pixels wide, with automated checks for content under the sidebar and anything past the right edge.

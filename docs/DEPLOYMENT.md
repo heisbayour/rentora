@@ -97,7 +97,7 @@ If something goes wrong, the old layout can be restored from the backup and the 
 
 ## 7. Android app
 
-The Android app is a Trusted Web Activity: a signed shell that opens the live tenant portal full screen, so website updates reach the app at once. Build steps, the signing key and version numbers are in `android/README.md`.
+The Android app is a Capacitor WebView: a signed app that opens the live tenant portal full screen with no browser bar, so website updates reach the app at once. It needs nothing on the server (no `assetlinks.json` check). Build steps, the signing key and version numbers are in `android-app/README.md`.
 
 To remove the browser bar inside the app, the site must serve `https://yourdomain/.well-known/assetlinks.json` with the app's signing fingerprint. Set in `.env`:
 

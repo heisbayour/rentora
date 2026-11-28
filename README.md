@@ -14,7 +14,7 @@ Version: see [`VERSION`](VERSION) (currently 1.0.0). Release notes: [`CHANGELOG.
 - **Maintenance:** repair requests with photos, assignment to staff or vendors (signed job link), statuses, SLA flags, ratings.
 - **Messaging:** email (SMTP) and SMS (Termii) through an outbox with retries, in-app inbox, rent reminders before and after the due date, lease expiry alerts, announcements, WhatsApp click-to-send.
 - **Dashboard and reports:** KPIs, 12-month collections chart, arrears aging, rent roll, collections CSV, expenses, audit log.
-- **Tenant portal** (`/portal`): balance and Pay now, invoices, payments and receipts, repairs, notices, inbox, documents, account. Installs as an app (PWA), and ships as an Android app (Trusted Web Activity, see `android/README.md`).
+- **Tenant portal** (`/portal`): balance and Pay now, invoices, payments and receipts, repairs, notices, inbox, documents, account. Installs as an app (PWA), and ships as an Android app (a Capacitor WebView that opens the portal full screen, see `android-app/README.md`).
 - **Public website** (`/`): headline, about, vacant listings with filters, unit pages with inquiry form.
 - **Settings and system health:** organization, website, billing, Paystack, SMTP and SMS settings with test buttons; scheduler and outbox status.
 - Runs on free shared hosting (InfinityFree): no SSH, no cron, no queue workers needed.

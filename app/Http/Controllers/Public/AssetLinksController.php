@@ -8,9 +8,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 
 /**
- * Digital Asset Links for the Android app (FINISH_BUILD 8.2). With the right
- * package name and signing fingerprint here, the Trusted Web Activity opens
- * full screen without a browser bar. Empty until both are configured.
+ * Digital Asset Links for the Android app (FINISH_BUILD 8.2). The app has been
+ * a Capacitor WebView since 1.0.2 and no longer depends on this file; it stays
+ * for Google Play and app links. Empty until both values are configured.
  */
 class AssetLinksController extends Controller
 {

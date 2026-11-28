@@ -1,0 +1,18 @@
+{
+  "name": "rentora-android-app",
+  "private": true,
+  "version": "1.0.2",
+  "description": "Rentora Android app: a Capacitor WebView that opens the live tenant portal full screen.",
+  "scripts": {
+    "sync": "cap sync android",
+    "build:release": "cap sync android && cd android && gradlew.bat assembleRelease bundleRelease"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.3",
+    "@capacitor/core": "^8.6.3",
+    "@capacitor/splash-screen": "^8.0.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.3"
+  }
+}
