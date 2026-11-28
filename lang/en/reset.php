@@ -10,7 +10,7 @@ return [
     'warning' => 'Export the database in phpMyAdmin first (Export, Quick, SQL) and keep the file. There is no other way back.',
     'will_delete' => 'Will be deleted',
     'kept_title' => 'Kept',
-    'kept' => 'The organization (name, logo, colour, contact details), all settings (bank, email, SMS, Paystack), every owner account and the install lock. Invoice, receipt and repair numbers start again at 000001.',
+    'kept' => 'The organization (name, logo, colour, contact details), all settings (bank, email, SMS, Paystack), every owner and developer account and the install lock. Invoice, receipt and repair numbers start again at 000001.',
     'new_owner_title' => 'Extra owner account (optional)',
     'new_owner_hint' => 'Creates an owner login for the client in the same step. A temporary password is shown once after the reset.',
     'new_owner_name' => 'Name',

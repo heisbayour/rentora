@@ -1,6 +1,15 @@
 <x-layouts::admin :title="__('dashboard.title')">
     <x-page-header :title="__('dashboard.greeting', ['name' => auth()->user()->name])" :description="__('dashboard.intro')" />
 
+    <x-invite-share />
+
+    @if (($failingConnections ?? []) !== [])
+        <x-alert type="warning" class="mb-4" data-connection-warning>
+            {{ __('health.connections.dashboard_warning', ['names' => collect($failingConnections)->map(fn ($kind) => __('health.connections.kinds.'.$kind))->join(', ')]) }}
+            <a href="{{ route('app.health') }}#connections" class="font-medium underline">{{ __('health.connections.dashboard_link') }}</a>
+        </x-alert>
+    @endif
+
     @if ($money)
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <x-stat-card :label="__('dashboard.kpi.expected')" :value="$format($kpis['expected'])" icon="document-currency-dollar" :href="route('app.invoices.index')" />

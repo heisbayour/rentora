@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Notifications;
 
 use App\Models\User;
+use App\Notifications\Channels\DirectMailChannel;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 /**
- * Invitation for a new staff member to set a password. Sent by mail for now;
- * Phase 8 moves every outbound message onto the outbox channels.
+ * Invitation for a new staff member to set a password, sent at once through
+ * the Settings SMTP server (DECISIONS 70). InviteStaff only sends it when
+ * email is set up and catches any failure (DECISIONS 104).
  */
 class StaffInvitation extends Notification
 {
@@ -19,7 +21,7 @@ class StaffInvitation extends Notification
     /** @return list<string> */
     public function via(User $notifiable): array
     {
-        return ['mail'];
+        return [DirectMailChannel::class];
     }
 
     public function toMail(User $notifiable): MailMessage

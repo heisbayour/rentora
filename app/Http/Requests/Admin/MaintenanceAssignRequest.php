@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Admin;
 
+use App\Enums\Role;
 use App\Models\MaintenanceRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -23,7 +24,7 @@ class MaintenanceAssignRequest extends FormRequest
         $organizationId = $this->user()?->organization_id;
 
         return [
-            'assigned_user_id' => ['nullable', 'integer', Rule::exists('users', 'id')->where('organization_id', $organizationId)->whereIn('role', ['owner', 'manager', 'caretaker'])],
+            'assigned_user_id' => ['nullable', 'integer', Rule::exists('users', 'id')->where('organization_id', $organizationId)->whereIn('role', array_map(fn (Role $role) => $role->value, Role::staff()))],
             'vendor_id' => ['nullable', 'integer', Rule::exists('vendors', 'id')->where('organization_id', $organizationId)->where('is_active', true)],
         ];
     }

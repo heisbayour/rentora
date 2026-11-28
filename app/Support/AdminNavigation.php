@@ -71,7 +71,8 @@ final class AdminNavigation
         foreach (self::definition() as $group) {
             $items = [];
             foreach ($group['items'] as $item) {
-                if ($role !== null && ! in_array($role->value, $item['roles'], true)) {
+                $value = $role === Role::Developer ? Role::Owner->value : $role?->value;
+                if ($value !== null && ! in_array($value, $item['roles'], true)) {
                     continue;
                 }
                 $exists = Route::has($item['route']);

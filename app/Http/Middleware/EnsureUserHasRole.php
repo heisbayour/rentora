@@ -25,7 +25,8 @@ class EnsureUserHasRole
         $user = $request->user();
         $role = $user?->role;
 
-        if ($role instanceof Role && in_array($role->value, $roles, true)) {
+        // A developer may go wherever an owner may.
+        if ($role instanceof Role && (in_array($role->value, $roles, true) || ($role === Role::Developer && in_array(Role::Owner->value, $roles, true)))) {
             return $next($request);
         }
 

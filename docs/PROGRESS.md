@@ -181,3 +181,12 @@ The per-phase lists below are the original spec plan; items FINISH_BUILD defers 
 - [x] `composer deploy:build` zip installs and runs via `/install` on a fresh folder and MySQL DB (PHP built-in server, 2026-11-24)
 - [x] README, DEPLOYMENT, USER_GUIDE, SMOKE_TEST, CHANGELOG written
 - [x] Repo public at `github.com/heisbayour/rentora`, tagged `v1.0.0`
+
+## v1.0.4 - Live fixes (2026-11-28, website only)
+
+- [x] No invite, resend or password reset fails without email or SMS; share panel on every link (DECISIONS 104)
+- [x] Get invite link, Get password reset link (DECISIONS 106)
+- [x] Developer (support) role, role changes and staff removal (DECISIONS 105, 107)
+- [x] System health Connections card, daily check, dashboard warning (DECISIONS 108)
+- [x] Migration verified on MariaDB 10.4 (fresh, rollback, re-apply)
+- [x] Gates pass, commit, tag v1.0.4, push, patch folder

@@ -81,11 +81,21 @@ class PaystackGateway implements PaymentGateway
 
     public function testConnection(): bool
     {
+        return $this->connectionError() === null;
+    }
+
+    /** GET /bank: read-only, needs a valid secret key. */
+    public function connectionError(): ?string
+    {
         try {
-            return $this->client()->get('/bank', ['perPage' => 1])->successful();
-        } catch (ConnectionException) {
-            return false;
+            $response = $this->client()->get('/bank', ['perPage' => 1]);
+        } catch (ConnectionException $e) {
+            return 'Paystack connection failed: '.mb_substr($e->getMessage(), 0, 300);
         }
+
+        return $response->successful()
+            ? null
+            : 'Paystack '.$response->status().': '.mb_substr((string) ($response->json('message') ?? $response->body()), 0, 300);
     }
 
     public function publicKey(): string

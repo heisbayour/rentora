@@ -24,6 +24,8 @@
         </x-slot:actions>
     </x-page-header>
 
+    <x-invite-share />
+
     @foreach (['lease', 'end_date', 'reason'] as $field)
         @error($field)
             <x-alert type="danger" class="mb-4">{{ $message }}</x-alert>

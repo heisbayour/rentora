@@ -45,4 +45,29 @@ final class TermiiSmsDriver implements SmsDriver
 
         return SmsResult::failed('Termii '.$response->status().': '.mb_substr((string) ($response->json('message') ?? $response->body()), 0, 300));
     }
+
+    /**
+     * Balance call for the System health check: proves the key works without
+     * sending a message.
+     *
+     * @return array{ok: bool, detail: ?string, error: ?string}
+     */
+    public function balance(): array
+    {
+        if ($this->apiKey === '') {
+            return ['ok' => false, 'detail' => null, 'error' => __('messaging.errors.termii_not_configured')];
+        }
+
+        try {
+            $response = Http::timeout(15)->acceptJson()->get(rtrim($this->baseUrl, '/').'/api/get-balance', ['api_key' => $this->apiKey]);
+        } catch (ConnectionException $e) {
+            return ['ok' => false, 'detail' => null, 'error' => 'Termii connection failed: '.$e->getMessage()];
+        }
+
+        if ($response->successful() && $response->json('balance') !== null) {
+            return ['ok' => true, 'detail' => trim($response->json('balance').' '.$response->json('currency')), 'error' => null];
+        }
+
+        return ['ok' => false, 'detail' => null, 'error' => 'Termii '.$response->status().': '.mb_substr((string) ($response->json('message') ?? $response->body()), 0, 300)];
+    }
 }

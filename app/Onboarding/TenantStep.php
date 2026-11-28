@@ -6,6 +6,7 @@ namespace App\Onboarding;
 
 use App\Actions\Tenants\InviteTenant;
 use App\Actions\Tenants\SaveTenant;
+use App\Support\InviteShare;
 use Illuminate\Http\Request;
 
 /** Wizard step 4 (skippable): add and invite the first tenant. Their lease is set up later. */
@@ -58,6 +59,9 @@ class TenantStep implements OnboardingStep
     public function handle(Request $request): void
     {
         $tenant = $this->save->handle(null, $request->only(['full_name', 'email', 'phone']));
-        $this->invite->handle($tenant);
+        if (($tenant->email ?? '') !== '' || $tenant->phone !== '') {
+            $invite = $this->invite->handle($tenant);
+            InviteShare::flash($tenant->full_name, $invite['link'], $tenant->phone, $tenant->email, $invite['deliveries']);
+        }
     }
 }

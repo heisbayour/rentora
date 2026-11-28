@@ -72,6 +72,48 @@ class MessagingConfig
         return $this->mail->mailer(self::RUNTIME_MAILER);
     }
 
+    /**
+     * Whether an SMTP server is configured: a host saved in Settings, or an
+     * SMTP default mailer with a host in .env. The live .env ships with
+     * MAIL_MAILER=smtp and an empty host, which means "not set up".
+     */
+    public function smtpConfigured(): bool
+    {
+        if (trim((string) $this->settings->get('mail.host', '')) !== '') {
+            return true;
+        }
+        $mailer = (string) config('mail.default');
+
+        return config("mail.mailers.{$mailer}.transport") === 'smtp'
+            && trim((string) config("mail.mailers.{$mailer}.host", '')) !== '';
+    }
+
+    /**
+     * Whether email can be sent at all: SMTP as above, or a non-SMTP default
+     * mailer (log or array locally and in tests, or a provider API).
+     */
+    public function emailConfigured(): bool
+    {
+        if ($this->smtpConfigured()) {
+            return true;
+        }
+        $mailer = (string) config('mail.default');
+        $transport = config("mail.mailers.{$mailer}.transport");
+
+        return is_string($transport) && $transport !== 'smtp';
+    }
+
+    /** Whether a real SMS provider is selected with its key and sender ID ("log" only writes to the log). */
+    public function smsConfigured(): bool
+    {
+        if ($this->smsDriverName() !== 'termii') {
+            return false;
+        }
+
+        return trim((string) $this->settings->get('sms.termii_api_key', (string) config('rentora.sms.termii.api_key'))) !== ''
+            && trim((string) $this->settings->get('sms.termii_sender_id', (string) config('rentora.sms.termii.sender_id'))) !== '';
+    }
+
     /** @return array{address: string, name: string} */
     public function from(?string $organizationName = null): array
     {

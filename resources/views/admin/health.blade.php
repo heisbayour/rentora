@@ -42,6 +42,36 @@
             </ul>
         </x-card>
 
+        <x-card :title="__('health.connections.title')" class="lg:col-span-2" id="connections">
+            <p class="mb-3 text-sm text-ink-muted">{{ __('health.connections.intro') }}</p>
+            <ul class="divide-y divide-border">
+                @foreach ($connections as $kind => $connection)
+                    @php($color = ['working' => 'success', 'failing' => 'danger', 'not_set_up' => 'neutral'][$connection['status']] ?? 'warning')
+                    <li class="flex flex-wrap items-center justify-between gap-3 py-3" data-connection="{{ $kind }}">
+                        <div class="min-w-0">
+                            <p class="font-medium text-ink">{{ __('health.connections.kinds.'.$kind) }}</p>
+                            <p class="mt-1 flex flex-wrap items-center gap-2 text-sm">
+                                <x-status-chip :label="__('health.connections.status.'.$connection['status'])" :color="$color" />
+                                @if ($connection['status'] !== 'not_set_up' && $connection['checked_at'])
+                                    <span class="text-xs text-ink-muted">{{ __('health.connections.checked', ['when' => $connection['checked_at']->timezone($tz)->format('j M Y H:i')]) }}</span>
+                                @endif
+                                @if ($connection['status'] === 'working' && $connection['detail'])
+                                    <span class="text-xs text-ink-muted">· {{ $connection['detail'] }}</span>
+                                @endif
+                            </p>
+                            @if ($connection['status'] === 'failing' && $connection['error'])
+                                <p class="mt-1 break-words text-xs text-danger">{{ $connection['error'] }}</p>
+                            @endif
+                        </div>
+                        <form method="POST" action="{{ route('app.health.connections.test', $kind) }}">
+                            @csrf
+                            <x-button size="sm" variant="secondary" icon="signal">{{ __('health.connections.test') }}</x-button>
+                        </form>
+                    </li>
+                @endforeach
+            </ul>
+        </x-card>
+
         <x-card :title="__('health.scheduler')" class="lg:col-span-2">
             <p class="mb-3 text-sm">
                 <span class="text-ink-muted">{{ __('health.mode') }}:</span> <span class="font-medium">{{ $schedulerMode }}</span>
@@ -70,11 +100,12 @@
                 <form method="POST" action="{{ route('app.health.drain') }}">@csrf<x-button size="sm" variant="secondary" icon="paper-airplane">{{ __('health.drain_now') }}</x-button></form>
                 <form method="POST" action="{{ route('app.health.retry') }}">@csrf<x-button size="sm" variant="secondary" icon="arrow-path">{{ __('health.retry_failed') }}</x-button></form>
             </x-slot:actions>
-            <div class="mb-4 flex flex-wrap gap-3">
+            <div class="mb-2 flex flex-wrap gap-3">
                 @foreach ($outbox as $status => $count)
                     <x-status-chip :label="\App\Enums\MessageStatus::from($status)->label().': '.$count" :color="\App\Enums\MessageStatus::from($status)->color()" />
                 @endforeach
             </div>
+            <p class="mb-4 text-sm text-ink-muted">{{ __('health.outbox_help') }}</p>
             @if ($failed->isNotEmpty())
                 <h3 class="mb-2 text-sm font-semibold">{{ __('health.failed_messages') }}</h3>
                 <ul class="space-y-2 text-sm">

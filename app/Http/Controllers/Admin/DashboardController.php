@@ -14,6 +14,7 @@ use App\Models\MaintenanceRequest;
 use App\Models\Payment;
 use App\Services\Reports\ArrearsAging;
 use App\Services\Reports\DashboardMetrics;
+use App\Services\System\ConnectionChecks;
 use App\Support\Money;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -21,14 +22,17 @@ use Illuminate\View\View;
 /** Landlord dashboard (spec 8.2). Caretakers see the maintenance widgets only. */
 class DashboardController extends Controller
 {
-    public function __invoke(Request $request, DashboardMetrics $metrics, ArrearsAging $aging): View
+    public function __invoke(Request $request, DashboardMetrics $metrics, ArrearsAging $aging, ConnectionChecks $connections): View
     {
         $money = $request->user()->can('manage-money');
+        // Owners and developers see a warning when a configured connection is failing.
+        $failing = $request->user()->can('view-system-health') ? $connections->failing() : [];
         $repairs = MaintenanceRequest::query()->with('unit.property')->latest('id')->limit(5)->get();
         $openRepairs = MaintenanceRequest::query()->whereIn('status', MaintenanceStatus::openValues());
 
         if (! $money) {
             return view('admin.dashboard', [
+                'failingConnections' => $failing,
                 'money' => false,
                 'repairs' => $repairs,
                 'openRepairs' => (clone $openRepairs)->count(),
@@ -40,6 +44,7 @@ class DashboardController extends Controller
         $agingTotals = $aging->build()['totals'];
 
         return view('admin.dashboard', [
+            'failingConnections' => $failing,
             'money' => true,
             'kpis' => $kpis,
             'format' => fn (int $minor): string => Money::forOrganization($minor)->format(),

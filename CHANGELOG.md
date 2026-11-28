@@ -2,6 +2,32 @@
 
 All notable changes are listed here. Versions follow semantic versioning (see `docs/RELEASING.md`).
 
+## [1.0.4] - 2026-11-28
+
+Website only: no new Android app. Has a database migration: run `/system/upgrade?key=...` after uploading.
+
+### Fixed
+
+- Inviting a staff member answered with a 500 error on a site without email, and no link was shown although the account had been created. Staff invites, resends and password reset emails were sent at once with the `.env` mailer, which has no server on the live site. Now no invite, resend or reset fails because email or SMS is missing or broken: email is only tried when it is set up, any SMTP error is caught and reported, and the link is always shown.
+- Staff invitations and password reset emails now use the SMTP server saved in Settings > Email (before, they ignored it and used the `.env` mailer).
+- Forgot password with email off now says "Email is not set up. Ask the property owner for a reset link." instead of failing; a failing SMTP server gets a similar message.
+- The outbox no longer spends the scheduler's time trying to reach an SMTP server that is not set up: such emails fail at once with "Email is not set up" and can be requeued with Retry failed once email works.
+
+### Added
+
+- Share panel after every invite and link: Copy link, WhatsApp, SMS, Email and the phone's share sheet (where the browser has one), with a plain line for each channel saying whether it was sent, queued, not set up or failed. Shown on the staff list, the tenant page, the lease page after the lease wizard and the dashboard after the first-run wizard.
+- **Get invite link** on every staff row whose invite has not been accepted, and on tenants without a portal account: a fresh link, nothing sent (a new tenant link replaces the old one).
+- **Get password reset link** for owners and developers, on any staff member (Edit) or tenant with a portal account (... menu). The normal 60 minute reset link, shown to share. Owners cannot get one for a developer, and nobody for themselves.
+- **Developer (support)** role: every owner permission plus the system pages (upgrade, reset, health). Can change anyone's role and remove any account, including owners. Owners cannot demote, deactivate or remove a developer, and cannot give the role. Shown as "Developer (support)". `/system/reset` keeps developer accounts. The migration makes the original developer's account a developer; `php artisan rentora:make-developer {email}` does it for others.
+- Owners can remove staff accounts (Edit > Remove account). An account with history (audit entries, payments, repairs, uploads, announcements) is deactivated and anonymised so the history stays; one without history is deleted. Nobody removes themselves and the last active owner can never be demoted, deactivated or removed.
+- Staff list: "Invite not accepted" status for staff who have not set a password.
+- System health **Connections** card: Email (SMTP), SMS (Termii) and Paystack, each Not set up, Working (with the last check time) or Failing (with the error and time), and a Test now button. Checked once a day by the scheduler without sending anything: an SMTP connect and login, a Termii balance call and a Paystack `GET /bank`. Owners and developers see a warning on the dashboard when a set-up connection is failing.
+- System health explains what Drain now and Retry failed do.
+
+### Database
+
+- `users.password_set_at` (null while an invite is pending; backfilled from the last login, and set for every tenant) and `users.removed_at`.
+
 ## [1.0.3] - 2026-11-28
 
 ### Fixed

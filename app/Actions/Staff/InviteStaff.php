@@ -8,17 +8,30 @@ use App\Enums\Role;
 use App\Models\User;
 use App\Notifications\StaffInvitation;
 use App\Services\ActivityLogger;
+use App\Services\Messaging\MessagingConfig;
+use App\Support\Delivery;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
+use Throwable;
 
+/**
+ * Creates a staff account and sends the invitation. The account is always
+ * created and the link always returned: email is only tried when it is set
+ * up, and a failing SMTP server is reported in the result, never thrown
+ * (DECISIONS 104).
+ */
 class InviteStaff
 {
-    public function __construct(private readonly ActivityLogger $logger) {}
+    public function __construct(
+        private readonly ActivityLogger $logger,
+        private readonly MessagingConfig $messaging,
+    ) {}
 
     /**
      * @param  array{name: string, email: string, phone?: ?string, role: string}  $data
+     * @return array{user: User, link: string, delivery: Delivery}
      */
-    public function handle(array $data): User
+    public function handle(array $data): array
     {
         $user = User::query()->create([
             'name' => $data['name'],
@@ -28,20 +41,38 @@ class InviteStaff
             'password' => Str::password(40),
             'is_active' => true,
         ]);
+        // Created with a random password nobody knows: still waiting for the invite.
+        $user->forceFill(['password_set_at' => null])->saveQuietly();
 
-        $this->send($user);
         $this->logger->log('staff.invited', $user, ['role' => $user->role->value]);
+        [$link, $delivery] = $this->send($user);
 
-        return $user;
+        return ['user' => $user, 'link' => $link, 'delivery' => $delivery];
     }
 
-    /** Sends the invitation and returns the link, so the console can offer Copy and WhatsApp too. */
-    public function send(User $user): string
+    /**
+     * Emails the invitation when email is set up and reports what happened.
+     *
+     * @return array{0: string, 1: Delivery}
+     */
+    public function send(User $user): array
     {
         $link = self::link($user);
-        $user->notify(new StaffInvitation($link));
 
-        return $link;
+        if (! $this->messaging->emailConfigured()) {
+            return [$link, Delivery::notSetUp('email')];
+        }
+
+        try {
+            $user->notify(new StaffInvitation($link));
+        } catch (Throwable $e) {
+            report($e);
+            $this->logger->log('staff.invite_email_failed', $user, ['error' => mb_substr($e->getMessage(), 0, 300)]);
+
+            return [$link, Delivery::failed('email', $e->getMessage())];
+        }
+
+        return [$link, Delivery::sent('email')];
     }
 
     /**

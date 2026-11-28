@@ -12,6 +12,7 @@ use App\Services\ActivityLogger;
 use App\Services\Messaging\Outbox;
 use App\Services\Scheduling\LazyScheduler;
 use App\Services\Scheduling\TaskRegistry;
+use App\Services\System\ConnectionChecks;
 use App\Support\AppVersion;
 use App\Support\Requirements;
 use Illuminate\Database\Migrations\Migrator;
@@ -23,7 +24,7 @@ use Throwable;
 /** System health for owners (spec 8.15, FINISH_BUILD Section 6). */
 class SystemHealthController extends Controller
 {
-    public function show(Requirements $requirements, Migrator $migrator, TaskRegistry $registry, Outbox $outbox): View
+    public function show(Requirements $requirements, Migrator $migrator, TaskRegistry $registry, Outbox $outbox, ConnectionChecks $connections): View
     {
         try {
             DB::connection()->getPdo();
@@ -53,7 +54,23 @@ class SystemHealthController extends Controller
             'lastTick' => SystemState::getValue(LazyScheduler::LAST_TICK_KEY),
             'tasks' => $tasks,
             'outbox' => $outbox->counts(),
+            'connections' => $connections->results(),
             'failed' => OutboundMessage::query()->where('status', MessageStatus::Failed->value)->latest('id')->limit(10)->get(),
+        ]);
+    }
+
+    /** "Test now" on the Connections card: one check, no message sent. */
+    public function testConnection(string $kind, ConnectionChecks $connections, ActivityLogger $logger): RedirectResponse
+    {
+        abort_unless(in_array($kind, ConnectionChecks::KINDS, true), 404);
+
+        $result = $connections->run($kind);
+        $logger->log('connection.checked', null, ['kind' => $kind, 'status' => $result['status']]);
+        $label = __('health.connections.kinds.'.$kind);
+
+        return back()->with('toast', [
+            'message' => __('health.connections.result.'.$result['status'], ['name' => $label, 'error' => (string) $result['error']]),
+            'type' => $result['status'] === ConnectionChecks::FAILING ? 'danger' : 'success',
         ]);
     }
 

@@ -105,6 +105,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('manage-money', fn (User $user) => $user->hasRole(Role::Owner, Role::Manager));
         Gate::define('manage-portfolio', fn (User $user) => $user->hasRole(Role::Owner, Role::Manager));
         Gate::define('reverse-payments', fn (User $user) => $user->hasRole(Role::Owner));
+        Gate::define('issue-reset-links', fn (User $user) => $user->hasRole(Role::Owner));
         Gate::define('use-maintenance', fn (User $user) => $user->hasRole(Role::Owner, Role::Manager, Role::Caretaker));
     }
 }

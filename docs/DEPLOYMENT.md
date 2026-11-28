@@ -91,7 +91,7 @@ If something goes wrong, the old layout can be restored from the backup and the 
 
 ## 6. Handing over to the client (clean-slate reset)
 
-Use this once, when the client takes over a system that still holds demo or test data. Only the developer should run it: it is not linked from the console and needs the install key.
+Use this once, when the client takes over a system that still holds demo or test data. Only the developer should run it: it is not linked from the console and needs the install key. It works for an owner or the developer (support) account.
 
 1. **Back up first.** In phpMyAdmin select the database, Export, Quick, SQL, and keep the file. The reset cannot be undone.
 2. Log in as an owner and open `https://yourdomain/system/reset?key=YOUR_INSTALL_KEY`.
@@ -100,7 +100,11 @@ Use this once, when the client takes over a system that still holds demo or test
 5. Type `RESET`, enter your password and press **Delete all data**.
 6. The summary shows what was deleted and, if you created an owner, the **temporary password once**. Send it to the client and ask them to change it under Profile.
 
-Kept: the organization (name, logo, colour, contact details), all settings (bank, email, SMS, Paystack), every owner account and the install lock. Invoice, receipt and repair numbers start again at 000001. One `system.reset` entry is written to the audit log.
+Kept: the organization (name, logo, colour, contact details), all settings (bank, email, SMS, Paystack), every owner and developer account and the install lock. Invoice, receipt and repair numbers start again at 000001. One `system.reset` entry is written to the audit log.
+
+### The developer (support) account
+
+From 1.0.4 the account that sets up and supports the system has the **Developer (support)** role: every owner permission plus the system pages, and owners cannot demote, deactivate or remove it. The 1.0.4 migration gives this role to the original developer's account (matched by a SHA-256 hash of its email, so the address is not in the repository; see DECISIONS 105). On a server with a shell, `php artisan rentora:make-developer someone@example.com` gives the role to another existing account. A developer can also give or take the role from Staff.
 
 ## 7. Recommended services
 

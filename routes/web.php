@@ -77,7 +77,7 @@ Route::middleware(['auth', 'active', 'role:owner'])->group(function () {
     Route::post('system/upgrade', [UpgradeController::class, 'run'])->name('system.upgrade.run');
 });
 
-// Clean-slate reset for handover: developer only (owner plus install key), never linked in the console.
+// Clean-slate reset for handover: owner or developer plus the install key, never linked in the console.
 Route::middleware(['auth', 'active', 'role:owner', 'install.key'])->group(function () {
     Route::get('system/reset', [ResetController::class, 'show'])->name('system.reset');
     Route::post('system/reset', [ResetController::class, 'run'])->middleware('throttle:5,1')->name('system.reset.run');
@@ -117,6 +117,8 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
     // People: tenants (caretakers read contact details) and leases.
     Route::resource('tenants', TenantController::class);
     Route::post('tenants/{tenant}/invite', [TenantController::class, 'invite'])->name('tenants.invite');
+    Route::post('tenants/{tenant}/invite-link', [TenantController::class, 'inviteLink'])->name('tenants.invite-link');
+    Route::post('tenants/{tenant}/reset-link', [TenantController::class, 'resetLink'])->middleware('can:issue-reset-links')->name('tenants.reset-link');
     Route::get('leases/new', [LeaseWizardController::class, 'start'])->name('leases.wizard.start');
     Route::get('leases/new/{step}', [LeaseWizardController::class, 'show'])->name('leases.wizard.show');
     Route::post('leases/new/{step}', [LeaseWizardController::class, 'store'])->name('leases.wizard.store');
@@ -193,6 +195,7 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
         Route::get('health', [SystemHealthController::class, 'show'])->name('health');
         Route::post('health/retry', [SystemHealthController::class, 'retryFailed'])->name('health.retry');
         Route::post('health/drain', [SystemHealthController::class, 'drain'])->name('health.drain');
+        Route::post('health/connections/{kind}', [SystemHealthController::class, 'testConnection'])->middleware('throttle:10,1')->name('health.connections.test');
     });
 
     Route::middleware('can:manage-staff')->group(function () {
@@ -200,6 +203,9 @@ Route::prefix('app')->name('app.')->middleware(['auth', 'active', 'role:owner,ma
         Route::post('staff', [StaffController::class, 'store'])->name('staff.store');
         Route::put('staff/{member}', [StaffController::class, 'update'])->name('staff.update');
         Route::post('staff/{member}/resend', [StaffController::class, 'resend'])->name('staff.resend');
+        Route::post('staff/{member}/invite-link', [StaffController::class, 'inviteLink'])->name('staff.invite-link');
+        Route::post('staff/{member}/reset-link', [StaffController::class, 'resetLink'])->name('staff.reset-link');
+        Route::delete('staff/{member}', [StaffController::class, 'destroy'])->name('staff.destroy');
     });
 });
 

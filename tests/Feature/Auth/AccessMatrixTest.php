@@ -26,9 +26,10 @@ use Illuminate\Support\Facades\Storage;
  * its own home, everyone else gets a 403, and guests go to the login page.
  */
 
-const ALL_STAFF = ['owner', 'manager', 'caretaker'];
-const MONEY = ['owner', 'manager'];
-const OWNER = ['owner'];
+// The developer (support) role holds every owner permission (DECISIONS 105).
+const ALL_STAFF = ['developer', 'owner', 'manager', 'caretaker'];
+const MONEY = ['developer', 'owner', 'manager'];
+const OWNER = ['developer', 'owner'];
 const TENANT = ['tenant'];
 
 function accessRules(): array

@@ -15,6 +15,7 @@ return [
     'errors' => [
         'invalid_phone' => 'The phone number ":phone" is not valid.',
         'termii_not_configured' => 'Termii API key or sender ID is missing in Settings.',
+        'email_not_set_up' => 'Email is not set up: add an SMTP server in Settings > Email, then use Retry failed on System health.',
     ],
     'invoice_issued' => [
         'title' => 'New invoice :number',

@@ -22,7 +22,7 @@ class InviteStaffRequest extends FormRequest
             'name' => ['required', 'string', 'max:150'],
             'email' => ['required', 'email', 'max:150', Rule::unique('users', 'email')],
             'phone' => ['nullable', 'string', 'max:32'],
-            'role' => ['required', Rule::in(array_map(fn (Role $role) => $role->value, Role::staff()))],
+            'role' => ['required', Rule::in(array_map(fn (Role $role) => $role->value, Role::assignableBy($this->user()?->role)))],
         ];
     }
 }

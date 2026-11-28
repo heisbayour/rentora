@@ -24,6 +24,8 @@ return [
         'intro' => 'Enter your email and we will send you a link to choose a new password.',
         'submit' => 'Email reset link',
         'back' => 'Back to log in',
+        'email_off' => 'Email is not set up. Ask the property owner for a reset link.',
+        'email_failed' => 'The reset email could not be sent right now. Ask the property owner for a reset link.',
     ],
     'reset' => [
         'title' => 'Choose a new password',

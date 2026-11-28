@@ -10,6 +10,10 @@
                         @csrf
                         <x-button variant="secondary" icon="paper-airplane">{{ $tenant->invite_sent_at ? __('tenants.resend_invite') : __('tenants.invite') }}</x-button>
                     </form>
+                    <form method="POST" action="{{ route('app.tenants.invite-link', $tenant) }}">
+                        @csrf
+                        <x-button variant="secondary" icon="link">{{ __('tenants.get_invite_link') }}</x-button>
+                    </form>
                 @endunless
                 <x-dropdown>
                     <x-slot:trigger class="h-10 border border-border px-3 text-sm font-medium text-ink hover:bg-canvas" aria-label="{{ __('tenants.edit') }}">
@@ -17,8 +21,12 @@
                     </x-slot:trigger>
                     <x-dropdown.item :href="route('app.tenants.edit', $tenant)" icon="pencil-square">{{ __('tenants.edit') }}</x-dropdown.item>
                     <x-dropdown.item :href="route('app.leases.wizard.start', ['tenant' => $tenant->id])" icon="document-plus">{{ __('tenants.overview.new_lease') }}</x-dropdown.item>
+                    @if ($tenant->hasPortalAccount() && auth()->user()->can('issue-reset-links'))
+                        <x-dropdown.item icon="key" x-on:click="document.getElementById('tenant-reset-link-form').submit()">{{ __('tenants.get_reset_link') }}</x-dropdown.item>
+                    @endif
                     <x-dropdown.item icon="trash" danger x-on:click="$dispatch('open-modal', 'delete-tenant')">{{ __('tenants.delete') }}</x-dropdown.item>
                 </x-dropdown>
+                <form id="tenant-reset-link-form" method="POST" action="{{ route('app.tenants.reset-link', $tenant) }}" class="hidden">@csrf</form>
             @endif
         </x-slot:actions>
     </x-page-header>

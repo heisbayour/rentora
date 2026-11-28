@@ -128,6 +128,15 @@ class Outbox
             return $this->fail($message, 'Organization not found.', permanent: true);
         }
 
+        // With no SMTP server there is nothing to connect to: fail at once instead
+        // of spending the scheduler's time budget on a connection timeout.
+        // "Retry failed" on System health queues it again once email is set up.
+        $emailOff = $message->channel === OutboundMessage::EMAIL
+            && ! $this->current->runAs($organization, fn (): bool => $this->config->emailConfigured());
+        if ($emailOff) {
+            return $this->fail($message, __('messaging.errors.email_not_set_up'), permanent: true);
+        }
+
         try {
             $error = $this->current->runAs($organization, function () use ($message, $organization): ?string {
                 if ($message->channel === OutboundMessage::SMS) {

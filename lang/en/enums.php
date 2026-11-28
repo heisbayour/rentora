@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 return [
     'role' => [
+        'developer' => 'Developer (support)',
         'owner' => 'Owner',
         'manager' => 'Manager',
         'caretaker' => 'Caretaker',

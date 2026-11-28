@@ -25,4 +25,7 @@ interface PaymentGateway
 
     /** Whether the configured secret key is accepted by the provider. */
     public function testConnection(): bool;
+
+    /** Null when the provider accepts the secret key, otherwise the error (read-only call). */
+    public function connectionError(): ?string;
 }

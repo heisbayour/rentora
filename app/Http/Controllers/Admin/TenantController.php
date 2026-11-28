@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Staff\IssuePasswordResetLink;
 use App\Actions\Tenants\DeleteTenant;
 use App\Actions\Tenants\InviteTenant;
 use App\Actions\Tenants\SaveTenant;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TenantRequest;
 use App\Models\ActivityLog;
 use App\Models\Tenant;
+use App\Models\User;
 use App\Support\CurrentOrganization;
 use App\Support\InviteShare;
 use App\Support\PhoneNormalizer;
@@ -21,6 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class TenantController extends Controller
@@ -127,9 +130,36 @@ class TenantController extends Controller
     {
         $this->authorize('update', $tenant);
 
-        InviteShare::flash($tenant->full_name, $invite->handle($tenant), $tenant->phone);
+        $result = $invite->handle($tenant);
+        InviteShare::flash($tenant->full_name, $result['link'], $tenant->phone, $tenant->email, $result['deliveries']);
 
         return back()->with('toast', __('tenants.invite_sent', ['name' => $tenant->full_name]));
+    }
+
+    /** "Get invite link": a fresh link for a tenant without a portal account, nothing sent. */
+    public function inviteLink(Tenant $tenant, InviteTenant $invite): RedirectResponse
+    {
+        $this->authorize('update', $tenant);
+
+        InviteShare::flash($tenant->full_name, $invite->issueLink($tenant), $tenant->phone, $tenant->email);
+
+        return back()->with('toast', __('tenants.link_ready', ['name' => $tenant->full_name]));
+    }
+
+    /** "Get password reset link" for a tenant's portal account (owners and developers). */
+    public function resetLink(Request $request, Tenant $tenant, IssuePasswordResetLink $issue): RedirectResponse
+    {
+        $this->authorize('update', $tenant);
+        $account = $tenant->user;
+        if ($account === null) {
+            throw ValidationException::withMessages(['tenant' => __('tenants.errors.no_account')]);
+        }
+        $actor = $request->user();
+        assert($actor instanceof User);
+
+        InviteShare::flash($tenant->full_name, $issue->handle($actor, $account), $tenant->phone, $account->email, [], InviteShare::RESET);
+
+        return back()->with('toast', __('tenants.link_ready', ['name' => $tenant->full_name]));
     }
 
     /** @return Collection<int, ActivityLog> */

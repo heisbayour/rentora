@@ -17,6 +17,7 @@ use App\Http\Requests\Admin\UnitRequest;
 use App\Models\Lease;
 use App\Models\Tenant;
 use App\Models\Unit;
+use App\Support\InviteShare;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -253,7 +254,9 @@ class LeaseWizard
         }
 
         if ($options['send_invite'] && ! $lease->tenant->hasPortalAccount()) {
-            $this->inviteTenant->handle($lease->tenant);
+            $tenant = $lease->tenant;
+            $invite = $this->inviteTenant->handle($tenant);
+            InviteShare::flash($tenant->full_name, $invite['link'], $tenant->phone, $tenant->email, $invite['deliveries']);
         }
 
         $this->forget();

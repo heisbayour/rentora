@@ -4,6 +4,7 @@ A short guide for landlords and their staff. Tenants use the portal and need no 
 
 ## Roles
 
+- **Developer (support):** the person who set the system up. Everything an owner can do, plus the system pages (upgrade, reset). Owners cannot change or remove this account; only a developer can.
 - **Owner:** everything, including settings, staff, the audit log and system health.
 - **Manager:** properties, tenants, leases, invoices, payments, reports, announcements and repairs.
 - **Caretaker:** repairs and vendors; can see units and tenant contact details, never money.
@@ -13,7 +14,9 @@ A short guide for landlords and their staff. Tenants use the portal and need no 
 
 1. After installing, the first-run wizard asks for your organization details, your first property, its units and (optionally) your first tenant.
 2. **Settings:** enter your bank account (Billing), Paystack keys (Payments), SMTP (Email) and Termii (SMS). Use the test buttons.
-3. **Staff:** invite managers and caretakers by email from Settings > Staff.
+3. **Staff:** invite managers and caretakers from Staff. The account is created at once and you get the invite link with Copy, WhatsApp, SMS and Email buttons; the panel says whether the email was also sent. If email is not set up, share the link yourself. Until the person sets a password, their row has **Get invite link** for a fresh link.
+4. **Changing staff:** Edit on a staff row changes the role (owner, manager, caretaker), turns the account off, gives a **password reset link** to share, or **removes** the account. Someone who recorded payments, repairs or other history is anonymised instead of deleted, so the history stays. The last active owner can never be demoted or removed.
+5. **Forgotten passwords while email is off:** the login page tells the person to ask the owner. Open their staff row (Edit) or the tenant's page (... menu) and choose **Get password reset link**. The link works for 60 minutes.
 
 ## Daily work
 
@@ -38,4 +41,4 @@ Your public site lists units marked "Listed" that are vacant or reserved. Visito
 
 ## When something looks wrong
 
-Settings > System health shows the server checks, when each background task last ran (with any error), and the email/SMS outbox. "Retry failed" requeues failed messages and "Drain now" sends what is waiting.
+Settings > System health shows the server checks, the **Connections** card (Email, SMS and Paystack: Not set up, Working or Failing with the error, and a Test now button; checked automatically once a day without sending anything), when each background task last ran (with any error), and the email/SMS outbox. "Drain now" sends what is waiting straight away; "Retry failed" puts messages that gave up back in the queue. When a set-up connection fails, owners see a warning on the dashboard.

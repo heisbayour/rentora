@@ -15,6 +15,7 @@ use App\Services\Messaging\LeaseExpiryAlerts;
 use App\Services\Messaging\Outbox;
 use App\Services\Messaging\RentReminders;
 use App\Services\Payments\PaymentReconciler;
+use App\Services\System\ConnectionChecks;
 use App\Support\CurrentOrganization;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Facades\Log;
@@ -43,6 +44,7 @@ class TaskRegistry
             'auto_close_repairs' => ['every' => 'daily', 'run' => fn () => $c->make(MaintenanceWorkflow::class)->autoCloseResolved()],
             'reconcile_payments' => ['every' => 'minutes:10', 'run' => fn () => $c->make(PaymentReconciler::class)->run()],
             'prune_old_logs' => ['every' => 'weekly', 'run' => fn () => $this->pruneOldLogs()],
+            'check_connections' => ['every' => 'daily', 'run' => fn () => $c->make(ConnectionChecks::class)->runForAllOrganizations()],
             // Last, so it gets whatever time budget is left.
             'drain_outbox' => ['every' => 'tick', 'run' => fn (float $deadline) => $c->make(Outbox::class)->drain($deadline)],
         ];

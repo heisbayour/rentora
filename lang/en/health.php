@@ -27,4 +27,29 @@ return [
     'failed_messages' => 'Recent failed messages',
     'retried' => ':count failed messages queued again.',
     'drained' => 'Outbox drained: :sent sent, :retried to retry, :failed failed.',
+    'outbox_help' => 'Drain now sends the queued emails and SMS straight away instead of waiting for the scheduler. Retry failed puts messages that gave up after 4 tries back in the queue.',
+    'connections' => [
+        'title' => 'Connections',
+        'intro' => 'Checked automatically once a day without sending any message: an SMTP login, a Termii balance call and a Paystack bank list call.',
+        'kinds' => [
+            'email' => 'Email (SMTP)',
+            'sms' => 'SMS (Termii)',
+            'paystack' => 'Paystack',
+        ],
+        'status' => [
+            'not_set_up' => 'Not set up',
+            'working' => 'Working',
+            'failing' => 'Failing',
+            'unchecked' => 'Not checked yet',
+        ],
+        'checked' => 'Last checked :when',
+        'test' => 'Test now',
+        'result' => [
+            'not_set_up' => ':name is not set up.',
+            'working' => ':name is working.',
+            'failing' => ':name is failing: :error',
+        ],
+        'dashboard_warning' => 'A connection is failing: :names. Emails, SMS or card payments may not go through.',
+        'dashboard_link' => 'Open System health',
+    ],
 ];

@@ -162,7 +162,7 @@ class ResetOrganizationData
     {
         return DB::table('users')
             ->where('organization_id', $organizationId)
-            ->where('role', '!=', Role::Owner->value)
+            ->whereNotIn('role', [Role::Owner->value, Role::Developer->value])
             ->pluck('id')
             ->map(fn ($id): int => (int) $id);
     }
