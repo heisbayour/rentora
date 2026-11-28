@@ -2,6 +2,26 @@
 
 All notable changes are listed here. Versions follow semantic versioning (see `docs/RELEASING.md`).
 
+## [1.0.3] - 2026-11-28
+
+### Fixed
+
+- Android app: an owner, manager or caretaker who signed in with "Remember me" got "403 FORBIDDEN" every time the app reopened, because the app started on the tenant-only `/portal`. The app now starts on `/start`, which sends staff to the console, tenants to the portal and guests to the login page.
+- Anywhere on the site, a signed-in staff member who opens a `/portal` page is sent to `/app`, and a tenant who opens an `/app` page is sent to `/portal`, instead of a bare 403. Form posts into the other area and permission limits inside an area (for example a caretaker on Payments) are still refused with 403.
+- Android app: after being offline, Retry showed "Connecting" and then a blank white page. Capacitor's page proxy turned a connection that dropped mid-page into an empty page with no error. Site pages now load directly in the WebView, Retry first checks that the site answers and then reloads the last page (or the start page), and any main page that fails, takes longer than 30 seconds to show anything or comes back blank shows the "No connection" screen again with Retry. When mobile data or Wi-Fi comes back while that screen is showing, the app reconnects by itself.
+
+- Sign-in pages (login, forgot and reset password, two-factor, invitations) looked like a small desktop card on phones and in the Android app. Below 640px they are now full width on white with no card frame, start near the top, and use a larger logo and heading and 48px fields and buttons with 16px text. Tablets and desktops are unchanged.
+
+### Added
+
+- `/system/reset`: clean-slate reset for handing the system over to the client. Developer only, guarded like `/system/upgrade` (signed-in owner plus `?key=RENTORA_INSTALL_KEY`) and not linked from the console. Shows what will be deleted with counts, asks for RESET and the owner's password, deletes all properties, units, tenants, leases, money records, repairs, vendors, expenses, messages, inquiries, documents, the audit log, their uploaded files and every non-owner account, and restarts invoice, receipt and repair numbers at 000001. Keeps the organization, all settings, owner accounts and the install lock. Can create an extra owner account with a temporary password shown once. Runs in one transaction and writes one `system.reset` audit entry. See "Handing over to the client" in `docs/DEPLOYMENT.md`.
+- `/start` entry route.
+
+### Android app (versionCode 4, versionName 1.0.3)
+
+- Starts on `/start`; `/start` counts as a home page for the back button.
+- Offline handling as described above: native connectivity check before Retry, 30 second load watchdog, blank page check, automatic reconnect when the network returns, pull to refresh on the offline screen does the same as Retry.
+
 ## [1.0.2] - 2026-11-25
 
 ### Fixed

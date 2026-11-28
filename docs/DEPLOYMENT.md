@@ -89,15 +89,28 @@ Use FileZilla with Server > Force showing hidden files turned on. Dragging a fil
 
 If something goes wrong, the old layout can be restored from the backup and the 1.0.0 package, because the database is unchanged.
 
-## 6. Recommended services
+## 6. Handing over to the client (clean-slate reset)
+
+Use this once, when the client takes over a system that still holds demo or test data. Only the developer should run it: it is not linked from the console and needs the install key.
+
+1. **Back up first.** In phpMyAdmin select the database, Export, Quick, SQL, and keep the file. The reset cannot be undone.
+2. Log in as an owner and open `https://yourdomain/system/reset?key=YOUR_INSTALL_KEY`.
+3. Check the counts of what will be deleted: properties, units and photos, tenants, leases, invoices, payments, allocations and receipts, repair requests with updates and photos, vendors, expenses, announcements, notifications, outbox messages, reminder logs, inquiries, documents, the audit log, all uploaded files of those records, and every manager, caretaker and tenant account.
+4. Optionally fill in **Extra owner account** (name and email) to create the client's own owner login in the same step, so you keep yours for support.
+5. Type `RESET`, enter your password and press **Delete all data**.
+6. The summary shows what was deleted and, if you created an owner, the **temporary password once**. Send it to the client and ask them to change it under Profile.
+
+Kept: the organization (name, logo, colour, contact details), all settings (bank, email, SMS, Paystack), every owner account and the install lock. Invoice, receipt and repair numbers start again at 000001. One `system.reset` entry is written to the audit log.
+
+## 7. Recommended services
 
 - Email: Brevo SMTP (free daily limit), Zoho Mail, or Gmail with an app password for low volume.
 - SMS (Nigeria): Termii with a registered sender ID; use the `dnd` channel to reach numbers on Do Not Disturb.
 - Payments: Paystack (test keys while you try things, live keys after business verification).
 
-## 7. Android app
+## 8. Android app
 
-The Android app is a Capacitor WebView: a signed app that opens the live tenant portal full screen with no browser bar, so website updates reach the app at once. It needs nothing on the server (no `assetlinks.json` check). Build steps, the signing key and version numbers are in `android-app/README.md`.
+The Android app is a Capacitor WebView: a signed app that opens the live site full screen (on `/start`, which sends staff to the console and tenants to the portal) with no browser bar, so website updates reach the app at once. It needs nothing on the server (no `assetlinks.json` check). Build steps, the signing key and version numbers are in `android-app/README.md`.
 
 To remove the browser bar inside the app, the site must serve `https://yourdomain/.well-known/assetlinks.json` with the app's signing fingerprint. Set in `.env`:
 

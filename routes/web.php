@@ -44,9 +44,11 @@ use App\Http\Controllers\Public\SiteController;
 use App\Http\Controllers\Public\StaffInvitationController;
 use App\Http\Controllers\Public\TenantInvitationController;
 use App\Http\Controllers\Public\VendorJobController;
+use App\Http\Controllers\StartController;
 use App\Http\Controllers\StatementController;
 use App\Http\Controllers\System\InstallController;
 use App\Http\Controllers\System\PaystackWebhookController;
+use App\Http\Controllers\System\ResetController;
 use App\Http\Controllers\System\TickController;
 use App\Http\Controllers\System\UpgradeController;
 use Illuminate\Support\Facades\Route;
@@ -56,6 +58,9 @@ Route::get('/', [SiteController::class, 'home'])->name('home');
 Route::get('listings', [SiteController::class, 'listings'])->name('public.listings');
 Route::get('listings/{unit}', [SiteController::class, 'unit'])->whereNumber('unit')->name('public.unit');
 Route::post('listings/{unit}/inquiry', [SiteController::class, 'inquire'])->whereNumber('unit')->middleware('throttle:inquiries')->name('public.inquire');
+
+// Entry route for the Android app: sends each role to its own home (guests to login).
+Route::get('start', StartController::class)->name('start');
 
 // Web installer: only before storage/app/installed.lock exists, only with ?key=RENTORA_INSTALL_KEY.
 Route::prefix('install')->name('install.')->middleware('installer')->group(function () {
@@ -70,6 +75,12 @@ Route::get('system/tick', TickController::class)->middleware('throttle:12,1')->n
 Route::middleware(['auth', 'active', 'role:owner'])->group(function () {
     Route::get('system/upgrade', [UpgradeController::class, 'show'])->name('system.upgrade');
     Route::post('system/upgrade', [UpgradeController::class, 'run'])->name('system.upgrade.run');
+});
+
+// Clean-slate reset for handover: developer only (owner plus install key), never linked in the console.
+Route::middleware(['auth', 'active', 'role:owner', 'install.key'])->group(function () {
+    Route::get('system/reset', [ResetController::class, 'show'])->name('system.reset');
+    Route::post('system/reset', [ResetController::class, 'run'])->middleware('throttle:5,1')->name('system.reset.run');
 });
 
 Route::middleware(['signed', 'throttle:10,1'])->group(function () {

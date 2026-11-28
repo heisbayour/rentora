@@ -22,7 +22,8 @@ use Illuminate\Support\Facades\Storage;
 /*
  * Role/route access matrix (spec 13): every named GET route under /app and
  * /portal, for every role. Allowed roles must get a page (2xx or a redirect),
- * everyone else a 403, and guests are sent to the login page.
+ * a role from the other area (staff on /portal, a tenant on /app) is sent to
+ * its own home, everyone else gets a 403, and guests go to the login page.
  */
 
 const ALL_STAFF = ['owner', 'manager', 'caretaker'];
@@ -142,6 +143,11 @@ it('enforces the role matrix on every /app and /portal page', function () {
                 if (! in_array($name, DENY_ONLY, true)) {
                     expect($status)->toBeLessThan(400, "{$role} should reach {$name}, got {$status}");
                 }
+            } elseif (($role === 'tenant') !== str_starts_with($name, 'portal.')) {
+                $home = $role === 'tenant' ? route('portal.home') : route('app.dashboard');
+                $response = $this->actingAs($user)->get($url);
+                expect($response->getStatusCode())->toBe(302, "{$role} on {$name} should be redirected home, got {$status}")
+                    ->and($response->headers->get('Location'))->toBe($home);
             } else {
                 expect($status)->toBe(403, "{$role} must not reach {$name}, got {$status}");
             }

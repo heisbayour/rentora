@@ -19,7 +19,7 @@ import java.io.OutputStream;
 import org.json.JSONObject;
 
 /**
- * PDF downloads (receipts, invoices, statements).
+ * PDF downloads (receipts, invoices, statements) and the offline screen's Retry.
  *
  * The file is fetched by the page itself (fetch with credentials), so the
  * logged-in session and InfinityFree's browser-check cookie are sent exactly
@@ -75,6 +75,12 @@ class NativeBridge {
         } catch (Exception e) {
             downloadFailed(e.getMessage());
         }
+    }
+
+    /** Retry button on the offline screen: checks the connection, then reloads the page that failed. */
+    @JavascriptInterface
+    public void retry() {
+        activity.runOnUiThread(activity::retryFromPage);
     }
 
     @JavascriptInterface

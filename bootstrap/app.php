@@ -7,6 +7,7 @@ use App\Http\Middleware\EnsureOnboarded;
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\InstallerGuard;
+use App\Http\Middleware\RequireInstallKey;
 use App\Http\Middleware\RunLazyScheduler;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetCurrentOrganization;
@@ -44,6 +45,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'active' => EnsureUserIsActive::class,
             'onboarded' => EnsureOnboarded::class,
             'installer' => InstallerGuard::class,
+            'install.key' => RequireInstallKey::class,
         ]);
 
         $middleware->redirectUsersTo(fn (Request $request) => LoginResponse::homeFor($request->user()));

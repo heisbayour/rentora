@@ -1,6 +1,6 @@
 # Rentora Android app
 
-Since version 1.0.2 (versionCode 3) the Android app is a **Capacitor WebView** that opens the live tenant portal, `https://rentora-housing.infinityfreeapp.com/portal`, full screen, like a native app with no browser bar. It replaced the Trusted Web Activity, which fell back to a Chrome tab with an address bar because InfinityFree blocks Google's Digital Asset Links check (see `docs/DECISIONS.md`).
+Since version 1.0.2 (versionCode 3) the Android app is a **Capacitor WebView** that opens the live site, `https://rentora-housing.infinityfreeapp.com/start`, full screen like a native app with no browser bar. `/start` sends owners, managers and caretakers to the console, tenants to the portal and guests to the login page (since 1.0.3, versionCode 4; before that the app opened `/portal`, which answered 403 for staff). It replaced the Trusted Web Activity, which fell back to a Chrome tab with an address bar because InfinityFree blocks Google's Digital Asset Links check (see `docs/DECISIONS.md`).
 
 The app loads the website, so website updates reach it at once. A new APK or AAB is needed only when the native code, icon, name, start URL or Capacitor version changes.
 
@@ -12,15 +12,17 @@ The app loads the website, so website updates reach it at once. A new APK or AAB
 
 | Feature | Where |
 |---|---|
-| Opens `/portal`; the live domain and Paystack (`checkout.paystack.com`, `*.paystack.com`, `*.paystack.co`) stay inside the app | `capacitor.config.json` (`server.url`, `allowNavigation`) |
+| Opens `/start`; the live domain and Paystack (`checkout.paystack.com`, `*.paystack.com`, `*.paystack.co`) stay inside the app | `capacitor.config.json` (`server.url`, `allowNavigation`) |
 | Adds `RentoraApp` to the user agent; the site then hides its "Install app" card and skips its service worker | `capacitor.config.json`, `app/Support/NativeApp.php`, `resources/js/pwa.js` |
 | JavaScript, DOM storage and cookies on (InfinityFree's browser check passes); cookies flushed to disk on pause, so logins are remembered | `MainActivity.setUpWebView`, `onPause` |
 | Status bar `#1A73E8` with white icons on every Android version, including edge-to-edge (Android 15+); the page is padded by the bar and keyboard sizes | `MainActivity.setUpSystemBars`, SystemBars `insetsHandling: "disable"` |
-| Back button: back in page history; exits only from a home page (`/portal`, `/app`, `/login`, `/`) | `MainActivity.setUpBackButton` |
+| Back button: back in page history; exits only from a home page (`/start`, `/portal`, `/app`, `/login`, `/`) | `MainActivity.setUpBackButton` |
 | File inputs: one chooser with the camera and the gallery or files; camera permission asked only when a photo field opens | `FileChooser.java` |
 | PDF downloads (receipts, invoices, statements): fetched by the page with the logged-in session, saved to Downloads, opened in the PDF viewer | `NativeBridge.java` |
 | `wa.me`, `tel:`, `mailto:`, `sms:`, `intent://` and other sites open in their app or the browser | `RentoraWebViewClient.java` |
-| "No connection" screen with Retry when a page cannot load (HTTP errors such as 404 still show the real page) | `RentoraWebViewClient.onReceivedError`, `www/offline.html` |
+| Site pages load directly in the WebView, not through Capacitor's proxy (the proxy turned a dropped connection into a blank white page) | `RentoraWebViewClient.shouldInterceptRequest` |
+| "No connection" screen with Retry when a main page fails, shows nothing for 30 seconds, or comes back blank (HTTP errors such as 404 still show the real page) | `RentoraWebViewClient.onReceivedError`, `MainActivity.onPageChecked`, `onLoadTimeout`, `www/offline.html` |
+| Retry checks for a network and that the site answers before reloading the last page (or `/start`); without a connection the screen stays and says so. When data or Wi-Fi comes back while the screen shows, the app reconnects by itself | `MainActivity.retry`, `setUpNetworkCallback`, `NativeBridge.retry` |
 | Pull down to refresh (only when the page is at the top) | `MainActivity.setUpPullToRefresh` |
 | Splash screen and launcher icons from `public/icons` | `scripts/make-icons.php` |
 
@@ -90,6 +92,6 @@ Another domain? Change it in `capacitor.config.json` (`server.url`, `allowNaviga
 
 ## Testing on a phone
 
-Install the APK over the old app (allow "Install unknown apps" for the file manager or browser), then check: login and staying logged in after closing the app, the back button (exits only from the home page), a photo upload from the camera and from the gallery, a receipt PDF download, a WhatsApp link, and airplane mode (the "No connection" screen, then Retry). There must be no address bar anywhere, including on the Paystack page.
+Install the APK over the old app (allow "Install unknown apps" for the file manager or browser), then check: login and staying logged in after closing the app (as an owner and as a tenant), the back button (exits only from the home page), a photo upload from the camera and from the gallery, a receipt PDF download, a WhatsApp link, and airplane mode (the "No connection" screen, then Retry). There must be no address bar anywhere, including on the Paystack page.
 
-The Android emulator needs Windows Hypervisor Platform. On this machine it was off (enabling it needs a restart), so 1.0.2 was verified by build checks and on a phone.
+The Android emulator needs Windows Hypervisor Platform. On this machine it was off (enabling it needs a restart), so 1.0.2 and 1.0.3 were verified by build checks and on a phone.

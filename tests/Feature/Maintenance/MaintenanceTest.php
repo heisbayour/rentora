@@ -160,7 +160,7 @@ it('shows tenants only their own requests', function () {
 
     $this->actingAs($user)->get(route('portal.repairs.index'))->assertSee('My tap')->assertDontSee('Their roof');
     $this->actingAs($user)->get(route('portal.repairs.show', $theirs))->assertForbidden();
-    $this->actingAs($user)->get(route('app.maintenance.show', $mine))->assertForbidden();
+    $this->actingAs($user)->get(route('app.maintenance.show', $mine))->assertRedirect(route('portal.home'));
 });
 
 it('lets a tenant cancel only while submitted, then confirm and rate a resolved repair', function () {

@@ -34,19 +34,47 @@
         </svg>
     </div>
     <h1>No connection</h1>
-    <p>Rentora could not be reached. Check your mobile data or Wi-Fi, then try again.</p>
+    <p id="message">Rentora could not be reached. Check your mobile data or Wi-Fi, then try again.</p>
     <button id="retry" type="button">Retry</button>
 </main>
 <script>
+    // The app uses this flag to tell this screen apart from a page that failed.
+    window.__rentoraOffline = true;
     // The app replaces __RETRY_URL__ with the page that failed to load.
-    var START = 'https://rentora-housing.infinityfreeapp.com/portal';
+    var START = 'https://rentora-housing.infinityfreeapp.com/start';
     var target = '__RETRY_URL__';
     if (target.indexOf('https://rentora-housing.infinityfreeapp.com/') !== 0) { target = START; }
     var button = document.getElementById('retry');
-    button.addEventListener('click', function () {
+    var message = document.getElementById('message');
+    var idle = message.textContent;
+    var guard = null;
+
+    // Called by the app while it checks the connection and reloads.
+    window.rentoraConnecting = function () {
         button.disabled = true;
         button.textContent = 'Connecting...';
-        window.location.replace(target);
+        message.textContent = 'Connecting to Rentora...';
+        clearTimeout(guard);
+        // Never stay stuck on "Connecting": the app shows this screen again if the page fails.
+        guard = setTimeout(window.rentoraStillOffline, 45000);
+    };
+    // Called by the app when there is still no connection.
+    window.rentoraStillOffline = function () {
+        clearTimeout(guard);
+        button.disabled = false;
+        button.textContent = 'Retry';
+        message.textContent = 'Still no connection. ' + idle;
+    };
+
+    button.addEventListener('click', function () {
+        if (window.RentoraNative && window.RentoraNative.retry) {
+            window.rentoraConnecting();
+            window.RentoraNative.retry();
+        } else {
+            button.disabled = true;
+            button.textContent = 'Connecting...';
+            window.location.replace(target);
+        }
     });
 </script>
 </body>

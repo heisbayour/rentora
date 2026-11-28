@@ -55,7 +55,7 @@ it('keeps another tenant\'s invoice, receipt and statement out of reach', functi
     $this->actingAs($userA)->get(route('portal.invoices.show', $invoiceB))->assertForbidden();
     $this->actingAs($userA)->get(route('portal.invoices.pdf', $invoiceB))->assertForbidden();
     $this->actingAs($userA)->get(route('portal.payments.receipt', $paymentB))->assertForbidden();
-    $this->actingAs($userA)->get(route('app.tenants.statement', $tenantB))->assertForbidden();
+    $this->actingAs($userA)->get(route('app.tenants.statement', $tenantB))->assertRedirect(route('portal.home'));
     $this->actingAs($userA)->get(route('portal.statement'))->assertOk()->assertDontSee($invoiceB->number);
     $this->actingAs($userA)->get(route('portal.invoices.index'))->assertDontSee($invoiceB->number);
     $this->actingAs($userA)->get(route('portal.payments.index'))->assertDontSee('RCT-B-1');

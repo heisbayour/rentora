@@ -3,7 +3,7 @@
   "appName": "Rentora",
   "webDir": "www",
   "server": {
-    "url": "https://rentora-housing.infinityfreeapp.com/portal",
+    "url": "https://rentora-housing.infinityfreeapp.com/start",
     "cleartext": false,
     "androidScheme": "https",
     "allowNavigation": [
