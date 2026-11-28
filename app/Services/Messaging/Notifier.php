@@ -29,16 +29,25 @@ class Notifier
 
     /**
      * Active staff of an organization in the given roles (owners and managers by default).
+     * Developers (support) only get owner messages while the organization has no
+     * active owner, so nothing goes unread before the client's owner exists (DECISIONS 105).
      *
      * @param  list<Role>  $roles
      * @return Collection<int, User>
      */
     public function staff(int $organizationId, array $roles = [Role::Owner, Role::Manager], ?User $except = null): Collection
     {
+        $values = array_map(fn (Role $role) => $role->value, $roles);
+        $noOwner = in_array(Role::Owner, $roles, true) && ! User::query()->withoutGlobalScopes()
+            ->where('organization_id', $organizationId)->where('role', Role::Owner->value)->where('is_active', true)->exists();
+        if ($noOwner) {
+            $values[] = Role::Developer->value;
+        }
+
         return User::query()->withoutGlobalScopes()
             ->where('organization_id', $organizationId)
             ->where('is_active', true)
-            ->whereIn('role', array_map(fn (Role $role) => $role->value, $roles))
+            ->whereIn('role', array_values(array_unique($values)))
             ->when($except !== null, fn ($query) => $query->whereKeyNot($except?->getKey()))
             ->get();
     }

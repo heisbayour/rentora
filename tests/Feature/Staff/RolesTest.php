@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Payment;
 use App\Models\User;
 use App\Services\ActivityLogger;
+use App\Services\Messaging\Notifier;
 use Illuminate\Support\Facades\Artisan;
 
 /*
@@ -168,6 +169,19 @@ it('keeps developer accounts through the clean-slate reset', function () {
     expect($developer->fresh())->not->toBeNull()
         ->and($owner->fresh())->not->toBeNull()
         ->and(User::query()->find($manager->id))->toBeNull();
+});
+
+it('sends owner messages to the developer only while there is no active owner', function () {
+    $organization = organization();
+    $developer = userWithRole(Role::Developer, $organization);
+    $manager = userWithRole(Role::Manager, $organization);
+    $notifier = app(Notifier::class);
+
+    expect($notifier->staff($organization->id)->pluck('id')->sort()->values()->all())->toBe(collect([$developer->id, $manager->id])->sort()->values()->all())
+        ->and($notifier->staff($organization->id, [Role::Manager])->pluck('id')->all())->toBe([$manager->id]);
+
+    $owner = userWithRole(Role::Owner, $organization);
+    expect($notifier->staff($organization->id)->pluck('id')->sort()->values()->all())->toBe(collect([$owner->id, $manager->id])->sort()->values()->all());
 });
 
 it('makes an existing account the developer with rentora:make-developer', function () {
